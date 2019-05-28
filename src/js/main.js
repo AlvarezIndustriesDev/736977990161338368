@@ -344,7 +344,12 @@
     var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
 
     if (pathName == "blog" && secondaryPathName == "karamo-brown") {
+      var videoID = "hh392mxhnfhmt3cwx1ku";
       var videoURL = "//video.mediavine.com/videos/hh392mxhnfhmt3cwx1ku.js";
+      // set autoplay property to true
+      $('#' + videoID).attr('data-autoplay', 'true');
+
+      // load javascript
       $.getScript(videoURL, function( data, textStatus, jqxhr ) {
         console.log("[VIDEO]", textStatus); // Success
         console.log("[VIDEO]", jqxhr.status); // 200
