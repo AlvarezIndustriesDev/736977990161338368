@@ -346,7 +346,6 @@
     if (pathName == "blog" && secondaryPathName == "karamo-brown") {
       var videoURL = "//video.mediavine.com/videos/hh392mxhnfhmt3cwx1ku.js";
       $.getScript(videoURL, function( data, textStatus, jqxhr ) {
-        console.log("[VIDEO]", data); // Data returned
         console.log("[VIDEO]", textStatus); // Success
         console.log("[VIDEO]", jqxhr.status); // 200
         console.log("[VIDEO]", "Load was performed.");
