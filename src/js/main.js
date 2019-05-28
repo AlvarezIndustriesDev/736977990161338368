@@ -337,6 +337,22 @@
     }
   
   }
+
+  // method that loads mediavine's videos
+  function loadMediavineVideo() {
+    var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+    var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
+
+    if (pathName == "blog" && secondaryPathName == "karamo-brown") {
+      var videoURL = "//video.mediavine.com/videos/hh392mxhnfhmt3cwx1ku.js";
+      $.getScript(videoURL, function( data, textStatus, jqxhr ) {
+        console.log("[VIDEO]", data); // Data returned
+        console.log("[VIDEO]", textStatus); // Success
+        console.log("[VIDEO]", jqxhr.status); // 200
+        console.log("[VIDEO]", "Load was performed.");
+      });
+    }
+  }
   
   // method that checks if elements exist
   function checkForElements() {
@@ -1639,9 +1655,10 @@
       summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
       sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
       checkBlog();
-      console.log("Will be calling function to fill in content hints");
+      console.log("Will be calling function to load custom video javascript...");
       //$mediavine.web.fillContentHints();
-      window.instgrm.Embeds.process()
-      console.log("Called function to fill in content hints!");
+      window.instgrm.Embeds.process();
+      loadMediavineVideo(); // call method that loads mediavine's video
+      console.log("Called function to load customm video javascript!");
     });
   }
