@@ -350,12 +350,13 @@
         var src = this.src; // initialize and retrieve script source link
         var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
+        console.log("[VIDEO] SRC: ", src);
         // execute if search string returns a valid match
         if (searchString != -1) {
           var videoID = src.substr(src.indexOf("/videos/") + src.length).slice(0, -3);
           console.log("[VIDEO] Video ID:", videoID);
 
-          
+
         }
       });
       /* 
