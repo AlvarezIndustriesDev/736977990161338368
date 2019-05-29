@@ -353,11 +353,19 @@
         console.log("[VIDEO] SRC: ", src);
         // execute if search string returns a valid match
         if (searchString != -1) {
-          var searchText = "/videos/";
-          var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3);
+          var searchText = "/videos/"; // initialize search text variable
+          var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
           console.log("[VIDEO] Video ID:", videoID);
 
+          // set autoplay property to true
+          $('#' + videoID).attr('data-autoplay', 'true');
 
+          // load javascript
+          $.getScript(src, function(data, textStatus, jqxhr) {
+            console.log("[VIDEO]", textStatus); // success message
+            console.log("[VIDEO", jqxhr.status); // 200 message
+            console.log("[VIDEO]", "Load was performed successfully."); // custom success message
+          });
         }
       });
       /* 
