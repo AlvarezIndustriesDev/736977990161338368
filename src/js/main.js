@@ -343,6 +343,31 @@
     var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
     var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
 
+    // execute if page is an article page under "blog" pathname
+    if (pathName == "blog" && secondaryPathName) {
+      
+      $('script[data-noptimize]').each(function() {
+        var src = this.src; // initialize and retrieve script source link
+        var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+
+        // execute if search string returns a valid match
+        if (searchString != -1) {
+          var videoID = src.substr(src.indexOf("/videos/") + src.length).slice(0, -3);
+          console.log("[VIDEO] Video ID:", videoID);
+
+          
+        }
+      });
+      /* 
+        var phrase = "an important number comes after this: 123456";
+        var word = "this: ";
+        var number = phrase.substr(phrase.indexOf(word) + word.length);
+        // number = 123456
+      */
+
+    }
+
+    /*
     if (pathName == "blog" && secondaryPathName == "karamo-brown") {
       var videoID = "hh392mxhnfhmt3cwx1ku";
       var videoURL = "//video.mediavine.com/videos/hh392mxhnfhmt3cwx1ku.js";
@@ -355,7 +380,7 @@
         console.log("[VIDEO]", jqxhr.status); // 200
         console.log("[VIDEO]", "Load was performed.");
       });
-    }
+    } */
   }
   
   // method that checks if elements exist
