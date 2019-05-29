@@ -364,7 +364,7 @@
           $.getScript(src, function(data, textStatus, jqxhr) {
             console.log("[VIDEO]", textStatus); // success message
             console.log("[VIDEO", jqxhr.status); // 200 message
-            console.log("[VIDEO]", "Load was performed successfully."); // custom success message
+            console.log("[VIDEO]", "Script load was performed successfully."); // custom success message
           });
         }
       });
