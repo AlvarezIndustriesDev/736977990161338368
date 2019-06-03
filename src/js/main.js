@@ -35,7 +35,7 @@
   //init(); //Start the code when the page loads
   // redirectInit(); // method called to initialize redirect function
   checkBlog(); // method called to check if current page is blog page
-  //handleTrendingCarousel(); // method called to modify "trending" carousel in home page
+  // handleTrendingCarousel(); // method called to modify "trending" carousel in home page
   
   // method called to initialize redirect function
   /*
@@ -330,7 +330,8 @@
         if (pageLoaded == true) {
           clearInterval(checkSelfCareContent); // stop the loop
           console.log("[ADVERTISEMENTS] PAGE LOADED!");
-          $mediavine.web.fillContentHints();
+          // $mediavine.web.fillContentHints();
+          loadMediavineScripts();
         }
       }, 100);
   
@@ -363,7 +364,7 @@
           // load javascript
           $.getScript(src, function(data, textStatus, jqxhr) {
             console.log("[VIDEO]", textStatus); // success message
-            console.log("[VIDEO", jqxhr.status); // 200 message
+            console.log("[VIDEO]", jqxhr.status); // 200 message
             console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
           });
         }
@@ -391,6 +392,25 @@
         console.log("[VIDEO]", "Load was performed.");
       });
     } */
+  }
+
+  // method that loads mediavine's script
+  function loadMediavineScripts() {
+    var scriptSrc = "//scripts.mediavine.com/tags/i-am-and-co.js"; // initialize and retrieve script source link
+
+    var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+    var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
+
+    // execute if page is an article page under "blog" pathname
+    if (pathName == "blog" && secondaryPathName) {
+       // load javascript
+       $.getScript(scriptSrc, function(data, textStatus, jqxhr) {
+        console.log("[SCRIPT]", textStatus); // success message
+        console.log("[SCRIPT]", jqxhr.status); // 200 message
+        console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
+      });
+    }
+
   }
   
   // method that checks if elements exist
@@ -689,7 +709,8 @@
       if (pageLoaded == true) {
         clearInterval(checkPageLoaded); // stop the loop
         console.log("[ADVERTISEMENTS] PAGE LOADED!");
-        $mediavine.web.fillContentHints();
+        // $mediavine.web.fillContentHints();
+        loadMediavineScripts();
       }
     }, 100);
   } // end function
@@ -1115,7 +1136,8 @@
         if (pageLoaded == true) {
           clearInterval(checkExtraPages); // stop the loop
           console.log("[ADVERTISEMENTS] PAGE LOADED!");
-          $mediavine.web.fillContentHints();
+          // $mediavine.web.fillContentHints();
+          loadMediavineScripts();
         }
       }, 100);
   
