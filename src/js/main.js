@@ -1721,7 +1721,6 @@
     // Adds an event listener that fires when page loads using SquareSpace's AJAX loading
     // This method is more efficient than the MutationObserver and it prevents the functions from running twice per load
     window.addEventListener('mercury:load', function() {
-      document.querySelector('meta[itemprop="datePublished"]').setAttribute( "content", "");
       summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
       sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
       checkBlog();
