@@ -1725,7 +1725,6 @@
       sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
       checkBlog();
       console.log("Will be calling function to load custom video javascript...");
-      //$mediavine.web.fillContentHints();
       window.instgrm.Embeds.process();
       loadMediavineVideo(); // call method that loads mediavine's video
       console.log("Called function to load customm video javascript!");
