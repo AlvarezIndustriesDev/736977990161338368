@@ -100,6 +100,8 @@
         console.log("Not mobile");
         insertAdSidebar();
       }
+
+      handleSEOChanges(); // call method that handles SEO changes
   
       // execute if page is article page (pathname exists after "/blog/")
       /*
@@ -337,6 +339,13 @@
   
     }
   
+  }
+
+  // method that handles SEO changes to blog pages
+  function handleSEOChanges() {
+    console.log("[SEO CHANGES] Method was called.");
+
+    
   }
 
   // method that loads mediavine's videos
