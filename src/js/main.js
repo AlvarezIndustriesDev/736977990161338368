@@ -30,6 +30,7 @@ var isMobile = function () {
 
 var jsonData; // initialize variable
 var pageLoaded = false;
+var articleIsFeelGoods = false;
 
 // custom code begins here -----------------------------------------------------------------------------------
 //init(); //Start the code when the page loads
@@ -152,6 +153,8 @@ function checkBlog() {
 
             insertAdvertisements(true);
 
+            articleIsFeelGoods = true;
+
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
               console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
@@ -216,6 +219,8 @@ function checkBlog() {
             }*/
 
             insertAdvertisements(true);
+
+            articleIsFeelGoods = true;
 
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
@@ -1662,7 +1667,9 @@ function insertCustomHTML(articleCategory) {
       $(".custom-summary-container").prepend(summaryBlockHTML); // append to custom HTML element into footer of article
       $(".custom-summary-container").prepend(authorBlockHTML); // append custom HTML into footer of article
       $(".custom-summary-container").prepend(categoryBlockHTML); // append to custom HTML element into footer of article
-      $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
+      if (articleIsFeelGoods == false) {
+        $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
+      }
       if (movePaginationHTML == true) {
         moveElements(); // method called to change position of elements in blog page
       }
@@ -1723,6 +1730,7 @@ function watch() {
   window.addEventListener('mercury:load', function () {
     summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
+    articleIsFeelGoods = false;
     checkBlog();
     console.log("Will be calling function to load custom video javascript...");
     window.instgrm.Embeds.process();
