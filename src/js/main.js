@@ -764,12 +764,17 @@ function returnAdPositions(array, limit) {
         // execute if final array does not contain element limit
         if ((finalElementsArray.length < limit) && elementsRemaining > 0) {
           // console.log(array[i][j]);
-          var contentHintExists = checkContentSiblings(array[i][j]);
+          var matchesConditions = checkContentSiblings(array[i][j]);
           console.log("ContentHints Exist?:", contentHintExists);
-          if ($(array[i][j]).is("h2") && contentHintExists) {
+          // execute if selected element is an H2 and has previous
+          if ($(array[i][j]).is("h2") && matchesConditions) {
             console.log("This element is an H2, and content hint exists");
             console.log(array[i][j]);
             elementsRemaining--; // still subtract but do not push to array
+          // execute if 
+          } else if (matchesConditions == "isNearVideoElement") {
+            console.log("This element is near a video block");
+            console.log(array[i][j]);
           } else {
             finalElementsArray.push(array[i][j]);
             // console.log("New elements array:", finalElementsArray);
@@ -801,7 +806,11 @@ function checkContentSiblings(element) {
   // execute if previous element is a horizontal rule block (to prevent ads from re-appearing after content hint was inserted prior to horizontal rule block
   if (closestSqsBlock.prev().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
     console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
-    return true; // return true
+    return true; // return true   
+  // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
+  } else if (closestSqsBlock.prev().is(".sqs-block.code-block").has(".mediavine-video__target-div") || closestSqsBlock.next().is(".sqs-block.code-block").has(".mediavine-video__target-div")) {
+    console.log("[PREV || NEXT]:", "Is near video element!");
+    return "isNearVideoElement"; // return true
   } else {
     return false; // return false
   }
