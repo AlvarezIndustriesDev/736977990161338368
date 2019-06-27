@@ -808,7 +808,7 @@ function checkContentSiblings(element) {
     console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
     return true; // return true   
   // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
-  } else if (closestSqsBlock.prev().is(".sqs-block.code-block").has(".mediavine-video__target-div") || closestSqsBlock.next().is(".sqs-block.code-block").has(".mediavine-video__target-div")) {
+  } else if (closestSqsBlock.prev().is(".sqs-block.code-block") || closestSqsBlock.next().is(".sqs-block.code-block")) {
     console.log("[PREV || NEXT]:", "Is near video element!");
     return "isNearVideoElement"; // return true
   } else {
