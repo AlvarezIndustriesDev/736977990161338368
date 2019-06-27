@@ -765,7 +765,7 @@ function returnAdPositions(array, limit) {
         if ((finalElementsArray.length < limit) && elementsRemaining > 0) {
           // console.log(array[i][j]);
           var matchesConditions = checkContentSiblings(array[i][j]);
-          console.log("ContentHints Exist?:", contentHintExists);
+          console.log("ContentHints Exist?:", matchesConditions);
           // execute if selected element is an H2 and has previous
           if ($(array[i][j]).is("h2") && matchesConditions) {
             console.log("This element is an H2, and content hint exists");
@@ -808,7 +808,7 @@ function checkContentSiblings(element) {
     console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
     return true; // return true   
   // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
-  } else if (closestSqsBlock.prev().is(".sqs-block.code-block") || closestSqsBlock.next().is(".sqs-block.code-block")) {
+  } else if ($(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div") || $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div")) {
     console.log("[PREV || NEXT]:", "Is near video element!");
     return "isNearVideoElement"; // return true
   } else {
