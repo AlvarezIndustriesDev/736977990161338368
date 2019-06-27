@@ -809,7 +809,7 @@ function checkContentSiblings(element) {
     return true; // return true   
   // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
   } else if ($(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div") || $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div")) {
-    console.log("[PREV || NEXT ELEMENT]:", "Is near video element!");
+    console.log("[PREV ELEMENT || NEXT ELEMENT]:", "Is near video element!");
     return "isNearVideoElement"; // return true
   } else {
     return false; // return false
