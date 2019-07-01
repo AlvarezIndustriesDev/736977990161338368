@@ -775,7 +775,7 @@ function returnAdPositions(array, limit) {
           } else if (($(array[i][j]).is(":first-child") && matchesConditions) || ($(array[i][j]).is(":last-child") && matchesConditions)) {
             console.log("This element is near a video block");
             console.log(array[i][j]);
-            elementsRemaining--; // still subtract but do not push to array
+            // elementsRemaining--; // still subtract but do not push to array
           } else {
             finalElementsArray.push(array[i][j]);
             // console.log("New elements array:", finalElementsArray);
