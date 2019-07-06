@@ -456,7 +456,7 @@ function insertImageButtons() {
   var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
 
   // execute if current page is products page
-  if (pathName == "products") {
+  if (pathName == "test") {
 
     // retrieve all image elements within the article content
     var images = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
@@ -514,8 +514,9 @@ function insertImageButtons() {
 
       $(images[i]).after(saveItButton);
 
-      // retrieve pinterest button
+      console.log("Images", images);
 
+      // retrieve pinterest button
       var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
       var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
 
@@ -524,8 +525,18 @@ function insertImageButtons() {
         // console.log(e);
         e.preventDefault(); // prevent anchor tag from automatically changing page
         e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        var customURL;
+
+        // execute if href exists
+        if (e.target.parentNode.parentNode.attributes['href']) {
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.parentNode.attributes['href'].value
+        } else {
+          customURL = location.href;
+        }
+
         PinUtils.pinOne({
-          'url': location.href,
+          'url': customURL,
           'media': e.target.attributes['data-image'].value,
           'description': e.target.attributes['data-desc'].value
         });
