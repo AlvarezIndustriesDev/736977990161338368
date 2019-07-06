@@ -526,8 +526,11 @@ function insertImageButtons() {
         e.preventDefault(); // prevent anchor tag from automatically changing page
         e.stopPropagation(); // prevents anchor tag from being handled by another event
 
-        var customURL;
+        var customURL = location.href;
 
+        console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value)
+
+        /*
         // execute if href exists
         if (e.target.parentNode.parentNode.attributes['href'].value) {
           customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.parentNode.attributes['href'].value;
@@ -537,7 +540,8 @@ function insertImageButtons() {
         } else {
           customURL = location.href;
         }
-
+        */
+       
         PinUtils.pinOne({
           'url': customURL,
           'media': e.target.attributes['data-image'].value,
