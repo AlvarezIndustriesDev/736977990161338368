@@ -459,7 +459,7 @@ function insertImageButtons() {
   if (pathName == "products") {
 
     // retrieve all image elements within the article content
-    var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
+    var images = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
 
     console.log("Images SQS-GALLERY:", images);
 
