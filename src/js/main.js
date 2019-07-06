@@ -128,7 +128,7 @@ function checkBlog() {
     }
 
     // call method that inserts Pinterest buttons to images
-    insertImageButtons(false);
+    insertImageButtons();
     console.log("Formatted URL:", formattedURL);
     // method to retrieve page in JSON format
     $.ajax({
@@ -348,7 +348,7 @@ function checkBlog() {
     console.log("Current pathname is:", pathName);
 
     // call method that inserts Pinterest buttons to images
-    insertImageButtons(true);
+    insertImageButtons();
 
   }
 
@@ -448,59 +448,101 @@ function checkForElements() {
 }
 
 // method that inserts custom pinterest & facebook buttons for images
-function insertImageButtons(productsPage) {
+function insertImageButtons() {
   let tag = "[PINTEREST]";
 
   console.log(tag, "Insert new pinterest save buttons");
 
-  // retrieve all image elements within the article content
-  var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
+  var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
 
   // execute if current page is products page
-  if (productsPage) {
+  if (pathName == "products") {
 
-    images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-gallery-container .sqs-gallery-design-grid-slide img");
+    // retrieve all image elements within the article content
+    var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
 
-  }
-  
-  console.log("Images to for Pinterest: ", images);
+    console.log("Images SQS-GALLERY:", images);
 
-  // loop through images
-  for (var i = 0; i < images.length; i++) {
-    console.log(tag, images[i]);
+    // loop through images
+    for (var i = 0; i < images.length; i++) {
+      console.log(tag, images[i]);
 
-    var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
-    $(images[i]).after(saveItButton);
+      $(images[i]).after(saveItButton);
 
-    // retrieve pinterest button
+      // retrieve pinterest button
 
-    var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-    var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
 
-    // method that inserts event listener and executes a function when button is pressed
-    pinterestButton.addEventListener('click', function (e) {
-      console.log(e);
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      e.stopPropagation(); // prevents anchor tag from being handled by another event
-      PinUtils.pinOne({
-        'url': location.href,
-        'media': e.target.attributes['data-image'].value,
-        'description': e.target.attributes['data-desc'].value
+      // method that inserts event listener and executes a function when button is pressed
+      pinterestButton.addEventListener('click', function (e) {
+        // console.log(e);
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+        PinUtils.pinOne({
+          'url': location.href,
+          'media': e.target.attributes['data-image'].value,
+          'description': e.target.attributes['data-desc'].value
+        });
       });
-    });
 
-    // method that inserts event listener and executes function when button is pressed
-    facebookButton.addEventListener('click', function (e) {
+      // method that inserts event listener and executes function when button is pressed
+      facebookButton.addEventListener('click', function (e) {
 
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      e.stopPropagation(); // prevents anchor tag from being handled by another event
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
 
-      var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
 
-      window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
-    });
+        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+      });
 
+    }
+
+  // execute if page is not products page
+  } else {
+    // retrieve all image elements within the article content
+    var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
+
+    // loop through images
+    for (var i = 0; i < images.length; i++) {
+      console.log(tag, images[i]);
+
+      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+      $(images[i]).after(saveItButton);
+
+      // retrieve pinterest button
+
+      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+
+      // method that inserts event listener and executes a function when button is pressed
+      pinterestButton.addEventListener('click', function (e) {
+        // console.log(e);
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+        PinUtils.pinOne({
+          'url': location.href,
+          'media': e.target.attributes['data-image'].value,
+          'description': e.target.attributes['data-desc'].value
+        });
+      });
+
+      // method that inserts event listener and executes function when button is pressed
+      facebookButton.addEventListener('click', function (e) {
+
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+
+        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+      });
+
+    }
   }
 
 }
@@ -786,7 +828,7 @@ function returnAdPositions(array, limit) {
             console.log("This element is an H2, and content hint exists");
             console.log(array[i][j]);
             elementsRemaining--; // still subtract but do not push to array
-          // execute if selected element is near a video element (either first or last child of their current element)
+            // execute if selected element is near a video element (either first or last child of their current element)
           } else if (($(array[i][j]).is(":first-child") && matchesConditions) || ($(array[i][j]).is(":last-child") && matchesConditions)) {
             console.log("This element is near a video block");
             console.log(array[i][j]);
@@ -823,7 +865,7 @@ function checkContentSiblings(element) {
   if (closestSqsBlock.prev().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
     console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
     return true; // return true   
-  // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
+    // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
   } else if ($(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div") || $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div")) {
     console.log("[PREV ELEMENT || NEXT ELEMENT]:", "Is near video element!", $(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div"), $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div"));
     return true; // return true
