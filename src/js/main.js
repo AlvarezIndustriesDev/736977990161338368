@@ -530,7 +530,10 @@ function insertImageButtons() {
 
         // execute if href exists
         if (e.target.parentNode.parentNode.attributes['href']) {
-          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.parentNode.attributes['href'].value
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.parentNode.attributes['href'].value;
+
+          console.log("[PINTEREST] HREF LOCATED.", customURL);
+
         } else {
           customURL = location.href;
         }
