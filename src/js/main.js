@@ -127,7 +127,8 @@ function checkBlog() {
       }
     }
 
-    insertImageButtons();
+    // call method that inserts Pinterest buttons to images
+    insertImageButtons(false);
     console.log("Formatted URL:", formattedURL);
     // method to retrieve page in JSON format
     $.ajax({
@@ -342,6 +343,13 @@ function checkBlog() {
       }
     }, 100);
 
+  } else if (pathName == "products") {
+
+    console.log("Current pathname is:", pathName);
+
+    // call method that inserts Pinterest buttons to images
+    insertImageButtons(true);
+
   }
 
 }
@@ -440,7 +448,7 @@ function checkForElements() {
 }
 
 // method that inserts custom pinterest & facebook buttons for images
-function insertImageButtons() {
+function insertImageButtons(productsPage) {
   let tag = "[PINTEREST]";
 
   console.log(tag, "Insert new pinterest save buttons");
@@ -448,13 +456,20 @@ function insertImageButtons() {
   // retrieve all image elements within the article content
   var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
 
+  // execute if current page is products page
+  if (productsPage) {
+
+    images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-gallery-container .sqs-gallery-design-grid-slide img");
+
+  }
+  
+  console.log("Images to for Pinterest: ", images);
+
   // loop through images
   for (var i = 0; i < images.length; i++) {
     console.log(tag, images[i]);
 
     var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
-
-
 
     $(images[i]).after(saveItButton);
 
@@ -465,7 +480,7 @@ function insertImageButtons() {
 
     // method that inserts event listener and executes a function when button is pressed
     pinterestButton.addEventListener('click', function (e) {
-      // console.log(e);
+      console.log(e);
       e.preventDefault(); // prevent anchor tag from automatically changing page
       e.stopPropagation(); // prevents anchor tag from being handled by another event
       PinUtils.pinOne({
