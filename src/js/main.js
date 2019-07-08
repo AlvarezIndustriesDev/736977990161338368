@@ -514,7 +514,7 @@ function insertImageButtons() {
 
       $(images[i]).after(saveItButton);
 
-      console.log("Images", images);
+      // console.log("Images", images);
 
       // retrieve pinterest button
       var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
@@ -528,20 +528,20 @@ function insertImageButtons() {
 
         var customURL = location.href;
 
-        console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value)
+        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
-        /*
+        
         // execute if href exists
-        if (e.target.parentNode.parentNode.attributes['href'].value) {
-          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.parentNode.attributes['href'].value;
+        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
 
           console.log("[PINTEREST] HREF LOCATED.", customURL);
 
         } else {
           customURL = location.href;
         }
-        */
-       
+        
+
         PinUtils.pinOne({
           'url': customURL,
           'media': e.target.attributes['data-image'].value,
