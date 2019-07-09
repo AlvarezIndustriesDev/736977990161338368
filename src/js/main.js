@@ -350,6 +350,11 @@ function checkBlog() {
     // call method that changes image URLs in shop page
     changeShopImageURLs();
 
+  } else if (pathName == "splash") {
+
+    // call method to redirect to affiliate link
+    redirectToAffiliate();
+
   }
 
 }
@@ -588,6 +593,38 @@ function changeShopImageURLs() {
     });
 
   }
+}
+
+// method that retrieves desired URL parameter
+function getURLParameter(url) {
+  var query = url.search.substring(1); // retrieve anything after ? query parameter
+
+  // execute if query parameter exists
+  if (query) {
+    console.log(query);
+    var afterRef = query.substr(query.indexOf("ref") + 4); // retrieve "ref" parameter
+    return afterRef; // return redirect URL
+  } else {
+    return false;
+  }
+}
+
+// method that redirects users to affiliate link
+function redirectToAffiliate() {
+  var currentURL = window.location; // initialize and retrieve current website URL
+
+  var redirectURL = getURLParameter(currentURL); // call method to retrieve URL parameter containing redirect URL
+
+  var redirectDelay = 2; // initialize and set number of seconds delay before redirecting
+
+   // method that redirects page to new URL after specified number of seconds
+   setTimeout(function() {
+    // execute if redirect URL exists
+    if (redirectURL != false) {
+      window.location.replace(redirectURL); // redirect the page to new URL
+    }
+  }, redirectDelay * 1000);
+
 }
 
 // method that inserts custom HTML for advertisements
