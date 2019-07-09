@@ -347,8 +347,8 @@ function checkBlog() {
 
     console.log("Current pathname is:", pathName);
 
-    // call method that inserts Pinterest buttons to images
-    insertImageButtons();
+    // call method that changes image URLs in shop page
+    changeShopImageURLs();
 
   }
 
@@ -453,8 +453,69 @@ function insertImageButtons() {
 
   console.log(tag, "Insert new pinterest save buttons");
 
-  var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+  // var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
 
+  // retrieve all image elements within the article content
+  var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
+
+  // loop through images
+  for (var i = 0; i < images.length; i++) {
+    console.log(tag, images[i]);
+
+    var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+    $(images[i]).after(saveItButton);
+
+    // console.log("Images", images);
+
+    // retrieve pinterest button
+    var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+    var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+
+    // method that inserts event listener and executes a function when button is pressed
+    pinterestButton.addEventListener('click', function (e) {
+      // console.log(e);
+      e.preventDefault(); // prevent anchor tag from automatically changing page
+      e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+      // var customURL = location.href;
+
+      // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+
+      /*
+      
+      // execute if href exists
+      if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+        customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+
+        console.log("[PINTEREST] HREF LOCATED.", customURL);
+
+      } else {
+        customURL = location.href;
+      } */
+
+
+      PinUtils.pinOne({
+        'url': location.href,
+        'media': e.target.attributes['data-image'].value,
+        'description': e.target.attributes['data-desc'].value
+      });
+    });
+
+    // method that inserts event listener and executes function when button is pressed
+    facebookButton.addEventListener('click', function (e) {
+
+      e.preventDefault(); // prevent anchor tag from automatically changing page
+      e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+      var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+
+      window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+    });
+
+  }
+
+  /*
   // execute if current page is products page
   if (pathName == "test") {
 
@@ -500,67 +561,28 @@ function insertImageButtons() {
       });
 
     }
+  } */
 
-  // execute if page is not products page
-  } else {
-    // retrieve all image elements within the article content
-    var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
+}
 
-    // loop through images
-    for (var i = 0; i < images.length; i++) {
-      console.log(tag, images[i]);
+// method that changes image URLs in shop page
+function changeShopImageURLs() {
+  let tag = "[SHOP]";
 
-      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+  console.log(tag, "Change shop image URLs");
 
-      $(images[i]).after(saveItButton);
+  // retrieve all image anchor tags in shop page
+  var shopAnchorTags = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide a.image-slide-anchor");
 
-      // console.log("Images", images);
+  // loop through anchor tags
+  for (var i = 0; i < shopAnchorTags.length; i++) {{
 
-      // retrieve pinterest button
-      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+    var currentURL = shopAnchorTags[i].href; // retrieve current anchor tag URL
 
-      // method that inserts event listener and executes a function when button is pressed
-      pinterestButton.addEventListener('click', function (e) {
-        // console.log(e);
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
+    shopAnchorTags[i].href = "https://iamandco.com/splash?ref=" + currentURL;
 
-        var customURL = location.href;
+    console.log(tag, "New URL: " + shopAnchorTags[i].href);
 
-        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
-
-        
-        // execute if href exists
-        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
-          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
-
-          console.log("[PINTEREST] HREF LOCATED.", customURL);
-
-        } else {
-          customURL = location.href;
-        }
-        
-
-        PinUtils.pinOne({
-          'url': customURL,
-          'media': e.target.attributes['data-image'].value,
-          'description': e.target.attributes['data-desc'].value
-        });
-      });
-
-      // method that inserts event listener and executes function when button is pressed
-      facebookButton.addEventListener('click', function (e) {
-
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
-
-        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
-      });
-
-    }
   }
 
 }
