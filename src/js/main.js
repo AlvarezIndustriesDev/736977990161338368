@@ -577,7 +577,7 @@ function changeShopImageURLs() {
   // loop through anchor tags
   for (var i = 0; i < shopAnchorTags.length; i++) {
 
-    var retrieveAffiliateURL = function() {
+    var retrieveAffiliateURL = function(e) {
       console.log(e);
       e.preventDefault(); // prevent anchor tag from automatically changing page
       e.stopPropagation(); // prevents anchor tag from being handled by another event
@@ -589,7 +589,7 @@ function changeShopImageURLs() {
     shopAnchorTags[i].addEventListener("click", retrieveAffiliateURL);
 
     // trigger event listener
-    $(shopAnchorTags[i]).trigger("click");
+    shopAnchorTags[i].click();
 
     // execute if current URL is not null
     if (retrieveAffiliateURL.length > 0) {
