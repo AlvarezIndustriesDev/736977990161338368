@@ -589,7 +589,7 @@ function changeShopImageURLs() {
     shopAnchorTags[i].addEventListener("click", retrieveAffiliateURL);
 
     // trigger event listener
-    $(shopAnchorTags[i]).click();
+    $(shopAnchorTags[i]).trigger("click");
 
     // execute if current URL is not null
     if (retrieveAffiliateURL.length > 0) {
