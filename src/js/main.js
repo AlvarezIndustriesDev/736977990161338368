@@ -594,6 +594,8 @@ function changeShopImageURLs() {
     // execute if current URL is not null
     if (retrieveAffiliateURL.length > 0) {
 
+      var currentURL = retrieveAffiliateURL;
+
       // remove event listener from anchor tag
       shopAnchorTags[i].removeEventListener("click", retrieveAffiliateURL);
 
