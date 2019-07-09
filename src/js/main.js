@@ -569,7 +569,7 @@ function insertImageButtons() {
 function changeShopImageURLs() {
   let tag = "[SHOP]";
 
-  console.log(tag, "Change shop image URLs");
+  // console.log(tag, "Change shop image URLs");
 
   // retrieve all image anchor tags in shop page
   var shopAnchorTags = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide a.image-slide-anchor");
@@ -577,35 +577,15 @@ function changeShopImageURLs() {
   // loop through anchor tags
   for (var i = 0; i < shopAnchorTags.length; i++) {
 
-    var currentURL;
+    // execute when user right clicks on the image
+    $(shopAnchorTags[i]).contextmenu(function (event) {
+      var currentURL = this.href; // retrieve affiliate URL
+      var newURL = "https://iamandco.com/splash?ref=" + currentURL; // set new splash + affiliate URL
 
-    var retrieveAffiliateURL = function(e) {
-      console.log(e);
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      e.stopPropagation(); // prevents anchor tag from being handled by another event
-      console.log(this.href);
-      
-      currentURL = this.href;
+      console.log(tag, newURL);
 
-    }
-
-    // add event listener to anchor tag
-    shopAnchorTags[i].addEventListener("click", retrieveAffiliateURL);
-
-    // trigger event listener
-    shopAnchorTags[i].click();
-
-    // execute if current URL is not null
-    if (currentURL.length > 0) {
-
-      // remove event listener from anchor tag
-      shopAnchorTags[i].removeEventListener("click", retrieveAffiliateURL);
-
-      //shopAnchorTags[i].href = "https://iamandco.com/splash?ref=" + currentURL;
-
-      //console.log(tag, "New URL: " + shopAnchorTags[i].href);
-
-    }
+      $(this).attr('href', newURL); // set image href to new URL
+    });
 
   }
 }
