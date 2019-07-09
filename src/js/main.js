@@ -617,12 +617,12 @@ function redirectToAffiliate() {
 
   var redirectDelay = 2; // initialize and set number of seconds delay before redirecting
 
-  // execute if redirect URL exists
-  if (redirectURL != false) {
-    window.location.href = redirectURL; // redirect the page to new URL
-  }
+  // // execute if redirect URL exists
+  // if (redirectURL != false) {
+  //   window.location.href = redirectURL; // redirect the page to new URL
+  // }
 
-   /*
+   
    // method that redirects page to new URL after specified number of seconds
    setTimeout(function() {
     // execute if redirect URL exists
@@ -630,7 +630,7 @@ function redirectToAffiliate() {
       window.location.href = redirectURL; // redirect the page to new URL
     }
   }, redirectDelay * 1000);
-  */
+  
 
 }
 
