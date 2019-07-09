@@ -577,12 +577,16 @@ function changeShopImageURLs() {
   // loop through anchor tags
   for (var i = 0; i < shopAnchorTags.length; i++) {
 
+    var currentURL;
+
     var retrieveAffiliateURL = function(e) {
       console.log(e);
       e.preventDefault(); // prevent anchor tag from automatically changing page
       e.stopPropagation(); // prevents anchor tag from being handled by another event
       console.log(this.href);
-      return this.href;
+      
+      currentURL = this.href;
+
     }
 
     // add event listener to anchor tag
@@ -592,16 +596,14 @@ function changeShopImageURLs() {
     shopAnchorTags[i].click();
 
     // execute if current URL is not null
-    if (retrieveAffiliateURL.length > 0) {
-
-      var currentURL = retrieveAffiliateURL;
+    if (currentURL.length > 0) {
 
       // remove event listener from anchor tag
       shopAnchorTags[i].removeEventListener("click", retrieveAffiliateURL);
 
-      shopAnchorTags[i].href = "https://iamandco.com/splash?ref=" + currentURL;
+      //shopAnchorTags[i].href = "https://iamandco.com/splash?ref=" + currentURL;
 
-      console.log(tag, "New URL: " + shopAnchorTags[i].href);
+      //console.log(tag, "New URL: " + shopAnchorTags[i].href);
 
     }
 
