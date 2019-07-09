@@ -615,8 +615,6 @@ function redirectToAffiliate() {
 
   var redirectURL = getURLParameter(currentURL); // call method to retrieve URL parameter containing redirect URL
 
-  var redirectDelay = 2; // initialize and set number of seconds delay before redirecting
-
   // // execute if redirect URL exists
   // if (redirectURL != false) {
   //   window.location.href = redirectURL; // redirect the page to new URL
