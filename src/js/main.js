@@ -621,7 +621,7 @@ function redirectToAffiliate() {
    setTimeout(function() {
     // execute if redirect URL exists
     if (redirectURL != false) {
-      window.location.replace(redirectURL); // redirect the page to new URL
+      window.location.href = redirectURL; // redirect the page to new URL
     }
   }, redirectDelay * 1000);
 
