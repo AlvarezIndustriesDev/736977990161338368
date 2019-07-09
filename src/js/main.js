@@ -619,7 +619,7 @@ function redirectToAffiliate() {
 
   // execute if redirect URL exists
   if (redirectURL != false) {
-    window.location.href = redirectURL; // redirect the page to new URL
+    //window.location.href = redirectURL; // redirect the page to new URL
   }
 
    /*
