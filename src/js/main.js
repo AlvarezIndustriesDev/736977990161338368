@@ -914,9 +914,9 @@ function returnAdPositions(array, limit) {
             console.log(array[i][j]);
             elementsRemaining--; // still subtract but do not push to array
             // execute if selected element is near a video element (either first or last child of their current element)
-          } else if (($(array[i][j]).is(":first-child") && matchesConditions) || ($(array[i][j]).is(":last-child") && matchesConditions)) {
-            console.log("This element is near a video block");
-            console.log(array[i][j]);
+          // } else if (($(array[i][j]).is(":first-child") && matchesConditions) || ($(array[i][j]).is(":last-child") && matchesConditions)) {
+          //   console.log("This element is near a video block");
+          //   console.log(array[i][j]);
             // elementsRemaining--; // still subtract but do not push to array
           } else {
             finalElementsArray.push(array[i][j]);
@@ -951,9 +951,9 @@ function checkContentSiblings(element) {
     console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
     return true; // return true   
     // execute if previous or next element is a code html block element (.sqs-block.html-block) [searching for video block]
-  } else if ($(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div") || $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div")) {
-    console.log("[PREV ELEMENT || NEXT ELEMENT]:", "Is near video element!", $(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div"), $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div"));
-    return true; // return true
+  // } else if ($(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div") || $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div")) {
+  //   console.log("[PREV ELEMENT || NEXT ELEMENT]:", "Is near video element!", $(closestSqsBlock.prev().is(".sqs-block.code-block")).has(".mediavine-video__target-div"), $(closestSqsBlock.next().is(".sqs-block.code-block")).has(".mediavine-video__target-div"));
+  //   return true; // return true
   } else {
     return false; // return false
   }
