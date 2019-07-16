@@ -1084,9 +1084,9 @@ function insertAdSidebar() {
   $("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
 
   var rssFeedURL = "https://iamandco.com/blog?format=rss";
-  var sidebarArticleStartHTML = "<div id='sidebar_atf_wrapper'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
+  var sidebarArticleStartHTML = "<div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
   var sidebarArticleMiddleHTML = "";
-  var sidebarArticleEndHTML = "</ul></div><div id='sidebar_btf_wrapper'></div>";
+  var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true'></div>";
 
   // method to retrieve blog page RSS in XML format
   $.ajax({
