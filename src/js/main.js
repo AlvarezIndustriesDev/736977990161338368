@@ -1388,9 +1388,9 @@ function displaySubscriptionPopup(categoryToDisplay) {
     //var currentTime = Date.now(); // retrieve current time
 
     var newScript = document.createElement("script");
-    script.src = "//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js";
-    script.type = "text/javascript";
-    script.onload = function () {
+    newScript.src = "//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js";
+    newScript.type = "text/javascript";
+    newScript.onload = function () {
       // MailChimp method that displays the popup
       window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
         // delay by specific time amount
