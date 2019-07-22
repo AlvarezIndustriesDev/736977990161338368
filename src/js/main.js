@@ -1383,22 +1383,23 @@ function displaySubscriptionPopup(categoryToDisplay) {
     console.log("[POPUP]", uuid);
     console.log("[POPUP]", listID);
 
-    var navigationStartTime = window.performance.timing.navigationStart; // use navigation time to find out when page actually loaded
+    //var navigationStartTime = window.performance.timing.navigationStart; // use navigation time to find out when page actually loaded
     var mailChimpDelay = mailChimpPopupDelay * 1000; // calculate delay in milliseconds
-    var currentTime = Date.now(); // retrieve current time
+    //var currentTime = Date.now(); // retrieve current time
 
     // MailChimp method that displays the popup
     window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
       // delay by specific time amount
       setTimeout(function(){
-        console.log("[POPUP] 15 seconds delay has executed.");
+        console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
         L.start({
           "baseUrl": "mc.us16.list-manage.com",
           "uuid": uuid,
           "lid": listID,
           "uniqueMethods": true
         });
-      }, Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0));
+      }, mailChimpDelay);
+      /* Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0) */
     });
   }
 
