@@ -268,6 +268,9 @@ function checkBlog() {
           // loop through result array
           for (var i = 0; i < categoryArray.length; i++) {
             console.log("[CHECK BLOG] Category Array:", categoryArray);
+
+            checkArticlesForPopup(categoryArray[i], categoriesForPopup); // method called to check if element exists in articles array
+
             var existsInArticlesForEmbed = articlesForEmbed.some(function (item) {
               return item === categoryArray[i];
             }); // filter through articlesForEmbed array and return true if article category exists
@@ -620,15 +623,15 @@ function redirectToAffiliate() {
   //   window.location.href = redirectURL; // redirect the page to new URL
   // }
 
-   
-   // method that redirects page to new URL after specified number of seconds
-   setTimeout(function() {
+
+  // method that redirects page to new URL after specified number of seconds
+  setTimeout(function () {
     // execute if redirect URL exists
     if (redirectURL != false) {
       window.location.href = redirectURL; // redirect the page to new URL
     }
   }, redirectDelay * 1000);
-  
+
 
 }
 
@@ -1331,6 +1334,65 @@ function decodeText(encodedString) {
   textArea.innerHTML = encodedString;
   return textArea.value;
   textArea.parentNode.removeChild(textArea);
+}
+
+// method that checks if an article category matches categoriesForPopup array
+function checkArticlesForPopup(category, array) {
+
+  // loop through categoriesForPopup array
+  for (var i = 0; i < array.length; i++) {
+
+    // execute if category exists in validation array
+    if (array[i] == category) {
+
+      console.log("[POPUP]", category, true);
+
+      displaySubscriptionPopup(value); // call method that displays subscription popup
+
+      // execute if category does not exist in validation array
+    } else {
+
+      console.log("[POPUP]", category, false);
+
+    }
+
+  }
+
+}
+
+// method that displays subscription popup
+function displaySubscriptionPopup(categoryToDisplay) {
+  console.log("[POPUP]", "Beginning of popup subscription.");
+
+  var uuid = "23fd1362e2fc3bca611d00b8b"; // initialize and declare variable value to unique user id from MailChimp
+  var listID; // initialize and declare list ID (from MailChimp) variable
+
+  // method that sets listID variable value based on category of page (NOTE: category must be converted to lowercase in this method for accessibility purposes)
+  switch (category.toLowerCase()) {
+    case 'astrology':
+      listID = "a05ec12fa8"; // set value to MailChimp list ID for astrology
+      break;
+    default:
+      console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
+  }
+  console.log("[POPUP] Category passed to this function:", category);
+
+  // execute if the list ID is not empty
+  if (listID != "") {
+    console.log("[POPUP] listID and uuid not empty");
+    console.log("[POPUP]", uuid);
+    console.log("[POPUP]", listID);
+    // MailChimp method that displays the popup
+    require(["mojo/signup-forms/Loader"], function (L) {
+      L.start({
+        "baseUrl": "mc.us16.list-manage.com",
+        "uuid": uuid,
+        "lid": listID,
+        "uniqueMethods": true
+      });
+    });
+  }
+
 }
 
 // method that adds event listeners to products found in a design gallery grid
