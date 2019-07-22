@@ -1383,7 +1383,7 @@ function displaySubscriptionPopup(categoryToDisplay) {
     console.log("[POPUP]", uuid);
     console.log("[POPUP]", listID);
     // MailChimp method that displays the popup
-    require(["mojo/signup-forms/Loader"], function (L) {
+    window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
       L.start({
         "baseUrl": "mc.us16.list-manage.com",
         "uuid": uuid,
