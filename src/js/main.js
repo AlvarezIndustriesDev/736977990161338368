@@ -1347,7 +1347,7 @@ function checkArticlesForPopup(category, array) {
 
       console.log("[POPUP]", category, true);
 
-      displaySubscriptionPopup(value); // call method that displays subscription popup
+      displaySubscriptionPopup(category); // call method that displays subscription popup
 
       // execute if category does not exist in validation array
     } else {
