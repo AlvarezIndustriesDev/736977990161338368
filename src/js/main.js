@@ -1387,6 +1387,17 @@ function displaySubscriptionPopup(categoryToDisplay) {
     var mailChimpDelay = mailChimpPopupDelay * 1000; // calculate delay in milliseconds
     //var currentTime = Date.now(); // retrieve current time
 
+    var scripts = document.getElementsByTagName("script");
+
+    for (var i = 0; i < scripts.length; i++) {
+
+      // look for src containing the old embed.js code and bail if it exists
+      if (scripts[i].getAttribute("src") === "//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js") {
+        scripts[i].remove();
+      }
+
+    }
+
     var newScript = document.createElement("script");
     newScript.src = "//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js";
     newScript.type = "text/javascript";
