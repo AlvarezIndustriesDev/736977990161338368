@@ -1388,15 +1388,14 @@ function displaySubscriptionPopup(categoryToDisplay) {
     //var currentTime = Date.now(); // retrieve current time
 
     // MailChimp method that displays the popup
-    window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
+    require(["mojo/signup-forms/Loader"], function (L) {
       // delay by specific time amount
       setTimeout(function(){
         console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
         L.start({
           "baseUrl": "mc.us16.list-manage.com",
           "uuid": uuid,
-          "lid": listID,
-          "uniqueMethods": true
+          "lid": listID
         });
       }, mailChimpDelay);
       /* Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0) */
