@@ -1404,10 +1404,9 @@ function displaySubscriptionPopup(categoryToDisplay) {
         }, mailChimpDelay);
         /* Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0) */
       });
-
-      document.body.appendChild(newScript);
     };
 
+    document.body.appendChild(newScript);
 
   }
 
