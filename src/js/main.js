@@ -1368,14 +1368,14 @@ function displaySubscriptionPopup(categoryToDisplay) {
   var listID; // initialize and declare list ID (from MailChimp) variable
 
   // method that sets listID variable value based on category of page (NOTE: category must be converted to lowercase in this method for accessibility purposes)
-  switch (category.toLowerCase()) {
+  switch (categoryToDisplay.toLowerCase()) {
     case 'astrology':
       listID = "a05ec12fa8"; // set value to MailChimp list ID for astrology
       break;
     default:
       console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
   }
-  console.log("[POPUP] Category passed to this function:", category);
+  console.log("[POPUP] Category passed to this function:", categoryToDisplay);
 
   // execute if the list ID is not empty
   if (listID != "") {
