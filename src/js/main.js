@@ -159,7 +159,7 @@ function checkBlog() {
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
               console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
-              var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
+              var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
 
               var elementsInArray = $("article em:contains('Every editorial product')");
 
@@ -226,7 +226,7 @@ function checkBlog() {
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
               console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
-              var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
+              var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
 
               var elementsInArray = $("article em:contains('Every editorial product')");
 
@@ -1387,38 +1387,20 @@ function displaySubscriptionPopup(categoryToDisplay) {
     var mailChimpDelay = mailChimpPopupDelay * 1000; // calculate delay in milliseconds
     //var currentTime = Date.now(); // retrieve current time
 
-    var scripts = document.getElementsByTagName("script");
-
-    for (var i = 0; i < scripts.length; i++) {
-
-      // look for src containing the old embed.js code and bail if it exists
-      if (scripts[i].getAttribute("src") === "//s3.amazonaws.com/downloads.mailchimp.com/js/signup-forms/popup/embed.js") {
-        scripts[i].remove();
-      }
-
-    }
-
-    var newScript = document.createElement("script");
-    newScript.src = "//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js";
-    newScript.type = "text/javascript";
-    newScript.onload = function () {
-      // MailChimp method that displays the popup
-      window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
-        // delay by specific time amount
-        setTimeout(function () {
-          console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
-          L.start({
-            "baseUrl": "mc.us16.list-manage.com",
-            "uuid": uuid,
-            "lid": listID
-          });
-        }, mailChimpDelay);
-        /* Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0) */
-      });
-    };
-
-    document.body.appendChild(newScript);
-
+    // MailChimp method that displays the popup
+    window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
+      // delay by specific time amount
+      setTimeout(function(){
+        console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
+        L.start({
+          "baseUrl": "mc.us16.list-manage.com",
+          "uuid": uuid,
+          "lid": listID,
+          "uniqueMethods": true
+        });
+      }, mailChimpDelay);
+      /* Math.max(mailChimpDelay - (currentTime - navigationStartTime), 0) */
+    });
   }
 
 }
@@ -1948,6 +1930,21 @@ function moveElements() {
   }
 }
 
+// method that prevents sidebar from moving past footer
+function preventStickySidebar() {
+
+  var windowTop = $(window).scrollTop();
+  var footerTop = $("footer.Footer").offset().top;
+  var sidebarAdHeight = $("sidebar_btf_sticky_wrapper").height();
+
+  var padding = 20; 
+
+  if (windowTop + sidebarAdHeight > footerTop - padding) {
+    $("sidebar_btf_sticky_wrapper").css({top: (windowTop + sidebarAdHeight - footerTop + padding) * -1});
+  } 
+
+}
+
 /* This stuff listens for an ajax page change */
 // window.onload = watch;
 window.onload = function () {
@@ -1971,3 +1968,8 @@ function watch() {
     console.log("Called function to load customm video javascript!");
   });
 }
+
+$(function () {
+  $(window).scroll(preventStickySidebar);
+  preventStickySidebar();
+});
