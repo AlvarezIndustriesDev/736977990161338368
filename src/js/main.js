@@ -1089,7 +1089,7 @@ function insertAdSidebar() {
   var rssFeedURL = "https://iamandco.com/blog?format=rss";
   var sidebarArticleStartHTML = "<div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
   var sidebarArticleMiddleHTML = "";
-  var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true'></div>";
+  var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
 
   // method to retrieve blog page RSS in XML format
   $.ajax({
@@ -1390,7 +1390,7 @@ function displaySubscriptionPopup(categoryToDisplay) {
     // MailChimp method that displays the popup
     window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
       // delay by specific time amount
-      setTimeout(function(){
+      setTimeout(function () {
         console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
         L.start({
           "baseUrl": "mc.us16.list-manage.com",
@@ -1930,21 +1930,6 @@ function moveElements() {
   }
 }
 
-// method that prevents sidebar from moving past footer
-function preventStickySidebar() {
-
-  var windowTop = $(window).scrollTop();
-  var footerTop = $("footer.Footer").offset().top;
-  var sidebarAdHeight = $("sidebar_btf_sticky_wrapper").height();
-
-  var padding = 20; 
-
-  if (windowTop + sidebarAdHeight > footerTop - padding) {
-    $("sidebar_btf_sticky_wrapper").css({top: (windowTop + sidebarAdHeight - footerTop + padding) * -1});
-  } 
-
-}
-
 /* This stuff listens for an ajax page change */
 // window.onload = watch;
 window.onload = function () {
@@ -1968,8 +1953,3 @@ function watch() {
     console.log("Called function to load customm video javascript!");
   });
 }
-
-$(function () {
-  $(window).scroll(preventStickySidebar);
-  preventStickySidebar();
-});
