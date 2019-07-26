@@ -152,7 +152,7 @@ function checkBlog() {
                   insertAdvertisements(true);
             }*/
 
-            insertAdvertisements(true);
+            // insertAdvertisements(true);
 
             articleIsFeelGoods = true;
 
@@ -219,7 +219,7 @@ function checkBlog() {
                   insertAdvertisements(true);
             }*/
 
-            insertAdvertisements(true);
+            // insertAdvertisements(true);
 
             articleIsFeelGoods = true;
 
@@ -328,7 +328,7 @@ function checkBlog() {
       insertAdvertisements(true);
     } */
 
-    insertAdvertisements(true);
+    // insertAdvertisements(true);
 
     // execute if current page is "featured-1" page
   } else if (pathName == "self-care") {
@@ -1347,7 +1347,7 @@ function checkArticlesForPopup(category, array) {
 
       console.log("[POPUP]", category, true);
 
-      displaySubscriptionPopup(category); // call method that displays subscription popup
+      // displaySubscriptionPopup(category); // call method that displays subscription popup
 
       // execute if category does not exist in validation array
     } else {
@@ -1406,7 +1406,6 @@ function displaySubscriptionPopup(categoryToDisplay) {
 }
 
 // method that adds event listeners to products found in a design gallery grid
-
 /*
 function addEventListeners() {
   // console.log("AddEventListener function was executed...");
