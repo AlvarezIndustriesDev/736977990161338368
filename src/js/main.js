@@ -1039,147 +1039,131 @@ function insertAdSidebar() {
         // append image to new image block element
         $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
 
-        // execute if previous row has shop market buttons
+        // execute if previous row has price text and button
         if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
-          console.log($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]);
 
-          var priceElement;
+          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
 
-          var priceButtonElement;
+          priceButtonElement = $(priceElement).next();
 
-          // var priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]; // retrieve previous row price text
+          console.log(priceElement, priceButtonElement);
 
-          // var priceButtonElement = priceElement.next();
+          // console.log("[PREV ROW ELEMENTS]:", priceElement);
 
-          // execute if previous row has price text and button
-          if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
-
-            priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
-
-            priceButtonElement = $(priceElement).next();
-
-            console.log(priceElement, priceButtonElement);
-
-            // console.log("[PREV ROW ELEMENTS]:", priceElement);
-
-            // insert price element and button element
-            $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
-            $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
-
-          }
+          // insert price element and button element
+          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
+          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
 
         }
+        
+        // delete old row
+        previousRow.remove();
 
-      }
+      } // end if statement
+    } // end for-loop statement
+  } // end if statement
 
-      // delete old row
-      previousRow.remove();
+  // execute if article has image gallery blocks
+  if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
+    console.log("[MSG] Retrieving image gallery blocks");
+    var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
 
-    } // end if statement
-  } // end for-loop statement
-} // end if statement
+    // loop through image gallery blocks
+    for (var i = 0; i < galleries.length; i++) {
+      // find nearest row
+      var nearestRow = retrieveNearestRow(galleries[i]);
+      // find nearest row's parent
+      var rowParent = retrieveRowParent(nearestRow);
+      // check if nearest row parent has class ".col.sqs-col-12.span-12"
+      var topRow = checkForClass(nearestRow, rowParent, 0);
+      // console.log("Row Index:", topRow);
+      // PRAISE THE LORD, IT WORKS!
 
-// execute if article has image gallery blocks
-if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
-  console.log("[MSG] Retrieving image gallery blocks");
-  var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
+      if (topRow != null) {
+        var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-  // loop through image gallery blocks
-  for (var i = 0; i < galleries.length; i++) {
-    // find nearest row
-    var nearestRow = retrieveNearestRow(galleries[i]);
-    // find nearest row's parent
-    var rowParent = retrieveRowParent(nearestRow);
-    // check if nearest row parent has class ".col.sqs-col-12.span-12"
-    var topRow = checkForClass(nearestRow, rowParent, 0);
-    // console.log("Row Index:", topRow);
-    // PRAISE THE LORD, IT WORKS!
+        // retrieve previous row
+        var previousRow = topRow;
 
-    if (topRow != null) {
-      var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+        // insert new image gallery block element
+        $(previousRow).before(customImageBlockHTML);
 
-      // retrieve previous row
-      var previousRow = topRow;
+        // append image gallery to new image gallery block element
+        $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
 
-      // insert new image gallery block element
-      $(previousRow).before(customImageBlockHTML);
+        // delete old row
+        previousRow.remove();
 
-      // append image gallery to new image gallery block element
-      $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
+      } // end if statement
+    } // end for-loop statement
+  } // end if statement
 
-      // delete old row
-      previousRow.remove();
+  // call function to display latest articles
+  var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
-    } // end if statement
-  } // end for-loop statement
-} // end if statement
+  // insert loading gif to sidebar
+  $("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
 
-// call function to display latest articles
-var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
+  var rssFeedURL = "https://iamandco.com/blog?format=rss";
+  var sidebarArticleStartHTML = "<div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
+  var sidebarArticleMiddleHTML = "";
+  var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
 
-// insert loading gif to sidebar
-$("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
+  // method to retrieve blog page RSS in XML format
+  $.ajax({
+    url: rssFeedURL,
+    accepts: {
+      xml: "application/rss+xml"
+    },
+    dataType: "xml",
+    success: function (data) {
+      console.log("[SIDEBAR DATA AJAX]:", data);
 
-var rssFeedURL = "https://iamandco.com/blog?format=rss";
-var sidebarArticleStartHTML = "<div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
-var sidebarArticleMiddleHTML = "";
-var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
+      var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
 
-// method to retrieve blog page RSS in XML format
-$.ajax({
-  url: rssFeedURL,
-  accepts: {
-    xml: "application/rss+xml"
-  },
-  dataType: "xml",
-  success: function (data) {
-    console.log("[SIDEBAR DATA AJAX]:", data);
+      for (var i = 0; i < sidebarArticleLimit; i++) {
+        var item; // initialize variable
 
-    var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
+        // execute if current item title is the same as page title/link
+        // items[i].getElementsByTagName("title")[0].textContent == decodeText(jsonData['item']['title'])
+        if (location.href.indexOf(items[i].getElementsByTagName("link")[0].textContent) !== -1) {
+          console.log("Current item link is the same as current page....");
+          item = items[i + 1]; // set variable as xml item
+          i++; // increment for-loop index
+          sidebarArticleLimit++; // increment sidebar article limit
+          // execute if current item title is not the same as page title
+        } else {
+          item = items[i]; // set variable as xml item
+        }
 
-    for (var i = 0; i < sidebarArticleLimit; i++) {
-      var item; // initialize variable
+        // item.getElementsByTagName("title")[0].textContent ||
+        var itemTitle = item.getElementsByTagName("title")[0].textContent; // initialize and set variable to xml item title
 
-      // execute if current item title is the same as page title/link
-      // items[i].getElementsByTagName("title")[0].textContent == decodeText(jsonData['item']['title'])
-      if (location.href.indexOf(items[i].getElementsByTagName("link")[0].textContent) !== -1) {
-        console.log("Current item link is the same as current page....");
-        item = items[i + 1]; // set variable as xml item
-        i++; // increment for-loop index
-        sidebarArticleLimit++; // increment sidebar article limit
-        // execute if current item title is not the same as page title
-      } else {
-        item = items[i]; // set variable as xml item
-      }
+        // item.getElementsByTagName("link")[0].textContent ||
+        var itemLink = item.getElementsByTagName("link")[0].textContent; // initialize and set variable to xml item URL
+        var itemAuthor = ""; // initialize xml item author variable
 
-      // item.getElementsByTagName("title")[0].textContent ||
-      var itemTitle = item.getElementsByTagName("title")[0].textContent; // initialize and set variable to xml item title
+        // execute if element exists in item
+        if (item.getElementsByTagName("dc:creator")[0]) {
+          itemAuthor = item.getElementsByTagName("dc:creator")[0].textContent; // set variable to xml item author
+          // execute if element does not exists (Microsoft Edge works with this one)
+        } else {
+          itemAuthor = $(item).children("dc\\:creator").text(); // set variable to xml item author
+        }
 
-      // item.getElementsByTagName("link")[0].textContent ||
-      var itemLink = item.getElementsByTagName("link")[0].textContent; // initialize and set variable to xml item URL
-      var itemAuthor = ""; // initialize xml item author variable
+        sidebarArticleMiddleHTML += "<li class='custom-sidebar-article-item'><div class='custom-sidebar-article-editorial'><a class='custom-sidebar-article-title' href='" + itemLink + "' data-url='" + itemLink + "'>" + itemTitle + "</a><p class='custom-sidebar-article-author-name'>" + itemAuthor + "</p></div></li>"; // set value to custom summary block item HTML
+      } // end for-loop
 
-      // execute if element exists in item
-      if (item.getElementsByTagName("dc:creator")[0]) {
-        itemAuthor = item.getElementsByTagName("dc:creator")[0].textContent; // set variable to xml item author
-        // execute if element does not exists (Microsoft Edge works with this one)
-      } else {
-        itemAuthor = $(item).children("dc\\:creator").text(); // set variable to xml item author
-      }
+      var completeHTML = sidebarArticleStartHTML + sidebarArticleMiddleHTML + sidebarArticleEndHTML; // concatenate HTML
 
-      sidebarArticleMiddleHTML += "<li class='custom-sidebar-article-item'><div class='custom-sidebar-article-editorial'><a class='custom-sidebar-article-title' href='" + itemLink + "' data-url='" + itemLink + "'>" + itemTitle + "</a><p class='custom-sidebar-article-author-name'>" + itemAuthor + "</p></div></li>"; // set value to custom summary block item HTML
-    } // end for-loop
+      // execute if article category does not contain "Feel Good(s)"
+      // && (location.pathname.split("/")[2] == "75-of-the-funniest-cheesy-pick-up-lines")
 
-    var completeHTML = sidebarArticleStartHTML + sidebarArticleMiddleHTML + sidebarArticleEndHTML; // concatenate HTML
+      $("article .custom-content .custom-ad-sidebar").append(completeHTML); // append to custom HTML element in custom sidebar
+      $("article .custom-content .custom-ad-sidebar .custom-loading-image-sidebar").remove(); // remove the loading image from sidebar
 
-    // execute if article category does not contain "Feel Good(s)"
-    // && (location.pathname.split("/")[2] == "75-of-the-funniest-cheesy-pick-up-lines")
-
-    $("article .custom-content .custom-ad-sidebar").append(completeHTML); // append to custom HTML element in custom sidebar
-    $("article .custom-content .custom-ad-sidebar .custom-loading-image-sidebar").remove(); // remove the loading image from sidebar
-
-  } // end ajax success
-}); // end ajax function
+    } // end ajax success
+  }); // end ajax function
 }
 
 // method that retrives the nearest row for positioning advertisements on article content
