@@ -36,6 +36,7 @@ var articleIsFeelGoods = false;
 //init(); //Start the code when the page loads
 // redirectInit(); // method called to initialize redirect function
 checkBlog(); // method called to check if current page is blog page
+removeMailChimpScript(); // method called to remove MailChimp script from DOM
 // handleTrendingCarousel(); // method called to modify "trending" carousel in home page
 
 // method called to initialize redirect function
