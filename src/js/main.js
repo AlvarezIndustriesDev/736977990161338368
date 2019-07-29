@@ -1365,7 +1365,7 @@ function checkArticlesForPopup(category, array) {
 
       console.log("[POPUP]", category, true);
 
-      // displaySubscriptionPopup(category); // call method that displays subscription popup
+      displaySubscriptionPopup(category); // call method that displays subscription popup
 
       // execute if category does not exist in validation array
     } else {
@@ -1947,6 +1947,22 @@ function moveElements() {
   }
 }
 
+// method that removes MailChimp script
+function removeMailChimpScript() {
+
+  // execute if mailchimp script is found
+  if (document.getElementById("mcjs")) {
+
+    var mailChimpScript = document.getElementById("mcjs");
+
+    mailChimpScript.parentNode.removeChild(mailChimpScript);
+
+    console.log("[MAILCHIMP]", "Removed script.");
+
+  }
+
+}
+
 /* This stuff listens for an ajax page change */
 // window.onload = watch;
 window.onload = function () {
@@ -1963,6 +1979,7 @@ function watch() {
     summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
     articleIsFeelGoods = false;
+    removeMailChimpScript(); // call method that removes MailChimp's script
     checkBlog();
     console.log("Will be calling function to load custom video javascript...");
     window.instgrm.Embeds.process();
