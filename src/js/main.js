@@ -540,7 +540,7 @@ function insertImageButtons() {
 
       console.log(tag, "Title length: " + textLength);
 
-      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
       $(thumbImages[i]).after(saveItButton);
 
@@ -1965,8 +1965,8 @@ function insertCustomHTML(articleCategory) {
 
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
-    // pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML
-    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML) {
+    // 
+    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML) {
       // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
       $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
