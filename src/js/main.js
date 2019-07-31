@@ -1965,7 +1965,8 @@ function insertCustomHTML(articleCategory) {
 
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
-    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML) {
+    // pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML
+    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML) {
       // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
       $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
