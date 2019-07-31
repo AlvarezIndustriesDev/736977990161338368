@@ -540,6 +540,8 @@ function insertImageButtons() {
 
       console.log(tag, "Title length: " + textLength);
 
+      console.log(tag, $(thumbImages[i]).attr('data-image'));
+
       var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
       $(thumbImages[i]).after(saveItButton);
