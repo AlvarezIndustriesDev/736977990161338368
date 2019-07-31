@@ -467,61 +467,131 @@ function insertImageButtons() {
   // retrieve all image elements within the article content
   var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
 
-  // loop through images
-  for (var i = 0; i < images.length; i++) {
-    console.log(tag, images[i]);
+  // execute if more than one image exists
+  if (images.length > 0) {
+    // loop through images
+    for (var i = 0; i < images.length; i++) {
+      console.log(tag, images[i]);
 
-    var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
-    $(images[i]).after(saveItButton);
+      $(images[i]).after(saveItButton);
 
-    // console.log("Images", images);
+      // console.log("Images", images);
 
-    // retrieve pinterest button
-    var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-    var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+      // retrieve pinterest button
+      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
 
-    // method that inserts event listener and executes a function when button is pressed
-    pinterestButton.addEventListener('click', function (e) {
-      // console.log(e);
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      e.stopPropagation(); // prevents anchor tag from being handled by another event
+      // method that inserts event listener and executes a function when button is pressed
+      pinterestButton.addEventListener('click', function (e) {
+        // console.log(e);
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
 
-      // var customURL = location.href;
+        // var customURL = location.href;
 
-      // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
-      /*
-      
-      // execute if href exists
-      if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
-        customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+        /*
+        
+        // execute if href exists
+        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+  
+          console.log("[PINTEREST] HREF LOCATED.", customURL);
+  
+        } else {
+          customURL = location.href;
+        } */
 
-        console.log("[PINTEREST] HREF LOCATED.", customURL);
 
-      } else {
-        customURL = location.href;
-      } */
-
-
-      PinUtils.pinOne({
-        'url': location.href,
-        'media': e.target.attributes['data-image'].value,
-        'description': e.target.attributes['data-desc'].value
+        PinUtils.pinOne({
+          'url': location.href,
+          'media': e.target.attributes['data-image'].value,
+          'description': e.target.attributes['data-desc'].value
+        });
       });
-    });
 
-    // method that inserts event listener and executes function when button is pressed
-    facebookButton.addEventListener('click', function (e) {
+      // method that inserts event listener and executes function when button is pressed
+      facebookButton.addEventListener('click', function (e) {
 
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      e.stopPropagation(); // prevents anchor tag from being handled by another event
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
 
-      var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
 
-      window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
-    });
+        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+      });
 
+    }
+  }
+
+  // retrieve all thumb image galleries
+  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor");
+
+  // execute if more than one image exists
+  if (thumbImages.length > 0) {
+    // loop through images
+    for (var i = 0; i < thumbImages.length; i++) {
+      console.log(tag, thumbImages[i]);
+
+      var textLength = $(thumbImages[i]).parent().parent().find(".image-slide-title").height() + 6;
+
+      console.log(tag, "Title length: " + textLength);
+
+      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+      $(thumbImages[i]).after(saveItButton);
+
+      // console.log("Images", images);
+
+      // retrieve pinterest button
+      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+
+      // method that inserts event listener and executes a function when button is pressed
+      pinterestButton.addEventListener('click', function (e) {
+        // console.log(e);
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        // var customURL = location.href;
+
+        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+
+        /*
+        
+        // execute if href exists
+        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+  
+          console.log("[PINTEREST] HREF LOCATED.", customURL);
+  
+        } else {
+          customURL = location.href;
+        } */
+
+
+        PinUtils.pinOne({
+          'url': location.href,
+          'media': e.target.attributes['data-image'].value,
+          'description': e.target.attributes['data-desc'].value
+        });
+      });
+
+      // method that inserts event listener and executes function when button is pressed
+      facebookButton.addEventListener('click', function (e) {
+
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+
+        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+      });
+
+    }
   }
 
   /*
@@ -1056,7 +1126,7 @@ function insertAdSidebar() {
           $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
 
         }
-        
+
         // delete old row
         previousRow.remove();
 
@@ -1391,6 +1461,8 @@ function displaySubscriptionPopup(categoryToDisplay) {
     case 'astrology':
       listID = "a05ec12fa8"; // set value to MailChimp list ID for astrology
       break;
+    case 'spirit':
+      listID = "a05ec12fa8"; // set value to MailChimp list ID for sppirit
     default:
       console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
   }
