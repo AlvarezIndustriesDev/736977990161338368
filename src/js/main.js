@@ -528,7 +528,7 @@ function insertImageButtons() {
   }
 
   // retrieve all thumb image galleries
-  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor");
+  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
 
   // execute if more than one image exists
   if (thumbImages.length > 0) {
@@ -540,7 +540,7 @@ function insertImageButtons() {
 
       console.log(tag, "Title length: " + textLength);
 
-      console.log(tag, $(thumbImages[i]).attr('data-image'));
+      // console.log(tag, $(thumbImages[i]).attr('data-image'));
 
       var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
