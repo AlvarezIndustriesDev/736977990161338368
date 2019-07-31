@@ -547,8 +547,8 @@ function insertImageButtons() {
       // console.log("Images", images);
 
       // retrieve pinterest button
-      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+      var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
 
       // method that inserts event listener and executes a function when button is pressed
       pinterestButton.addEventListener('click', function (e) {
