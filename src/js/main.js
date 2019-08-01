@@ -542,7 +542,7 @@ function insertImageButtons() {
 
       // console.log(tag, $(thumbImages[i]).attr('data-image'));
 
-      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px;'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
       $(thumbImages[i]).after(saveItButton);
 
@@ -550,7 +550,6 @@ function insertImageButtons() {
 
       // retrieve pinterest button
       var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-      var facebookButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
 
       // method that inserts event listener and executes a function when button is pressed
       pinterestButton.addEventListener('click', function (e) {
@@ -580,17 +579,6 @@ function insertImageButtons() {
           'media': e.target.attributes['data-image'].value,
           'description': e.target.attributes['data-desc'].value
         });
-      });
-
-      // method that inserts event listener and executes function when button is pressed
-      facebookButton.addEventListener('click', function (e) {
-
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
-
-        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
       });
 
     }
