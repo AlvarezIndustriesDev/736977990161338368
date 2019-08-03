@@ -1071,93 +1071,93 @@ function insertAdSidebar() {
   document.querySelector('style').textContent +=
     "@media screen and (min-width: 1025px) {.new-custom-article-sqs-block {width: calc(56.65800000000001% + 175px) !important;} .new-custom-article-content {width: calc(100% - (300px)) !important;}}"
 
-  // execute if article has image blocks
-  if ($("article .image-block").length) {
-    console.log("[MSG]:", "Retrieving image blocks...");
-    var imageBlocks = $("article .image-block");
-    console.log(imageBlocks);
+  // // execute if article has image blocks
+  // if ($("article .image-block").length) {
+  //   console.log("[MSG]:", "Retrieving image blocks...");
+  //   var imageBlocks = $("article .image-block");
+  //   console.log(imageBlocks);
 
-    // loop through image block
-    for (var i = 0; i < imageBlocks.length; i++) {
-      // find nearest row
-      var nearestRow = retrieveNearestRow(imageBlocks[i]);
-      // find nearest row's parent
-      var rowParent = retrieveRowParent(nearestRow);
-      // check if nearest row parent has class ".col.sqs-col-12.span-12"
-      var topRow = checkForClass(nearestRow, rowParent, 0);
-      // // console.log("Row Index:", topRow);
-      // PRAISE THE LORD, IT WORKS!
+  //   // loop through image block
+  //   for (var i = 0; i < imageBlocks.length; i++) {
+  //     // find nearest row
+  //     var nearestRow = retrieveNearestRow(imageBlocks[i]);
+  //     // find nearest row's parent
+  //     var rowParent = retrieveRowParent(nearestRow);
+  //     // check if nearest row parent has class ".col.sqs-col-12.span-12"
+  //     var topRow = checkForClass(nearestRow, rowParent, 0);
+  //     // // console.log("Row Index:", topRow);
+  //     // PRAISE THE LORD, IT WORKS!
 
-      if (topRow != null) {
-        var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+  //     if (topRow != null) {
+  //       var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-        console.log("We were able to find the top row.");
-        // insert new image block element
-        var previousRow = topRow;
-        console.log(previousRow);
+  //       console.log("We were able to find the top row.");
+  //       // insert new image block element
+  //       var previousRow = topRow;
+  //       console.log(previousRow);
 
-        $(previousRow).before(customImageBlockHTML);
-        // append image to new image block element
-        $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
+  //       $(previousRow).before(customImageBlockHTML);
+  //       // append image to new image block element
+  //       $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
 
-        // execute if previous row has price text and button
-        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
+  //       // execute if previous row has price text and button
+  //       if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
 
-          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
+  //         priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
 
-          priceButtonElement = $(priceElement).next();
+  //         priceButtonElement = $(priceElement).next();
 
-          console.log(priceElement, priceButtonElement);
+  //         console.log(priceElement, priceButtonElement);
 
-          console.log("[PREV ROW ELEMENTS]:", priceElement);
+  //         console.log("[PREV ROW ELEMENTS]:", priceElement);
 
-          // insert price element and button element
-          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
-          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
+  //         // insert price element and button element
+  //         $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
+  //         $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
 
-        }
+  //       }
 
-        // delete old row
-        previousRow.remove();
+  //       // delete old row
+  //       previousRow.remove();
 
-      } // end if statement
-    } // end for-loop statement
-  } // end if statement
+  //     } // end if statement
+  //   } // end for-loop statement
+  // } // end if statement
 
-  // execute if article has image gallery blocks
-  if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
-    // console.log("[MSG] Retrieving image gallery blocks");
-    var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
+  // // execute if article has image gallery blocks
+  // if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
+  //   // console.log("[MSG] Retrieving image gallery blocks");
+  //   var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
 
-    // loop through image gallery blocks
-    for (var i = 0; i < galleries.length; i++) {
-      // find nearest row
-      var nearestRow = retrieveNearestRow(galleries[i]);
-      // find nearest row's parent
-      var rowParent = retrieveRowParent(nearestRow);
-      // check if nearest row parent has class ".col.sqs-col-12.span-12"
-      var topRow = checkForClass(nearestRow, rowParent, 0);
-      // // console.log("Row Index:", topRow);
-      // PRAISE THE LORD, IT WORKS!
+  //   // loop through image gallery blocks
+  //   for (var i = 0; i < galleries.length; i++) {
+  //     // find nearest row
+  //     var nearestRow = retrieveNearestRow(galleries[i]);
+  //     // find nearest row's parent
+  //     var rowParent = retrieveRowParent(nearestRow);
+  //     // check if nearest row parent has class ".col.sqs-col-12.span-12"
+  //     var topRow = checkForClass(nearestRow, rowParent, 0);
+  //     // // console.log("Row Index:", topRow);
+  //     // PRAISE THE LORD, IT WORKS!
 
-      if (topRow != null) {
-        var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+  //     if (topRow != null) {
+  //       var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-        // retrieve previous row
-        var previousRow = topRow;
+  //       // retrieve previous row
+  //       var previousRow = topRow;
 
-        // insert new image gallery block element
-        $(previousRow).before(customImageBlockHTML);
+  //       // insert new image gallery block element
+  //       $(previousRow).before(customImageBlockHTML);
 
-        // append image gallery to new image gallery block element
-        $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
+  //       // append image gallery to new image gallery block element
+  //       $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
 
-        // delete old row
-        previousRow.remove();
+  //       // delete old row
+  //       previousRow.remove();
 
-      } // end if statement
-    } // end for-loop statement
-  } // end if statement
+  //     } // end if statement
+  //   } // end for-loop statement
+  // } // end if statement
 
   // call function to display latest articles
   var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
