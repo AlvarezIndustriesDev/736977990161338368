@@ -24,7 +24,7 @@
 
 // method that checks to see if user is on mobile device
 var isMobile = function () {
-  //console.log("Device: " + navigator.userAgent);
+  //// console.log("Device: " + navigator.userAgent);
   return /(iphone|ipod|ipad|android|blackberry|windows ce|palm|symbian)/i.test(navigator.userAgent);
 };
 
@@ -73,7 +73,7 @@ function checkBlog() {
     }
 
   }
-  // console.log("First time running function...");
+  // // console.log("First time running function...");
   // Actual function runs below this line
   // -----------------------------------------------------------------------
   // location.pathname.split("/"); returns an array containing all the URL parts
@@ -84,22 +84,22 @@ function checkBlog() {
 
   // execute if URL has parameters
   if (location.href.split("?")[1]) {
-    //console.log("Exists!", location.href.split("?"));
+    //// console.log("Exists!", location.href.split("?"));
     extraPathName = location.href.split("?")[1].split("="); // initialize and retrieve current parameter after "/blog/"
-    // console.log(authorPathName);
+    // // console.log(authorPathName);
   }
 
-  // console.log("Other pathname: ", secondaryPathName);
-  // console.log("Path name:", pathName);
+  // // console.log("Other pathname: ", secondaryPathName);
+  // // console.log("Path name:", pathName);
   // execute if current page has "blog" (or "feels-good") path in URL
   if (pathName == "blog" && secondaryPathName) {
-    // console.log(location.href);
+    // // console.log(location.href);
     var formattedURL; // initialize formatted URL variaWble
     var urlHasParameters = checkForParameters(location.href); // call method to check if current URL has parameters
 
     // execute if not on mobile device
     if (!isMobile()) {
-      console.log("Not mobile");
+      // console.log("Not mobile");
       insertAdSidebar();
     }
 
@@ -121,7 +121,7 @@ function checkBlog() {
 
       // check if url contains question mark
       if (location.href.indexOf("?") !== -1 && location.href.split('?')[1] == "") {
-        console.log("[PARAMETERS]: Url contains ? & white space...trimming ? from url");
+        // console.log("[PARAMETERS]: Url contains ? & white space...trimming ? from url");
         formattedURL = location.href + "format=json"; // set formatted URL variable to current link and create json format parameter and add to end
       } else {
         formattedURL = location.href + "?format=json"; // set formatted URL variable to current link and create json format parameter and add to end
@@ -130,7 +130,7 @@ function checkBlog() {
 
     // call method that inserts Pinterest buttons to images
     insertImageButtons();
-    console.log("Formatted URL:", formattedURL);
+    // console.log("Formatted URL:", formattedURL);
     // method to retrieve page in JSON format
     $.ajax({
       url: formattedURL,
@@ -138,10 +138,10 @@ function checkBlog() {
 
         callback(result); // method called to assign ajax result to variable
 
-        // console.log(result);
+        // // console.log(result);
         // execute if page has category filter
         if (result['categoryFilter']) {
-          // console.log("Filter name:", result['categoryFilter']);
+          // // console.log("Filter name:", result['categoryFilter']);
           // checkInArray(result['categoryFilter'], articlesForEmbed); // method called to check if element exists in articles array
 
           // NOTE: Execute checkForExternalLinks function for articles that are categorized under "Feel Good(s)"
@@ -159,28 +159,28 @@ function checkBlog() {
 
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
-              console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
+              // console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
               var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
 
               var elementsInArray = $("article em:contains('Every editorial product')");
 
-              console.log("[CUSTOM DISCLAIMER TEXT]", elementsInArray);
+              // console.log("[CUSTOM DISCLAIMER TEXT]", elementsInArray);
 
               // execute if disclaimer element exists in DOM
               if (elementsInArray.length > 0) {
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist?");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist?");
                 for (var i = 0; i < elementsInArray.length; i++) {
-                  console.log("[CUSTOM DISCLAIMER TEXT]", $(elementsInArray[i]).text());
+                  // console.log("[CUSTOM DISCLAIMER TEXT]", $(elementsInArray[i]).text());
                   if ($(elementsInArray[i]).text() == currentText) {
-                    console.log("[CUSTOM DISCLAIMER TEXT]", "Current text matches!");
+                    // console.log("[CUSTOM DISCLAIMER TEXT]", "Current text matches!");
                     $(elementsInArray[i]).text(newDisclaimerText);
                   }
                 } // end for loop
                 // execute if disclaimer element does not exist in DOM
               } else {
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist!");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist!");
                 var disclaimerHTML = "<div class='sqs-block spacer-block sqs-block-spacer new-custom-article-sqs-block'><div class='sqs-block-content sqs-intrinsic' style='padding-bottom: 0.157729%;'>&nbsp;</div></div><div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block'><div class='sqs-block-content'><p style='white-space:pre-wrap;'><em>" + newDisclaimerText + "</em></p></div></div>";
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer not found");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer not found");
                 $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").append(disclaimerHTML);
               } // end if statement
             } // end if statement
@@ -201,7 +201,7 @@ function checkBlog() {
 
           // execute if page does not have category filter parameter
         } else if (result['item']['categories']) {
-          // console.log(result['item']['categories']);
+          // // console.log(result['item']['categories']);
           var categoryArray = result['item']['categories']; // initialize and declare variable
           var checked = false; // initialize and declare variable to false
 
@@ -209,7 +209,7 @@ function checkBlog() {
             return item === "Feel Good(s)";
           }); // filter through category array and return true if "Feel Good(s)" category is returned
 
-          // console.log("Add no follow: ", insertNoFollowLinks);
+          // // console.log("Add no follow: ", insertNoFollowLinks);
 
           // execute if insertNoFollowLinks returns true
           if (insertNoFollowLinks) {
@@ -226,28 +226,28 @@ function checkBlog() {
 
             // execute if insert custom disclaimer text variable is true
             if (insertCustomDisclaimerText == true) {
-              console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
+              // console.log("[CUSTOM DISCLAIMER TEXT]", "Insert custom disclaimer...");
               var currentText = "Every editorial product is independently selected. If you purchase something through our linked recommendations, our partner(s) may provide a portion of the revenue to I AM Media.";
 
               var elementsInArray = $("article em:contains('Every editorial product')");
 
-              console.log("[CUSTOM DISCLAIMER TEXT]", elementsInArray);
+              // console.log("[CUSTOM DISCLAIMER TEXT]", elementsInArray);
 
               // execute if disclaimer element exists in DOM
               if (elementsInArray.length > 0) {
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist?");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist?");
                 for (var i = 0; i < elementsInArray.length; i++) {
-                  console.log("[CUSTOM DISCLAIMER TEXT]", $(elementsInArray[i]).text());
+                  // console.log("[CUSTOM DISCLAIMER TEXT]", $(elementsInArray[i]).text());
                   if ($(elementsInArray[i]).text() == currentText) {
-                    console.log("[CUSTOM DISCLAIMER TEXT]", "Current text matches!");
+                    // console.log("[CUSTOM DISCLAIMER TEXT]", "Current text matches!");
                     $(elementsInArray[i]).text(newDisclaimerText);
                   }
                 } // end for loop
                 // execute if disclaimer element does not exist in DOM
               } else {
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist!");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer does not exist!");
                 var disclaimerHTML = "<div class='sqs-block spacer-block sqs-block-spacer new-custom-article-sqs-block'><div class='sqs-block-content sqs-intrinsic' style='padding-bottom: 0.157729%;'>&nbsp;</div></div><div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block'><div class='sqs-block-content'><p style='white-space:pre-wrap;'><em>" + newDisclaimerText + "</em></p></div></div>";
-                console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer not found");
+                // console.log("[CUSTOM DISCLAIMER TEXT]", "Disclaimer not found");
                 $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").append(disclaimerHTML);
               } // end if statement
 
@@ -268,7 +268,7 @@ function checkBlog() {
 
           // loop through result array
           for (var i = 0; i < categoryArray.length; i++) {
-            console.log("[CHECK BLOG] Category Array:", categoryArray);
+            // console.log("[CHECK BLOG] Category Array:", categoryArray);
 
             checkArticlesForPopup(categoryArray[i], categoriesForPopup); // method called to check if element exists in articles array
 
@@ -278,7 +278,7 @@ function checkBlog() {
 
             // execute if article category exists in articlesForEmbed array and checked is false
             if (existsInArticlesForEmbed && !checked) {
-              console.log("[CHECK BLOG] Insert the following category for breadcrumb:", categoryArray[i]);
+              // console.log("[CHECK BLOG] Insert the following category for breadcrumb:", categoryArray[i]);
               insertCustomHTML(categoryArray[i]); // method called to insert custom HTML
               checked = true; // set value to true
             }
@@ -298,25 +298,25 @@ function checkBlog() {
     var prependHTML = "<div class='custom-author-container sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
     $(".Main .Main-content").prepend(prependHTML);
-    // console.log("This is an author page.");
+    // // console.log("This is an author page.");
 
     var formattedURL; // initialize formattedURL variable
 
     // execute if authorPathName contains #
     if (extraPathName[1].split("#")) {
-      // console.log(authorPathName[1].split("#"));
+      // // console.log(authorPathName[1].split("#"));
       formattedURL = location.href.replace("#" + extraPathName[1].split("#")[1], "") + "&format=json"; // set formatted URL variable to modified link and add json format parameter to end
       // execute if authorPathName does not contain #
     } else {
       formattedURL = location.href + "&format=json"; // set formatted URL variable to current link and add json format parameter to end
     }
 
-    // console.log(formattedURL);
+    // // console.log(formattedURL);
 
     insertAuthorBio(formattedURL); // method called to insert author bio information to page
     // execute if current page is a category page
   } else if (pathName == "blog" && extraPathName[0] == "category") {
-    console.log("This page is a category page");
+    // console.log("This page is a category page");
 
     insertAdsExtraPages(); // call method that inserts advertisements on author & category pages
 
@@ -334,14 +334,14 @@ function checkBlog() {
     // execute if current page is "featured-1" page
   } else if (pathName == "self-care") {
 
-    console.log("Current pathname is:", pathName);
+    // console.log("Current pathname is:", pathName);
 
     // dynamically load advertisements with content hints
     var checkSelfCareContent = setInterval(function () {
       // execute if pageLoaded variable is true
       if (pageLoaded == true) {
         clearInterval(checkSelfCareContent); // stop the loop
-        console.log("[ADVERTISEMENTS] PAGE LOADED!");
+        // console.log("[ADVERTISEMENTS] PAGE LOADED!");
         // $mediavine.web.fillContentHints();
         loadMediavineScripts();
       }
@@ -349,7 +349,7 @@ function checkBlog() {
 
   } else if (pathName == "products") {
 
-    console.log("Current pathname is:", pathName);
+    // console.log("Current pathname is:", pathName);
 
     // call method that changes image URLs in shop page
     changeShopImageURLs();
@@ -365,7 +365,7 @@ function checkBlog() {
 
 // method that handles SEO changes to blog pages
 function handleSEOChanges() {
-  console.log("[SEO CHANGES] Method was called.");
+  // console.log("[SEO CHANGES] Method was called.");
 
 
 }
@@ -382,21 +382,21 @@ function loadMediavineVideo() {
       var src = this.src; // initialize and retrieve script source link
       var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-      console.log("[VIDEO] SRC: ", src);
+      // console.log("[VIDEO] SRC: ", src);
       // execute if search string returns a valid match
       if (searchString != -1) {
         var searchText = "/videos/"; // initialize search text variable
         var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
-        console.log("[VIDEO] Video ID:", videoID);
+        // console.log("[VIDEO] Video ID:", videoID);
 
         // set autoplay property to true
         $('#' + videoID).attr('data-autoplay', 'true');
 
         // load javascript
         $.getScript(src, function (data, textStatus, jqxhr) {
-          console.log("[VIDEO]", textStatus); // success message
-          console.log("[VIDEO]", jqxhr.status); // 200 message
-          console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
+          // console.log("[VIDEO]", textStatus); // success message
+          // console.log("[VIDEO]", jqxhr.status); // 200 message
+          // console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
         });
       }
     });
@@ -418,9 +418,9 @@ function loadMediavineVideo() {
 
     // load javascript
     $.getScript(videoURL, function( data, textStatus, jqxhr ) {
-      console.log("[VIDEO]", textStatus); // Success
-      console.log("[VIDEO]", jqxhr.status); // 200
-      console.log("[VIDEO]", "Load was performed.");
+      // console.log("[VIDEO]", textStatus); // Success
+      // console.log("[VIDEO]", jqxhr.status); // 200
+      // console.log("[VIDEO]", "Load was performed.");
     });
   } */
 }
@@ -436,9 +436,9 @@ function loadMediavineScripts() {
   if (pathName == "blog" && secondaryPathName) {
     // load javascript
     $.getScript(scriptSrc, function (data, textStatus, jqxhr) {
-      console.log("[SCRIPT]", textStatus); // success message
-      console.log("[SCRIPT]", jqxhr.status); // 200 message
-      console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
+      // console.log("[SCRIPT]", textStatus); // success message
+      // console.log("[SCRIPT]", jqxhr.status); // 200 message
+      // console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
     });
   }
 
@@ -449,7 +449,7 @@ function checkForElements() {
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
     if ($("article .custom-breadcrumb").length && $("article .BlogItem-title") && $("article .Blog-meta.BlogItem-meta") && $("article .BlogItem-share") && $("article .sqs-layout.sqs-grid-12.columns-12")) {
-      console.log("[FUNCTION]:", "Elements ready for moving!");
+      // console.log("[FUNCTION]:", "Elements ready for moving!");
       clearInterval(checkElement); // stop the loop
       insertAdSidebar();
     }
@@ -460,7 +460,7 @@ function checkForElements() {
 function insertImageButtons() {
   let tag = "[PINTEREST]";
 
-  console.log(tag, "Insert new pinterest save buttons");
+  // console.log(tag, "Insert new pinterest save buttons");
 
   // var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
 
@@ -471,13 +471,13 @@ function insertImageButtons() {
   if (images.length > 0) {
     // loop through images
     for (var i = 0; i < images.length; i++) {
-      console.log(tag, images[i]);
+      // console.log(tag, images[i]);
 
       var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
       $(images[i]).after(saveItButton);
 
-      // console.log("Images", images);
+      // // console.log("Images", images);
 
       // retrieve pinterest button
       var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
@@ -485,13 +485,13 @@ function insertImageButtons() {
 
       // method that inserts event listener and executes a function when button is pressed
       pinterestButton.addEventListener('click', function (e) {
-        // console.log(e);
+        // // console.log(e);
         e.preventDefault(); // prevent anchor tag from automatically changing page
         e.stopPropagation(); // prevents anchor tag from being handled by another event
 
         // var customURL = location.href;
 
-        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+        // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
         /*
         
@@ -499,7 +499,7 @@ function insertImageButtons() {
         if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
           customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
   
-          console.log("[PINTEREST] HREF LOCATED.", customURL);
+          // console.log("[PINTEREST] HREF LOCATED.", customURL);
   
         } else {
           customURL = location.href;
@@ -534,32 +534,32 @@ function insertImageButtons() {
   // if (thumbImages.length > 0) {
   //   // loop through images
   //   for (var i = 0; i < thumbImages.length; i++) {
-  //     console.log(tag, thumbImages[i]);
+  //     // console.log(tag, thumbImages[i]);
 
   //     var textLength = $(thumbImages[i]).parent().parent().find(".image-slide-title").height() + 6;
 
-  //     console.log(tag, "Title length: " + textLength);
+  //     // console.log(tag, "Title length: " + textLength);
 
-  //     // console.log(tag, $(thumbImages[i]).attr('data-image'));
+  //     // // console.log(tag, $(thumbImages[i]).attr('data-image'));
 
   //     var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
   //     $(thumbImages[i]).after(saveItButton);
 
-  //     // console.log("Images", images);
+  //     // // console.log("Images", images);
 
   //     // retrieve pinterest button
   //     var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
 
   //     // method that inserts event listener and executes a function when button is pressed
   //     pinterestButton.addEventListener('click', function (e) {
-  //       // console.log(e);
+  //       // // console.log(e);
   //       e.preventDefault(); // prevent anchor tag from automatically changing page
   //       e.stopPropagation(); // prevents anchor tag from being handled by another event
 
   //       // var customURL = location.href;
 
-  //       // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+  //       // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
   //       /*
         
@@ -567,7 +567,7 @@ function insertImageButtons() {
   //       if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
   //         customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
   
-  //         console.log("[PINTEREST] HREF LOCATED.", customURL);
+  //         // console.log("[PINTEREST] HREF LOCATED.", customURL);
   
   //       } else {
   //         customURL = location.href;
@@ -591,11 +591,11 @@ function insertImageButtons() {
     // retrieve all image elements within the article content
     var images = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
 
-    console.log("Images SQS-GALLERY:", images);
+    // console.log("Images SQS-GALLERY:", images);
 
     // loop through images
     for (var i = 0; i < images.length; i++) {
-      console.log(tag, images[i]);
+      // console.log(tag, images[i]);
 
       var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
@@ -608,7 +608,7 @@ function insertImageButtons() {
 
       // method that inserts event listener and executes a function when button is pressed
       pinterestButton.addEventListener('click', function (e) {
-        // console.log(e);
+        // // console.log(e);
         e.preventDefault(); // prevent anchor tag from automatically changing page
         e.stopPropagation(); // prevents anchor tag from being handled by another event
         PinUtils.pinOne({
@@ -638,7 +638,7 @@ function insertImageButtons() {
 function changeShopImageURLs() {
   let tag = "[SHOP]";
 
-  // console.log(tag, "Change shop image URLs");
+  // // console.log(tag, "Change shop image URLs");
 
   // retrieve all image anchor tags in shop page
   var shopAnchorTags = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide a.image-slide-anchor");
@@ -651,7 +651,7 @@ function changeShopImageURLs() {
       var currentURL = this.href; // retrieve affiliate URL
       var newURL = "https://iamandco.com/splash?ref=" + currentURL; // set new splash + affiliate URL
 
-      console.log(tag, newURL);
+      // console.log(tag, newURL);
 
       $(this).attr('href', newURL); // set image href to new URL
     });
@@ -665,7 +665,7 @@ function getURLParameter(url) {
 
   // execute if query parameter exists
   if (query) {
-    console.log(query);
+    // console.log(query);
     var afterRef = query.substr(query.indexOf("ref") + 4); // retrieve "ref" parameter
     return afterRef; // return redirect URL
   } else {
@@ -700,7 +700,7 @@ function redirectToAffiliate() {
 function insertAdvertisements(isFeelGoods) {
   // var adHTML = "<div class='test-content'>Test</div>";
 
-  console.log("[FUNCTION] Insert advertisements!");
+  // console.log("[FUNCTION] Insert advertisements!");
   /* NOTE: For sidebar, use the flex option on the article element itself */
   /* NOTES from client */
   // --------------------------------------------------------------------------
@@ -714,22 +714,22 @@ function insertAdvertisements(isFeelGoods) {
   -------------------------------------------------------------------------------
   */
   if (isFeelGoods) {
-    console.log("[FUNCTION] is feel good(s)");
+    // console.log("[FUNCTION] is feel good(s)");
     // var adHTML = "<div class='test-content sqs-block html-block sqs-block-html'>Test</div>";
     var adHTML = "<div class='content_hint custom-appended'></div>";
 
     // -- Line blocks
     var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-    console.log("Line blocks:", lineBlocks.length);
+    // console.log("Line blocks:", lineBlocks.length);
     // -- H2 elements
     var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
-    console.log("H2 elements:", h2Elements.length);
+    // console.log("H2 elements:", h2Elements.length);
     // -- H3 elements
     var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
-    console.log("H3 elements:", h3Elements.length);
+    // console.log("H3 elements:", h3Elements.length);
     // -- P elements
     var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
-    console.log("P elements:", pElements.length);
+    // console.log("P elements:", pElements.length);
 
     var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
 
@@ -753,25 +753,25 @@ function insertAdvertisements(isFeelGoods) {
       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
     }
 
-    console.log("Ad Ratio:", adPerPageLimit);
+    // console.log("Ad Ratio:", adPerPageLimit);
 
     // ---------------------------------------------------
     var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
 
-    console.log("Final Element Array:", elementArray);
+    // console.log("Final Element Array:", elementArray);
 
     // loop through elements array and append div content avove
     for (var i = 0; i < elementArray.length; i++) {
 
       // NOTE: Append paragraphs after, everything else before
       if ($(elementArray[i]).is("p")) {
-        console.log("[ADS] Element is a paragraph!");
+        // console.log("[ADS] Element is a paragraph!");
         $(elementArray[i]).after(adHTML);
 
         /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
         if ($(elementArray[i]).next().is(".content_hint")) {
           var elementAppended = $(elementArray[i]).next();
-          console.log("[JUST APPENDED AFTER]", elementAppended);
+          // console.log("[JUST APPENDED AFTER]", elementAppended);
 
           if (elementAppended.next().is(".content_hint")) {
             elementAppended.remove();
@@ -779,13 +779,13 @@ function insertAdvertisements(isFeelGoods) {
         }
 
       } else {
-        console.log("[ADS] Element is not a paragraph!");
+        // console.log("[ADS] Element is not a paragraph!");
         $(elementArray[i]).before(adHTML);
 
         /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
         if ($(elementArray[i]).prev().is(".content_hint")) {
           var elementAppended = $(elementArray[i]).prev();
-          console.log("[JUST APPENDED BEFORE]", elementAppended);
+          // console.log("[JUST APPENDED BEFORE]", elementAppended);
 
           if (elementAppended.prev().is(".content_hint")) {
             elementAppended.remove();
@@ -801,25 +801,25 @@ function insertAdvertisements(isFeelGoods) {
     -------------------------------------------------------------------------------
     */
   } else {
-    console.log("[FUNCTION] is not feel good(s)");
+    // console.log("[FUNCTION] is not feel good(s)");
     // var adHTML = "<div class='test-content'>Test</div>";
     var adHTML = "<div class='content_hint custom-appended'></div>";
 
     // -- Line blocks
     var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-    console.log("Line blocks:", lineBlocks.length);
+    // console.log("Line blocks:", lineBlocks.length);
     // -- Spacer blocks
     /* var spacerBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.spacer-block.sqs-block-spacer");
-    console.log("Spacer blocks:", spacerBlocks.length); */
+    // console.log("Spacer blocks:", spacerBlocks.length); */
     // -- H2 elements
     var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
-    console.log("H2 elements:", h2Elements.length);
+    // console.log("H2 elements:", h2Elements.length);
     // -- H3 elements
     var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
-    console.log("H3 elements:", h3Elements.length);
+    // console.log("H3 elements:", h3Elements.length);
     // -- P elements
     var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
-    console.log("P elements:", pElements.length);
+    // console.log("P elements:", pElements.length);
 
     var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
 
@@ -844,29 +844,29 @@ function insertAdvertisements(isFeelGoods) {
       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
     }
 
-    console.log("Ad Ratio:", adPerPageLimit);
+    // console.log("Ad Ratio:", adPerPageLimit);
 
     // ---------------------------------------------------
 
     var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
 
-    console.log("Final Element Array:", elementArray);
+    // console.log("Final Element Array:", elementArray);
 
     // loop through elements array and append div content avove
 
     for (var i = 0; i < elementArray.length; i++) {
-      // console.log(elementArray[i]);
+      // // console.log(elementArray[i]);
 
       // NOTE: Append paragraphs after, everything else before
 
       if ($(elementArray[i]).is("p")) {
-        console.log("[ADS] Element is a paragraph!");
+        // console.log("[ADS] Element is a paragraph!");
         $(elementArray[i]).after(adHTML);
 
         /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
         if ($(elementArray[i]).next().is(".content_hint")) {
           var elementAppended = $(elementArray[i]).next();
-          console.log("[JUST APPENDED AFTER]", elementAppended);
+          // console.log("[JUST APPENDED AFTER]", elementAppended);
 
           if (elementAppended.next().is(".content_hint")) {
             elementAppended.remove();
@@ -875,13 +875,13 @@ function insertAdvertisements(isFeelGoods) {
         }
 
       } else {
-        console.log("[ADS] Element is not a paragraph!");
+        // console.log("[ADS] Element is not a paragraph!");
         $(elementArray[i]).before(adHTML);
 
         /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
         if ($(elementArray[i]).prev().is(".content_hint")) {
           var elementAppended = $(elementArray[i]).prev();
-          console.log("[JUST APPENDED BEFORE]", elementAppended);
+          // console.log("[JUST APPENDED BEFORE]", elementAppended);
 
           if (elementAppended.prev().is(".content_hint")) {
             elementAppended.remove();
@@ -895,13 +895,13 @@ function insertAdvertisements(isFeelGoods) {
 
       /*
       if (!$(elementArray[i]).prev().is(".content_hint")) {
-        console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
+        // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
         
         if ($(elementArray[i]).is("p")) {
-          console.log("[ADS] Element is a paragraph!");
+          // console.log("[ADS] Element is a paragraph!");
           $(elementArray[i]).after(adHTML);
         } else {
-          console.log("[ADS] Element is not a paragraph!");
+          // console.log("[ADS] Element is not a paragraph!");
           $(elementArray[i]).before(adHTML);
         }
         
@@ -914,7 +914,7 @@ function insertAdvertisements(isFeelGoods) {
   var checkForFinishedElementMovement = setInterval(function () {
     // execute if element movement was finished
     if ($("article .custom-content .custom-article-content .BlogItem-comments")) {
-      console.log("[FINAL MOVEMENT FINISHED]");
+      // console.log("[FINAL MOVEMENT FINISHED]");
       clearInterval(checkForFinishedElementMovement); // stop the loop
       // insert ads below and above comment section
       /*
@@ -928,7 +928,7 @@ function insertAdvertisements(isFeelGoods) {
     // execute if pageLoaded variable is true
     if (pageLoaded == true) {
       clearInterval(checkPageLoaded); // stop the loop
-      console.log("[ADVERTISEMENTS] PAGE LOADED!");
+      // console.log("[ADVERTISEMENTS] PAGE LOADED!");
       // $mediavine.web.fillContentHints();
       loadMediavineScripts();
     }
@@ -941,7 +941,7 @@ function returnAdPositions(array, limit) {
 
   // loop through array
   for (var i = 0; i < array.length; i++) {
-    // console.log("Element Array:", array[i]);
+    // // console.log("Element Array:", array[i]);
 
     // remove first element in all element arrays
     array[i] = array[i].slice(1);
@@ -962,24 +962,24 @@ function returnAdPositions(array, limit) {
         delta = 1;
       }
 
-      console.log("Final delta [" + i + "]:", delta);
+      // console.log("Final delta [" + i + "]:", delta);
 
 
       // loop through elements
       for (var j = 0; j < array[i].length; j = j + delta) {
         // execute if final array does not contain element limit
         if ((finalElementsArray.length < limit) && elementsRemaining > 0) {
-          // console.log(array[i][j]);
+          // // console.log(array[i][j]);
           var matchesConditions = checkContentSiblings(array[i][j]);
-          console.log("ContentHints Exist?:", matchesConditions);
+          // console.log("ContentHints Exist?:", matchesConditions);
           // execute if selected element is an H2 and has previous
           if ($(array[i][j]).is("h2") && matchesConditions) {
-            console.log("This element is an H2, and content hint exists");
-            console.log(array[i][j]);
+            // console.log("This element is an H2, and content hint exists");
+            // console.log(array[i][j]);
             elementsRemaining--;
           } else {
             finalElementsArray.push(array[i][j]);
-            // console.log("New elements array:", finalElementsArray);
+            // // console.log("New elements array:", finalElementsArray);
             elementsRemaining--;
           }
         } // end final elements array if statement
@@ -998,8 +998,8 @@ function checkContentSiblings(element) {
 
   /*
   if (closestContentHint && $(element).is("h2")) {
-    console.log("[PREV ELEMENT]:", "Is a content hint in the same tree as h2 element");
-    console.log("[PREV ELEMENT SPECIAL]:", "Is the previous element of the h2 element a content hint?", $(element).prev().is(".content_hint"), $(element).prev());
+    // console.log("[PREV ELEMENT]:", "Is a content hint in the same tree as h2 element");
+    // console.log("[PREV ELEMENT SPECIAL]:", "Is the previous element of the h2 element a content hint?", $(element).prev().is(".content_hint"), $(element).prev());
     //return true; // return true
   } */
 
@@ -1007,14 +1007,14 @@ function checkContentSiblings(element) {
 
   // execute if previous element is a horizontal rule block (to prevent ads from re-appearing after content hint was inserted prior to horizontal rule block
   if (closestSqsBlock.prev().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
-    console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
+    // console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
     return true; // return true   
   } else {
     return false; // return false
   }
   /*
   if (closestSqsBlock.siblings().closest(".content_hint")) {
-    console.log("H2 element is really close to content hints");
+    // console.log("H2 element is really close to content hints");
     return true
   } else {
    return false
@@ -1046,10 +1046,10 @@ function insertAdSidebar() {
   // method to check if custom summary container exists
   var checkSummaryContent = setInterval(function() {
     if ($("article .custom-summary-container")) {
-      console.log("[FUNCTION]:", "Summary container found!");
+      // console.log("[FUNCTION]:", "Summary container found!");
       clearInterval(checkSummaryContent); // stop the loop
       var summaryContent = $(".custom-summary-container");
-      console.log(summaryContent[0]);
+      // console.log(summaryContent[0]);
       $("article .custom-content .custom-article-content").append(articleContent);
       $("article .custom-content .custom-article-content").append(summaryContent);
       $("article .custom-content .custom-article-content").append(commentsContent);
@@ -1073,9 +1073,9 @@ function insertAdSidebar() {
 
   // execute if article has image blocks
   if ($("article .image-block").length) {
-    //console.log("[MSG]:", "Retrieving image blocks...");
+    console.log("[MSG]:", "Retrieving image blocks...");
     var imageBlocks = $("article .image-block");
-    //console.log(imageBlocks);
+    console.log(imageBlocks);
 
     // loop through image block
     for (var i = 0; i < imageBlocks.length; i++) {
@@ -1085,16 +1085,16 @@ function insertAdSidebar() {
       var rowParent = retrieveRowParent(nearestRow);
       // check if nearest row parent has class ".col.sqs-col-12.span-12"
       var topRow = checkForClass(nearestRow, rowParent, 0);
-      // console.log("Row Index:", topRow);
+      // // console.log("Row Index:", topRow);
       // PRAISE THE LORD, IT WORKS!
 
       if (topRow != null) {
         var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-        // console.log("We were able to find the top row.");
+        console.log("We were able to find the top row.");
         // insert new image block element
         var previousRow = topRow;
-        // console.log(previousRow);
+        console.log(previousRow);
 
         $(previousRow).before(customImageBlockHTML);
         // append image to new image block element
@@ -1109,7 +1109,7 @@ function insertAdSidebar() {
 
           console.log(priceElement, priceButtonElement);
 
-          // console.log("[PREV ROW ELEMENTS]:", priceElement);
+          console.log("[PREV ROW ELEMENTS]:", priceElement);
 
           // insert price element and button element
           $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
@@ -1126,7 +1126,7 @@ function insertAdSidebar() {
 
   // execute if article has image gallery blocks
   if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
-    console.log("[MSG] Retrieving image gallery blocks");
+    // console.log("[MSG] Retrieving image gallery blocks");
     var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
 
     // loop through image gallery blocks
@@ -1137,7 +1137,7 @@ function insertAdSidebar() {
       var rowParent = retrieveRowParent(nearestRow);
       // check if nearest row parent has class ".col.sqs-col-12.span-12"
       var topRow = checkForClass(nearestRow, rowParent, 0);
-      // console.log("Row Index:", topRow);
+      // // console.log("Row Index:", topRow);
       // PRAISE THE LORD, IT WORKS!
 
       if (topRow != null) {
@@ -1243,10 +1243,10 @@ function retrieveRowParent(element) {
 
 // method that checks element class for positioning advertisements on article content
 function checkForClass(row, parent, numTry) {
-  //console.log("[CHECK] Row:");
-  //console.log(row);
-  //console.log("[CHECK] Row Parent:");
-  //console.log(parent);
+  //// console.log("[CHECK] Row:");
+  //// console.log(row);
+  //// console.log("[CHECK] Row Parent:");
+  //// console.log(parent);
 
   var parentHasClass = $(parent).hasClass("col sqs-col-12 span-12");
   var numberOfTries = numTry + 1;
@@ -1254,23 +1254,23 @@ function checkForClass(row, parent, numTry) {
   if (parentHasClass) {
     // retrieve element index
     var topLevelIndex = $(row).index();
-    //console.log("[CHECK] Top Level index of this element (parentHasClass):", topLevelIndex);
-    //console.log("[CHECK] Element at that index is:");
-    // console.log($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").find("div").eq(topLevelIndex));
+    //// console.log("[CHECK] Top Level index of this element (parentHasClass):", topLevelIndex);
+    //// console.log("[CHECK] Element at that index is:");
+    // // console.log($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").find("div").eq(topLevelIndex));
     return row;
   } else {
-    //console.log("[CHECK] Following element does not have class!");
-    //console.log(parent);
+    //// console.log("[CHECK] Following element does not have class!");
+    //// console.log(parent);
     if (numberOfTries < 2) {
       // check parent for class
-      // console.log("[CHECK] Searching for top level element again!");
+      // // console.log("[CHECK] Searching for top level element again!");
       // find nearest row
       var newNearestRow = retrieveNearestRow(parent);
       // find nearest row's parent
       var newNearestRowParent = retrieveRowParent(newNearestRow);
       return checkForClass(newNearestRow, newNearestRowParent, numberOfTries);
     } else {
-      // console.log("[CHECK] NO HOPES OF FINDING IT");
+      // // console.log("[CHECK] NO HOPES OF FINDING IT");
       return null;
     }
   }
@@ -1283,7 +1283,7 @@ function insertAuthorBio(linkURL) {
   $.ajax({
     url: linkURL,
     success: function (result) {
-      // console.log(result);
+      // // console.log(result);
       var authorID = result["author"]["id"]; // initialize and declare author ID
 
       var authorName = result["author"]["displayName"]; // initialize and declare author name
@@ -1330,10 +1330,10 @@ function insertAuthorBio(linkURL) {
       img.onload = function () {
         var width = img.naturalWidth || img.width;
         var height = img.naturalHeight || img.height;
-        // console.log("Image height:", height);
-        // console.log("Image width:", width);
+        // // console.log("Image height:", height);
+        // // console.log("Image width:", width);
 
-        // console.log(authorID, authorName, authorWebsiteURL, authorBio);
+        // // console.log(authorID, authorName, authorWebsiteURL, authorBio);
 
         var html = "<div class='custom-author-image'><img src='" + authorAvatarURL + "' alt='' title='" + authorName + "' /></div><div class='custom-author-info'><h1 class='custom-author-title'>" + authorName + "</h1><div class='custom-author-bio'>" + authorBio + "</div>" + authorWebsiteString + "</div>";
 
@@ -1355,13 +1355,13 @@ function insertAuthorBio(linkURL) {
 
 // method that inserts advertisements on author & category pages
 function insertAdsExtraPages() {
-  console.log("[FUNCTION] Insert ads into author pages!");
+  // console.log("[FUNCTION] Insert ads into author pages!");
   var advertisementHTML = "<br><article class='BlogList-item' style='width: 100%;'><div class='content_hint'></div></article><br>";
   var groupHTML = "<div class='custom-author-group'></div>";
 
   // execute if article elements exist
   if ($(".Main-content section.BlogList.BlogList--posts-excerpt article").length) {
-    console.log("[FUNCTION] Articles exist!");
+    // console.log("[FUNCTION] Articles exist!");
     // execute if user is on a mobile device
     if (isMobile()) {
       $(".Main-content section.BlogList.BlogList--posts-excerpt > article:nth-child(4n)").after(advertisementHTML);
@@ -1374,7 +1374,7 @@ function insertAdsExtraPages() {
       // execute if pageLoaded variable is true
       if (pageLoaded == true) {
         clearInterval(checkExtraPages); // stop the loop
-        console.log("[ADVERTISEMENTS] PAGE LOADED!");
+        // console.log("[ADVERTISEMENTS] PAGE LOADED!");
         // $mediavine.web.fillContentHints();
         loadMediavineScripts();
       }
@@ -1389,9 +1389,9 @@ function checkForParameters(url) {
   var urlArray = url.split('?'); // initialize and declare value to URL split at '?' character
   // execute if splitted URL has length greater than one and if path after '?' character is not empty
 
-  console.log("[PARAMETERS] URL ARRAY LENGTH:", urlArray)
+  // console.log("[PARAMETERS] URL ARRAY LENGTH:", urlArray)
   if (urlArray.length > 1 && urlArray[1] !== '') {
-    // console.log("Parameters found in this URL");
+    // // console.log("Parameters found in this URL");
     return true; // return true
   }
   return false; // return false if URL has no parameters
@@ -1424,14 +1424,14 @@ function checkArticlesForPopup(category, array) {
     // execute if category exists in validation array
     if (array[i] == category) {
 
-      console.log("[POPUP]", category, true);
+      // console.log("[POPUP]", category, true);
 
       displaySubscriptionPopup(category); // call method that displays subscription popup
 
       // execute if category does not exist in validation array
     } else {
 
-      console.log("[POPUP]", category, false);
+      // console.log("[POPUP]", category, false);
 
     }
 
@@ -1441,7 +1441,7 @@ function checkArticlesForPopup(category, array) {
 
 // method that displays subscription popup
 function displaySubscriptionPopup(categoryToDisplay) {
-  console.log("[POPUP]", "Beginning of popup subscription.");
+  // console.log("[POPUP]", "Beginning of popup subscription.");
 
   var uuid = "23fd1362e2fc3bca611d00b8b"; // initialize and declare variable value to unique user id from MailChimp
   var listID; // initialize and declare list ID (from MailChimp) variable
@@ -1454,15 +1454,15 @@ function displaySubscriptionPopup(categoryToDisplay) {
     case 'spirit':
       listID = "a05ec12fa8"; // set value to MailChimp list ID for sppirit
     default:
-      console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
+      // console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
   }
-  console.log("[POPUP] Category passed to this function:", categoryToDisplay);
+  // console.log("[POPUP] Category passed to this function:", categoryToDisplay);
 
   // execute if the list ID is not empty
   if (listID != "") {
-    console.log("[POPUP] listID and uuid not empty");
-    console.log("[POPUP]", uuid);
-    console.log("[POPUP]", listID);
+    // console.log("[POPUP] listID and uuid not empty");
+    // console.log("[POPUP]", uuid);
+    // console.log("[POPUP]", listID);
 
     //var navigationStartTime = window.performance.timing.navigationStart; // use navigation time to find out when page actually loaded
     var mailChimpDelay = mailChimpPopupDelay * 1000; // calculate delay in milliseconds
@@ -1472,7 +1472,7 @@ function displaySubscriptionPopup(categoryToDisplay) {
     window.dojoRequire(["mojo/signup-forms/Loader"], function (L) {
       // delay by specific time amount
       setTimeout(function () {
-        console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
+        // console.log("[POPUP] " + mailChimpPopupDelay + " seconds delay has executed.");
         L.start({
           "baseUrl": "mc.us16.list-manage.com",
           "uuid": uuid,
@@ -1489,7 +1489,7 @@ function displaySubscriptionPopup(categoryToDisplay) {
 // method that adds event listeners to products found in a design gallery grid
 /*
 function addEventListeners() {
-  // console.log("AddEventListener function was executed...");
+  // // console.log("AddEventListener function was executed...");
   var anchorTags = document.getElementsByClassName("sqs-gallery-design-grid")[0].getElementsByTagName("a"); // initialize and retrieve anchor tags inside div as array-like collection of elements
   var newURL; // initialize new URL variable
  
@@ -1500,7 +1500,7 @@ function addEventListeners() {
       anchorTags[i].addEventListener("touchend", function(e) {
         e.preventDefault(); // prevent anchor tag from automatically changing page
         newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-        //console.log(newURL);
+        //// console.log(newURL);
         // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
         var button = document.createElement("a"); // create anchor tag
         button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
@@ -1514,7 +1514,7 @@ function addEventListeners() {
       anchorTags[i].addEventListener("click", function(e) {
         e.preventDefault(); // prevent anchor tag from automatically changing page
         newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-        //console.log(newURL);
+        //// console.log(newURL);
         // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
         var button = document.createElement("a"); // create anchor tag
         button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
@@ -1530,7 +1530,7 @@ function addEventListeners() {
 
 // method that checks if anchor tags (links) found in document are external
 function checkForExternalLinks(applyNoFollow) {
-  // console.log("Function external links works! Apply no follow: ", applyNoFollow);
+  // // console.log("Function external links works! Apply no follow: ", applyNoFollow);
 
   var anchorTagsInDocument; // initialize variable
 
@@ -1549,7 +1549,7 @@ function checkForExternalLinks(applyNoFollow) {
 
     // execute if host name of anchor tag href does not contain "iamandco"
     if (hostName.indexOf("iamandco") == -1) {
-      //console.log("does not contain iamandco ", hostName);
+      //// console.log("does not contain iamandco ", hostName);
 
       //anchorTagsInDocument[i].removeEventListener("click", checkForExternalLinks, false);
 
@@ -1565,10 +1565,10 @@ function checkForExternalLinks(applyNoFollow) {
 
       /*
       anchorTagsInDocument[i].addEventListener("click", function(e) {
-        console.log(e);
+        // console.log(e);
         e.preventDefault(); // prevent anchor tag from automatically changing page
         e.stopPropagation(); // prevents anchor tag from being handled by another event
-        //console.log(this.href);
+        //// console.log(this.href);
         /* NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser */
 
       /*
@@ -1576,12 +1576,12 @@ function checkForExternalLinks(applyNoFollow) {
         var button = document.createElement("a"); // create anchor tag
         button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
         button.href = this.href; // set anchor tag reference to new URL
-        //console.log("Link being applied!: ", button.href);
+        //// console.log("Link being applied!: ", button.href);
  
         // NOTE: Apply "no-follow" attribute if links are affiliate links
         if (applyNoFollow == true) {
           button.setAttribute("rel", "nofollow"); // set rel attribute to "no-follow"
-          console.log("Applied no-follow attribute!.....", button.href);
+          // console.log("Applied no-follow attribute!.....", button.href);
         }
  
         document.body.appendChild(button); // append anchor tag to body
@@ -1596,8 +1596,8 @@ function checkForExternalLinks(applyNoFollow) {
 
 // method that dynamically inserts custom HTML into the DOM of article pages
 function insertCustomHTML(articleCategory) {
-  // console.log("insertCustomHTML function called!");
-  // console.log("Article category:", articleCategory);
+  // // console.log("insertCustomHTML function called!");
+  // // console.log("Article category:", articleCategory);
 
   var articleResult; // initialize article result variable
 
@@ -1615,16 +1615,16 @@ function insertCustomHTML(articleCategory) {
     $(".BlogItem-share").after("<div class='custom-summary-container'></div>"); // append a custom HTML element into footer of article
   }
 
-  console.log("INSERTED CUSTOM SUMMARY CONTAINER");
+  // console.log("INSERTED CUSTOM SUMMARY CONTAINER");
 
   var length = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p").length; // set value to length of article DOM elements
 
   // divides the length by 2 and rounds number up ---> gives append position
-  // console.log(length);
+  // // console.log(length);
 
   var positionIndex = Math.ceil(length / 4); // initialize and declare position index for custom MailChimp embed HTML
 
-  // console.log("Approximate position index of middle of page:", positionIndex);
+  // // console.log("Approximate position index of middle of page:", positionIndex);
 
   // execute if insertMailChimpHTML variable is true
   if (insertMailChimpHTML == true) {
@@ -1635,7 +1635,7 @@ function insertCustomHTML(articleCategory) {
 
     // execute if category passed in parameter (articleCategory) exists in articlesForEmbed array
     if (isAcceptable) {
-      console.log("LINE 353 MSG: Article is acceptable!");
+      // console.log("LINE 353 MSG: Article is acceptable!");
 
       // filter article data
       articleResult = articleData.filter(function (data) {
@@ -1644,7 +1644,7 @@ function insertCustomHTML(articleCategory) {
 
       // execute if category passed in parameter does not exist in articlesForEmbed array
     } else {
-      console.log("LINE 353 MSG: Article is NOT acceptable!");
+      // console.log("LINE 353 MSG: Article is NOT acceptable!");
 
       // filter article data
       articleResult = articleData.filter(function (data) {
@@ -1661,13 +1661,13 @@ function insertCustomHTML(articleCategory) {
 
   // if pubExchange element already exists
   if (pubExchangeElement) {
-    // console.log("Exists! Removing now...");
+    // // console.log("Exists! Removing now...");
     $(".pubexchange_module").remove(); // remove from DOM
   }
 
   // execute if insertPubExchangeHTML variable is true
   if (insertPubExchangeHTML == true) {
-    // console.log("Does not exist, creating now!");
+    // // console.log("Does not exist, creating now!");
     //$(".custom-summary-container").prepend(htmlToInsert); // append to custom HTML element into footer of article
     pubExchangeHTML = htmlToInsert; // set value to PubExchange HTML
   }
@@ -1687,7 +1687,7 @@ function insertCustomHTML(articleCategory) {
     // execute if article only has one category
     if (jsonData['categoryFilter']) {
 
-      console.log("Article HAS Category Filter");
+      // console.log("Article HAS Category Filter");
 
       var articleCategoryExists = summaryBlockData.some(function (item) {
         return item['categoryName'] === jsonData['categoryFilter'];
@@ -1708,7 +1708,7 @@ function insertCustomHTML(articleCategory) {
       // execute if page does not have category filter node
     } else if (jsonData['item']['categories']) {
 
-      console.log("Article HAS Item Categories");
+      // console.log("Article HAS Item Categories");
 
       var checkedCategory = false; // initialize and set value to false
 
@@ -1727,7 +1727,7 @@ function insertCustomHTML(articleCategory) {
       // loop through JSON data array
       for (var i = 0; i < categoriesArray.length; i++) {
 
-        // console.log(categoriesArray[i]);
+        // // console.log(categoriesArray[i]);
 
         var existsInArticlesArray = summaryBlockData.some(function (item) {
           return item['categoryName'] === categoriesArray[i];
@@ -1746,11 +1746,11 @@ function insertCustomHTML(articleCategory) {
       } // end for-loop statement
     } // end if statement
 
-    console.log("RSS FEED URL: ", categoryResult);
+    // console.log("RSS FEED URL: ", categoryResult);
 
     /* NOTE: Optimize this by adding a check for category result before adding any breadcrumbs, etc */
     if (categoryResult) {
-      console.log("[CATEGORY RESULT] Exists!", categoryResult);
+      // console.log("[CATEGORY RESULT] Exists!", categoryResult);
 
       // execute if insertBreadcumbHTML variable is true
       if (insertBreadcrumbHTML == true) {
@@ -1762,7 +1762,7 @@ function insertCustomHTML(articleCategory) {
 
       rssFeedURL = categoryResult.categoryURL + "&format=rss"; // set value of article RSS Feed URL
 
-      // console.log(rssFeedURL);
+      // // console.log(rssFeedURL);
 
       // method to retrieve blog page RSS in XML format
       $.ajax({
@@ -1817,7 +1817,7 @@ function insertCustomHTML(articleCategory) {
             // execute if element exists in item
             if (item.getElementsByTagName("media:content")[0]) {
               itemImage = item.getElementsByTagName("media:content")[0].attributes[1].value; // set variable to xml item image
-              // console.log("Current Item Image: ", itemImage);
+              // // console.log("Current Item Image: ", itemImage);
 
               // execute if the image URL returned is not an actual url (Internet Explorer works with this one)
               if (itemImage.indexOf("http://") == -1 || itemImage.indexOf("https://") == -1) {
@@ -1828,13 +1828,13 @@ function insertCustomHTML(articleCategory) {
               itemImage = $(item).children("media\\:content").attr("url"); // set variable to xml item image
             }
 
-            //console.log(itemImage);
+            //// console.log(itemImage);
 
             var itemStyle = ""; // initialize xml item CSS style variable
 
             var itemThumbnail = itemImage.replace(/^http:\/\//i, 'https://'); // set variable to HTTP replaced URL
 
-            // console.log("New updated!: ", itemThumbnail);
+            // // console.log("New updated!: ", itemThumbnail);
 
             // variables: itemTitle, itemLink, itemAuthor, itemDescription, itemThumbnail
 
@@ -1861,7 +1861,7 @@ function insertCustomHTML(articleCategory) {
   if (insertCategoryBlockHTML == true) {
     // execute if article has categories node
     if (jsonData['item']['categories']) {
-      // console.log("Article has multiple categories");
+      // // console.log("Article has multiple categories");
 
       var categoriesArray = jsonData['item']['categories']; // initialize and declare variable value to JSON data array
       var specialCharacter = ""; // initialize special character variable
@@ -1871,7 +1871,7 @@ function insertCustomHTML(articleCategory) {
 
       // loop through JSON data array
       for (var i = 0; i < categoriesArray.length; i++) {
-        // console.log(categoriesArray[i]);
+        // // console.log(categoriesArray[i]);
 
         var categoryURL = ""; // initialize category URL variable
 
@@ -1879,7 +1879,7 @@ function insertCustomHTML(articleCategory) {
           return item['categoryName'] === categoriesArray[i];
         }); // filter through summaryBlockData array object and return true if article category exists
 
-        // console.log(existsInCategoryArray);
+        // // console.log(existsInCategoryArray);
 
         // execute if article category exists in category array (summaryBlockData)
         if (existsInCategoryArray) {
@@ -1888,11 +1888,11 @@ function insertCustomHTML(articleCategory) {
           })[0].categoryURL; // set value to returned article data object
           // execute if article category does not exist in category array
         } else {
-          // console.log("ERROR:", "Article category does not exist...");
+          // // console.log("ERROR:", "Article category does not exist...");
           categoryURL = "https://iamandco.com/blog?category=" + categoriesArray[i];
         }
 
-        // console.log("URL:", categoryURL);
+        // // console.log("URL:", categoryURL);
 
         if (i == 0) {
           specialCharacter = "";
@@ -1915,7 +1915,7 @@ function insertCustomHTML(articleCategory) {
 
   // execute if insertAuthorBlockHTML variable is true
   if (insertAuthorBlockHTML == true) {
-    console.log("[AUTHOR ARTICLE BLOCK]:", jsonData);
+    // console.log("[AUTHOR ARTICLE BLOCK]:", jsonData);
 
     var authorName = jsonData["item"]["author"]["displayName"]; // initialize and declare author name
     var authorID = jsonData["item"]["author"]["id"]; // initialize and declare author ID
@@ -1938,8 +1938,8 @@ function insertCustomHTML(articleCategory) {
       var customClass = ""; // initialize custom class
       var width = img.naturalWidth || img.width;
       var height = img.naturalHeight || img.height;
-      // console.log("Image height:", height);
-      // console.log("Image width:", width);
+      // // console.log("Image height:", height);
+      // // console.log("Image width:", width);
 
       // execute if image width is greater than height
       if (width > height) {
@@ -1957,7 +1957,7 @@ function insertCustomHTML(articleCategory) {
   var checkElement = setInterval(function () {
     // 
     if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML) {
-      // console.log("MESSAGE:", "Elements ready for insertion!");
+      // // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
       $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
       $(".custom-summary-container").prepend(summaryBlockHTML); // append to custom HTML element into footer of article
@@ -1981,8 +1981,8 @@ function moveElements() {
 
   // execute if paginationElement exists
   if (paginationElement[0]) {
-    // console.log("pagination element exists!");
-    // console.log(paginationElement);
+    // // console.log("pagination element exists!");
+    // // console.log(paginationElement);
 
     var paginationElementClone = paginationElement.clone();
 
@@ -1991,18 +1991,18 @@ function moveElements() {
     $(".custom-summary-container .custom-category-block").after(paginationElementClone);
     // execute if paginationElement does not exist
   } else {
-    // console.log("ERROR:", "Pagination Element does not exist!");
+    // // console.log("ERROR:", "Pagination Element does not exist!");
   }
 
   if (socialElement[0]) {
-    // console.log("social element exists!");
-    // console.log(socialElement);
+    // // console.log("social element exists!");
+    // // console.log(socialElement);
 
     var socialElementClone = socialElement.clone();
 
     // socialElementClone.removeClass("hidden");
 
-    // console.log(socialElementClone);
+    // // console.log(socialElementClone);
 
     // socialElement.remove();
 
@@ -2021,7 +2021,7 @@ function removeMailChimpScript() {
 
     mailChimpScript.parentNode.removeChild(mailChimpScript);
 
-    console.log("[MAILCHIMP]", "Removed script.");
+    // console.log("[MAILCHIMP]", "Removed script.");
 
   }
 
@@ -2030,7 +2030,7 @@ function removeMailChimpScript() {
 /* This stuff listens for an ajax page change */
 // window.onload = watch;
 window.onload = function () {
-  console.log("[ANNOUNCEMENT] ALL IMAGES/ASSETS/SCRIPTS HAVE LOADED");
+  // console.log("[ANNOUNCEMENT] ALL IMAGES/ASSETS/SCRIPTS HAVE LOADED");
   pageLoaded = true;
 }
 
@@ -2045,9 +2045,9 @@ function watch() {
     articleIsFeelGoods = false;
     removeMailChimpScript(); // call method that removes MailChimp's script
     checkBlog();
-    console.log("Will be calling function to load custom video javascript...");
+    // console.log("Will be calling function to load custom video javascript...");
     window.instgrm.Embeds.process();
     loadMediavineVideo(); // call method that loads mediavine's video
-    console.log("Called function to load customm video javascript!");
+    // console.log("Called function to load customm video javascript!");
   });
 }
