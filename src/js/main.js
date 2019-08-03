@@ -527,62 +527,62 @@ function insertImageButtons() {
     }
   }
 
-  // retrieve all thumb image galleries
-  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
+  // // retrieve all thumb image galleries
+  // var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
 
-  // execute if more than one image exists
-  if (thumbImages.length > 0) {
-    // loop through images
-    for (var i = 0; i < thumbImages.length; i++) {
-      console.log(tag, thumbImages[i]);
+  // // execute if more than one image exists
+  // if (thumbImages.length > 0) {
+  //   // loop through images
+  //   for (var i = 0; i < thumbImages.length; i++) {
+  //     console.log(tag, thumbImages[i]);
 
-      var textLength = $(thumbImages[i]).parent().parent().find(".image-slide-title").height() + 6;
+  //     var textLength = $(thumbImages[i]).parent().parent().find(".image-slide-title").height() + 6;
 
-      console.log(tag, "Title length: " + textLength);
+  //     console.log(tag, "Title length: " + textLength);
 
-      // console.log(tag, $(thumbImages[i]).attr('data-image'));
+  //     // console.log(tag, $(thumbImages[i]).attr('data-image'));
 
-      var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+  //     var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
 
-      $(thumbImages[i]).after(saveItButton);
+  //     $(thumbImages[i]).after(saveItButton);
 
-      // console.log("Images", images);
+  //     // console.log("Images", images);
 
-      // retrieve pinterest button
-      var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+  //     // retrieve pinterest button
+  //     var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
 
-      // method that inserts event listener and executes a function when button is pressed
-      pinterestButton.addEventListener('click', function (e) {
-        // console.log(e);
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
+  //     // method that inserts event listener and executes a function when button is pressed
+  //     pinterestButton.addEventListener('click', function (e) {
+  //       // console.log(e);
+  //       e.preventDefault(); // prevent anchor tag from automatically changing page
+  //       e.stopPropagation(); // prevents anchor tag from being handled by another event
 
-        // var customURL = location.href;
+  //       // var customURL = location.href;
 
-        // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+  //       // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
-        /*
+  //       /*
         
-        // execute if href exists
-        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
-          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+  //       // execute if href exists
+  //       if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+  //         customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
   
-          console.log("[PINTEREST] HREF LOCATED.", customURL);
+  //         console.log("[PINTEREST] HREF LOCATED.", customURL);
   
-        } else {
-          customURL = location.href;
-        } */
+  //       } else {
+  //         customURL = location.href;
+  //       } */
 
 
-        PinUtils.pinOne({
-          'url': location.href,
-          'media': e.target.attributes['data-image'].value,
-          'description': e.target.attributes['data-desc'].value
-        });
-      });
+  //       PinUtils.pinOne({
+  //         'url': location.href,
+  //         'media': e.target.attributes['data-image'].value,
+  //         'description': e.target.attributes['data-desc'].value
+  //       });
+  //     });
 
-    }
-  }
+  //   }
+  // }
 
   /*
   // execute if current page is products page
