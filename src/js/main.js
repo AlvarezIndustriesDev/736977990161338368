@@ -14,12 +14,12 @@
 }(window, document, "script", "pubexchange-jssdk"));
 /*
 (function(s, u, m, o, j, v) {
-  j = u.createElement(m);
-  v = u.getElementsByTagName(m)[0];
-  j.async = 1;
-  j.src = o;
-  j.dataset.sumoSiteId = '292bcff2270f0c8b2fb1c41d528dab6b000bc120aa040e4eb5b53950a8be7cbf';
-  v.parentNode.insertBefore(j, v)
+j = u.createElement(m);
+v = u.getElementsByTagName(m)[0];
+j.async = 1;
+j.src = o;
+j.dataset.sumoSiteId = '292bcff2270f0c8b2fb1c41d528dab6b000bc120aa040e4eb5b53950a8be7cbf';
+v.parentNode.insertBefore(j, v)
 })(window, document, 'script', '//load.sumo.com/'); */
 
 // method that checks to see if user is on mobile device
@@ -36,19 +36,18 @@ var articleIsFeelGoods = false;
 //init(); //Start the code when the page loads
 // redirectInit(); // method called to initialize redirect function
 checkBlog(); // method called to check if current page is blog page
-removeMailChimpScript(); // method called to remove MailChimp script from DOM
 // handleTrendingCarousel(); // method called to modify "trending" carousel in home page
 
 // method called to initialize redirect function
 /*
 function redirectInit() {
-  // method to check if gallery exists
-  var checkElement = setInterval(function() {
-    if (document.getElementsByClassName("sqs-gallery-design-grid").length) {
-      clearInterval(checkElement); // stop the loop
-      addEventListeners(); // call method to add event listeners to product tiles
-    }
-  }, 100);
+// method to check if gallery exists
+var checkElement = setInterval(function() {
+  if (document.getElementsByClassName("sqs-gallery-design-grid").length) {
+    clearInterval(checkElement); // stop the loop
+    addEventListeners(); // call method to add event listeners to product tiles
+  }
+}, 100);
 }
 */
 
@@ -527,110 +526,81 @@ function insertImageButtons() {
     }
   }
 
-  // // retrieve all thumb image galleries
-  // var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
+  // retrieve all thumb image galleries
+  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
 
-  // // execute if more than one image exists
-  // if (thumbImages.length > 0) {
-  //   // loop through images
-  //   for (var i = 0; i < thumbImages.length; i++) {
-  //     // console.log(tag, thumbImages[i]);
+  // execute if more than one image exists
+  if (thumbImages.length > 0) {
 
-  //     var textLength = $(thumbImages[i]).parent().parent().find(".image-slide-title").height() + 6;
+    var pinTag = "[PINTEREST BUTTONS]";
 
-  //     // console.log(tag, "Title length: " + textLength);
-
-  //     // // console.log(tag, $(thumbImages[i]).attr('data-image'));
-
-  //     var saveItButton = "<div class='custom-image-button-section' style='bottom: " + textLength + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
-
-  //     $(thumbImages[i]).after(saveItButton);
-
-  //     // // console.log("Images", images);
-
-  //     // retrieve pinterest button
-  //     var pinterestButton = $(thumbImages[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-
-  //     // method that inserts event listener and executes a function when button is pressed
-  //     pinterestButton.addEventListener('click', function (e) {
-  //       // // console.log(e);
-  //       e.preventDefault(); // prevent anchor tag from automatically changing page
-  //       e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-  //       // var customURL = location.href;
-
-  //       // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
-
-  //       /*
-        
-  //       // execute if href exists
-  //       if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
-  //         customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
-  
-  //         // console.log("[PINTEREST] HREF LOCATED.", customURL);
-  
-  //       } else {
-  //         customURL = location.href;
-  //       } */
-
-
-  //       PinUtils.pinOne({
-  //         'url': location.href,
-  //         'media': e.target.attributes['data-image'].value,
-  //         'description': e.target.attributes['data-desc'].value
-  //       });
-  //     });
-
-  //   }
-  // }
-
-  /*
-  // execute if current page is products page
-  if (pathName == "test") {
-
-    // retrieve all image elements within the article content
-    var images = $("main section[data-content-field='main-content'] .col.sqs-col-12.span-12 .sqs-gallery .sqs-gallery-design-grid-slide img");
-
-    // console.log("Images SQS-GALLERY:", images);
+    // console.log(pinTag, "Thumb images found: " + thumbImages.length);
 
     // loop through images
-    for (var i = 0; i < images.length; i++) {
-      // console.log(tag, images[i]);
+    for (var i = 0; i < thumbImages.length; i++) {
 
-      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+      // retrieve height of image text
+      var textHeight = $(thumbImages[i]).parent().parent().find(".image-slide-title").outerHeight();
 
-      $(images[i]).after(saveItButton);
+      // retrieve height of image anchor tag
+      var anchorHeight = $(thumbImages[i]).parent().outerHeight();
 
-      // retrieve pinterest button
+      // retrieve height of margin wrapper tag
+      var marginWrapperHeight = $(thumbImages[i]).parent().parent().outerHeight();
 
-      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+      // set default height of image
+      var imageHeight = $(thumbImages[i]).outerHeight();
 
-      // method that inserts event listener and executes a function when button is pressed
-      pinterestButton.addEventListener('click', function (e) {
-        // // console.log(e);
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-        PinUtils.pinOne({
-          'url': location.href,
-          'media': e.target.attributes['data-image'].value,
-          'description': e.target.attributes['data-desc'].value
+      // check if image height is larger than anchor tag
+      if (imageHeight > anchorHeight) {
+        imageHeight = 0;
+      }
+
+      // set default bottom calculation
+      var bottomCalculation = 0;
+
+      // check if image height is 0 (if so, calculate bottom value by subtracting anchor tag height from margin wrapper height)
+      if (imageHeight == 0) {
+        // calculate bottom value of pinterest button
+        bottomCalculation = marginWrapperHeight - anchorHeight;
+        // calculate bottom value by subtracting anchor tag height from margin wrapper height and adding the subtraction of image height from anchor height / 2 (we want to get height of bottom difference)
+      } else {
+        // calculate bottom value of pinterest button
+        bottomCalculation = (marginWrapperHeight - anchorHeight) + ((anchorHeight - imageHeight) / 2);
+      }
+
+      // console.log(pinTag, textHeight, imageHeight, anchorHeight, bottomCalculation);
+
+      // construct custom container for pinterest button
+      var customContainer = "<div class='custom-image-button-section' style='bottom: " + bottomCalculation + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+      // append into margin wrapper
+      $(thumbImages[i]).parent().parent().append(customContainer);
+
+      // retrieve pinterest button from margin wrapper
+      var thumbPinterestButton = $(thumbImages[i]).parent().parent().find(".custom-pinterest-button")[0];
+
+      // execute if pinterest button exists
+      if (thumbPinterestButton) {
+
+        // method that inserts event listener and executes a function when button is pressed
+        thumbPinterestButton.addEventListener('click', function (e) {
+          // // console.log(e);
+          e.preventDefault(); // prevent anchor tag from automatically changing page
+          e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+          PinUtils.pinOne({
+            'url': location.href,
+            'media': e.target.attributes['data-image'].value,
+            'description': e.target.attributes['data-desc'].value
+          });
         });
-      });
 
-      // method that inserts event listener and executes function when button is pressed
-      facebookButton.addEventListener('click', function (e) {
-
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
-
-        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
-      });
+      }
 
     }
-  } */
+
+  }
 
 }
 
@@ -1071,93 +1041,93 @@ function insertAdSidebar() {
   document.querySelector('style').textContent +=
     "@media screen and (min-width: 1025px) {.new-custom-article-sqs-block {width: calc(56.65800000000001% + 175px) !important;} .new-custom-article-content {width: calc(100% - (300px)) !important;}}"
 
-  // // execute if article has image blocks
-  // if ($("article .image-block").length) {
-  //   console.log("[MSG]:", "Retrieving image blocks...");
-  //   var imageBlocks = $("article .image-block");
-  //   console.log(imageBlocks);
+  // execute if article has image blocks
+  if ($("article .image-block").length) {
+    console.log("[MSG]:", "Retrieving image blocks...");
+    var imageBlocks = $("article .image-block");
+    console.log(imageBlocks);
 
-  //   // loop through image block
-  //   for (var i = 0; i < imageBlocks.length; i++) {
-  //     // find nearest row
-  //     var nearestRow = retrieveNearestRow(imageBlocks[i]);
-  //     // find nearest row's parent
-  //     var rowParent = retrieveRowParent(nearestRow);
-  //     // check if nearest row parent has class ".col.sqs-col-12.span-12"
-  //     var topRow = checkForClass(nearestRow, rowParent, 0);
-  //     // // console.log("Row Index:", topRow);
-  //     // PRAISE THE LORD, IT WORKS!
+    // loop through image block
+    for (var i = 0; i < imageBlocks.length; i++) {
+      // find nearest row
+      var nearestRow = retrieveNearestRow(imageBlocks[i]);
+      // find nearest row's parent
+      var rowParent = retrieveRowParent(nearestRow);
+      // check if nearest row parent has class ".col.sqs-col-12.span-12"
+      var topRow = checkForClass(nearestRow, rowParent, 0);
+      // // console.log("Row Index:", topRow);
+      // PRAISE THE LORD, IT WORKS!
 
-  //     if (topRow != null) {
-  //       var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+      if (topRow != null) {
+        var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-  //       console.log("We were able to find the top row.");
-  //       // insert new image block element
-  //       var previousRow = topRow;
-  //       console.log(previousRow);
+        console.log("We were able to find the top row.");
+        // insert new image block element
+        var previousRow = topRow;
+        console.log(previousRow);
 
-  //       $(previousRow).before(customImageBlockHTML);
-  //       // append image to new image block element
-  //       $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
+        $(previousRow).before(customImageBlockHTML);
+        // append image to new image block element
+        $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
 
-  //       // execute if previous row has price text and button
-  //       if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
+        // execute if previous row has price text and button
+        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
 
-  //         priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
+          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
 
-  //         priceButtonElement = $(priceElement).next();
+          priceButtonElement = $(priceElement).next();
 
-  //         console.log(priceElement, priceButtonElement);
+          console.log(priceElement, priceButtonElement);
 
-  //         console.log("[PREV ROW ELEMENTS]:", priceElement);
+          console.log("[PREV ROW ELEMENTS]:", priceElement);
 
-  //         // insert price element and button element
-  //         $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
-  //         $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
+          // insert price element and button element
+          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
+          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
 
-  //       }
+        }
 
-  //       // delete old row
-  //       previousRow.remove();
+        // delete old row
+        previousRow.remove();
 
-  //     } // end if statement
-  //   } // end for-loop statement
-  // } // end if statement
+      } // end if statement
+    } // end for-loop statement
+  } // end if statement
 
-  // // execute if article has image gallery blocks
-  // if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
-  //   // console.log("[MSG] Retrieving image gallery blocks");
-  //   var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
+  // execute if article has image gallery blocks
+  if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
+    // console.log("[MSG] Retrieving image gallery blocks");
+    var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
 
-  //   // loop through image gallery blocks
-  //   for (var i = 0; i < galleries.length; i++) {
-  //     // find nearest row
-  //     var nearestRow = retrieveNearestRow(galleries[i]);
-  //     // find nearest row's parent
-  //     var rowParent = retrieveRowParent(nearestRow);
-  //     // check if nearest row parent has class ".col.sqs-col-12.span-12"
-  //     var topRow = checkForClass(nearestRow, rowParent, 0);
-  //     // // console.log("Row Index:", topRow);
-  //     // PRAISE THE LORD, IT WORKS!
+    // loop through image gallery blocks
+    for (var i = 0; i < galleries.length; i++) {
+      // find nearest row
+      var nearestRow = retrieveNearestRow(galleries[i]);
+      // find nearest row's parent
+      var rowParent = retrieveRowParent(nearestRow);
+      // check if nearest row parent has class ".col.sqs-col-12.span-12"
+      var topRow = checkForClass(nearestRow, rowParent, 0);
+      // // console.log("Row Index:", topRow);
+      // PRAISE THE LORD, IT WORKS!
 
-  //     if (topRow != null) {
-  //       var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+      if (topRow != null) {
+        var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-  //       // retrieve previous row
-  //       var previousRow = topRow;
+        // retrieve previous row
+        var previousRow = topRow;
 
-  //       // insert new image gallery block element
-  //       $(previousRow).before(customImageBlockHTML);
+        // insert new image gallery block element
+        $(previousRow).before(customImageBlockHTML);
 
-  //       // append image gallery to new image gallery block element
-  //       $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
+        // append image gallery to new image gallery block element
+        $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
 
-  //       // delete old row
-  //       previousRow.remove();
+        // delete old row
+        previousRow.remove();
 
-  //     } // end if statement
-  //   } // end for-loop statement
-  // } // end if statement
+      } // end if statement
+    } // end for-loop statement
+  } // end if statement
 
   // call function to display latest articles
   var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
@@ -1454,7 +1424,7 @@ function displaySubscriptionPopup(categoryToDisplay) {
     case 'spirit':
       listID = "a05ec12fa8"; // set value to MailChimp list ID for sppirit
     default:
-      // console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
+    // console.log("[POPUP] Sorry, article was not in category array so no popup will appear.");
   }
   // console.log("[POPUP] Category passed to this function:", categoryToDisplay);
 
@@ -1489,42 +1459,42 @@ function displaySubscriptionPopup(categoryToDisplay) {
 // method that adds event listeners to products found in a design gallery grid
 /*
 function addEventListeners() {
-  // // console.log("AddEventListener function was executed...");
-  var anchorTags = document.getElementsByClassName("sqs-gallery-design-grid")[0].getElementsByTagName("a"); // initialize and retrieve anchor tags inside div as array-like collection of elements
-  var newURL; // initialize new URL variable
- 
-  // loop through anchor tags
-  for (var i = 0; i < anchorTags.length; i++) {
-    if (isMobile() || (screen && screen.width < 768)) {
-      // add an event listerner to anchor tag
-      anchorTags[i].addEventListener("touchend", function(e) {
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-        //// console.log(newURL);
-        // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
-        var button = document.createElement("a"); // create anchor tag
-        button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
-        button.href = newURL; // set anchor tag reference to new URL
-        document.body.appendChild(button); // append anchor tag to body
-        button.click(); // trigger anchor tag "click" event
-        button.parentNode.removeChild(button); // remove anchor tag from body
-      });
-    } else {
-      // add an event listerner to anchor tag
-      anchorTags[i].addEventListener("click", function(e) {
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-        //// console.log(newURL);
-        // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
-        var button = document.createElement("a"); // create anchor tag
-        button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
-        button.href = newURL; // set anchor tag reference to new URL
-        document.body.appendChild(button); // append anchor tag to body
-        button.click(); // trigger anchor tag "click" event
-        button.parentNode.removeChild(button); // remove anchor tag from body
-      });
-    }
+// // console.log("AddEventListener function was executed...");
+var anchorTags = document.getElementsByClassName("sqs-gallery-design-grid")[0].getElementsByTagName("a"); // initialize and retrieve anchor tags inside div as array-like collection of elements
+var newURL; // initialize new URL variable
+
+// loop through anchor tags
+for (var i = 0; i < anchorTags.length; i++) {
+  if (isMobile() || (screen && screen.width < 768)) {
+    // add an event listerner to anchor tag
+    anchorTags[i].addEventListener("touchend", function(e) {
+      e.preventDefault(); // prevent anchor tag from automatically changing page
+      newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
+      //// console.log(newURL);
+      // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
+      var button = document.createElement("a"); // create anchor tag
+      button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
+      button.href = newURL; // set anchor tag reference to new URL
+      document.body.appendChild(button); // append anchor tag to body
+      button.click(); // trigger anchor tag "click" event
+      button.parentNode.removeChild(button); // remove anchor tag from body
+    });
+  } else {
+    // add an event listerner to anchor tag
+    anchorTags[i].addEventListener("click", function(e) {
+      e.preventDefault(); // prevent anchor tag from automatically changing page
+      newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
+      //// console.log(newURL);
+      // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
+      var button = document.createElement("a"); // create anchor tag
+      button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
+      button.href = newURL; // set anchor tag reference to new URL
+      document.body.appendChild(button); // append anchor tag to body
+      button.click(); // trigger anchor tag "click" event
+      button.parentNode.removeChild(button); // remove anchor tag from body
+    });
   }
+}
 }
 */
 
@@ -2011,22 +1981,6 @@ function moveElements() {
   }
 }
 
-// method that removes MailChimp script
-function removeMailChimpScript() {
-
-  // execute if mailchimp script is found
-  if (document.getElementById("mcjs")) {
-
-    var mailChimpScript = document.getElementById("mcjs");
-
-    mailChimpScript.parentNode.removeChild(mailChimpScript);
-
-    // console.log("[MAILCHIMP]", "Removed script.");
-
-  }
-
-}
-
 /* This stuff listens for an ajax page change */
 // window.onload = watch;
 window.onload = function () {
@@ -2043,7 +1997,6 @@ function watch() {
     summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
     articleIsFeelGoods = false;
-    removeMailChimpScript(); // call method that removes MailChimp's script
     checkBlog();
     // console.log("Will be calling function to load custom video javascript...");
     window.instgrm.Embeds.process();
