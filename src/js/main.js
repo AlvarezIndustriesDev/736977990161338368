@@ -1095,7 +1095,7 @@ function insertAdSidebar() {
         */
 
         // new custom image block that expands images to fit article text content
-        var customImageBlockHTML = $("<div class='sqs-block code-block sqs-block-code new-custom-article-sqs-block custom-image-block-" + i + "'><div class='sqs-block-content'></div></div>");
+        var customImageBlockHTML = $("<div class='sqs-block code-block sqs-block-code new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
 
         console.log("We were able to find the top row.");
         // insert new image block element
