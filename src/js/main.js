@@ -1059,7 +1059,9 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       if (topRow != null) {
-        var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+        /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
+        ------------------------------------------------------------------------------------------------------------------------------------------------------
+        // var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
         console.log("We were able to find the top row.");
         // insert new image block element
@@ -1088,12 +1090,47 @@ function insertAdSidebar() {
         }
 
         // delete old row
+        previousRow.remove(); 
+        ------------------------------------------------------------------------------------------------------------------------------------------------------
+        */
+
+        // new custom image block that expands images to fit article text content
+        var customImageBlockHTML = $("<div class='sqs-block code-block sqs-block-code new-custom-article-sqs-block custom-image-block-" + i + "'><div class='sqs-block-content'></div></div>");
+
+        console.log("We were able to find the top row.");
+        // insert new image block element
+        var previousRow = topRow;
+        console.log(previousRow);
+
+        $(previousRow).before(customImageBlockHTML);
+        // append image to new image block element
+        $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
+
+        // execute if previous row has price text and button
+        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
+
+          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
+
+          priceButtonElement = $(priceElement).next();
+
+          console.log(priceElement, priceButtonElement);
+
+          console.log("[PREV ROW ELEMENTS]:", priceElement);
+
+          // insert price element and button element
+          $(".custom-image-block-" + i).find(".sqs-block-content").append(priceElement);
+          $(".custom-image-block-" + i).find(".sqs-block-content").append(priceButtonElement);
+
+        }
+
+        // delete old row
         previousRow.remove();
 
       } // end if statement
     } // end for-loop statement
   } // end if statement
 
+  /* NOTE 08/11/2019: UPDATE TO HTML BLOCK ELEMENTS FOR BIGGER PICTURE SIZE, FIX PINTEREST BUTTON BOTTOM IF DOING SO */
   // execute if article has image gallery blocks
   if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
     // console.log("[MSG] Retrieving image gallery blocks");
