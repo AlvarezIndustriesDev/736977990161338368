@@ -970,54 +970,59 @@ function insertFeelGoodAds() {
   // execute if article has more than one html blocks
   if (htmlBlocks.length > 0) {
 
-    // execute if html block contains image block
-    if ($(htmlBlocks[i]).has(".image-block")) {
+    // loop through html blocks
+    for (var i = 0; i < htmlBlocks.length; i++) {
 
-      console.log(tag, "Block (" + i + ") has image block.");
+      // execute if html block contains image block
+      if ($(htmlBlocks[i]).has(".image-block")) {
 
-      // retrieve blocks with images
-      var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+        console.log(tag, "Block (" + i + ") has image block.");
 
-      // initialize variables
-      var titleBlock;
-      var buttonBlock;
-      var textBlock;
+        // retrieve blocks with images
+        var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
 
-      // retrieve title block if it exists next to image block
-      if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-        titleBlock = $(imageBlock).next()[0];
-      }
+        // initialize variables
+        var titleBlock;
+        var buttonBlock;
+        var textBlock;
 
-      // retrieve button block if it exists next to title block
-      if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-        buttonBlock = $(titleBlock).next()[0];
-      }
+        // retrieve title block if it exists next to image block
+        if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+          titleBlock = $(imageBlock).next()[0];
+        }
 
-      // retrieve text block if it exists next to button block
-      if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-        textBlock = $(buttonBlock).next()[0];
-      }
+        // retrieve button block if it exists next to title block
+        if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+          buttonBlock = $(titleBlock).next()[0];
+        }
 
-      // execute if all four blocks exist
-      if (imageBlock && titleBlock && buttonBlock && textBlock) {
+        // retrieve text block if it exists next to button block
+        if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+          textBlock = $(buttonBlock).next()[0];
+        }
 
-        console.log(tag, "All four blocks exist.");
+        // execute if all four blocks exist
+        if (imageBlock && titleBlock && buttonBlock && textBlock) {
 
-        // execute if article limit has not been reached
-        if (numAdsInserted < adPerPageLimit) {
+          console.log(tag, "All four blocks exist.");
 
-          console.log(tag, "Inserting ad into page.");
+          // execute if article limit has not been reached
+          if (numAdsInserted < adPerPageLimit) {
 
-          // insert advertisement after text block
-          $(textBlock).after(adHTML);
+            console.log(tag, "Inserting ad into page.");
 
-          numAdsInserted++;
+            // insert advertisement after text block
+            $(textBlock).after(adHTML);
+
+            numAdsInserted++;
+
+          }
 
         }
 
-      }
+      } // end if statement (htmlBlock)
 
-    } // end if statement (htmlBlock)
+    }
 
   } // end if statements
 
