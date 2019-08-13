@@ -258,6 +258,10 @@ function checkBlog() {
 
             } // end if statement
 
+            if (secondaryPathName == "double-breasted-suit-for-women") {
+              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+            }
+
             // execute if insertNoFollowLinks returns false
           } else {
             checkForExternalLinks(false); // method called to check if anchor tags (links) found in document are external
