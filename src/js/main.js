@@ -924,6 +924,23 @@ function insertFeelGoodAds() {
 
   var adHTML = "<div class='content_hint custom-appended'></div>";
 
+  // -- Line blocks
+  var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+  // console.log("Line blocks:", lineBlocks.length);
+  // -- H2 elements
+  var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
+  // console.log("H2 elements:", h2Elements.length);
+  // -- H3 elements
+  var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
+  // console.log("H3 elements:", h3Elements.length);
+  // -- P elements
+  var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+  // console.log("P elements:", pElements.length);
+
+  var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
+
+  var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
+
   var finalAdRatio;
 
   // execute if user is on a mobile device
