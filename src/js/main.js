@@ -919,7 +919,8 @@ function insertFeelGoodAds() {
   let tag = "FEEL GOOD(S):";
 
   console.log(tag, "Article is a feel good article.");
-
+ 
+  // initialize and declare ad HTML for feel-good(s) ads
   var adHTML = "<div class='content_hint custom-appended'></div>";
 
   // -- Line blocks
