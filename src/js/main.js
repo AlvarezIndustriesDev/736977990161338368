@@ -974,9 +974,11 @@ function insertFeelGoodAds() {
     for (var i = 0; i < htmlBlocks.length; i++) {
 
       // execute if html block contains image block
-      if ($(htmlBlocks[i]).has(".image-block")) {
+      if ($(htmlBlocks[i]).has(".image-block")[0]) {
 
         console.log(tag, "Block (" + i + ") has image block.");
+
+        console.log(tag, htmlBlocks[i]);
 
         // retrieve blocks with images
         var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
@@ -986,18 +988,18 @@ function insertFeelGoodAds() {
         var buttonBlock;
         var textBlock;
 
-        console.log(tag, $(imageBlock).next().attr("class"));
-        console.log(tag, $(imageBlock).next());
+        // exeucte if image block meets all requirements
+        if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
 
+          // retrieve title block if it exists next to image block
+          if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+            titleBlock = $(imageBlock).next()[0];
+          }
 
-        // retrieve title block if it exists next to image block
-        if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-          titleBlock = $(imageBlock).next()[0];
-        }
-
-        // retrieve button block if it exists next to title block
-        if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-          buttonBlock = $(titleBlock).next()[0];
+          // retrieve button block if it exists next to title block
+          if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+            buttonBlock = $(titleBlock).next()[0];
+          }
 
           // retrieve text block if it exists next to button block
           if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
@@ -1019,15 +1021,15 @@ function insertFeelGoodAds() {
 
               numAdsInserted++;
 
-            }
+            } // end if statement (insert if ad limit)
 
-          }
+          } // end if statement (check all blocks exist)
 
         }
 
       } // end if statement (htmlBlock)
 
-    }
+    } // end for-loop
 
   } // end if statements
 
