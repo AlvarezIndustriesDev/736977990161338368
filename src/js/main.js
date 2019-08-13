@@ -986,6 +986,10 @@ function insertFeelGoodAds() {
         var buttonBlock;
         var textBlock;
 
+        console.log(tag, $(imageBlock).next().attr("class"));
+        console.log(tag, $(imageBlock).next());
+
+
         // retrieve title block if it exists next to image block
         if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
           titleBlock = $(imageBlock).next();
