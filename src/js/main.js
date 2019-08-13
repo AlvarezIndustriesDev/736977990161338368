@@ -962,74 +962,165 @@ function insertFeelGoodAds() {
   // remove any current content hint
   $(".content_hint.custom-appended").remove();
 
-  // retrieve all html blocks
-  var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
+  // execute if user is on a mobile device
+  if (isMobile()) {
 
-  // execute if article has more than one html blocks
-  if (htmlBlocks.length > 0) {
+    // retrieve all row blocks that contain images and whose parent class is the .col.sqs-col-12.span-12
+    var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .row.sqs-row").filter(function (elem) {
+      return $(this).parent().attr('class').indexOf("col sqs-col-12 span-12") != -1;
+    });
 
-    // loop through html blocks
-    for (var i = 0; i < htmlBlocks.length; i++) {
+    // execute if article has more than one html blocks
+    if (htmlBlocks.length > 0) {
 
-      // execute if html block contains image block
-      if ($(htmlBlocks[i]).has(".image-block")[0]) {
+      // loop through html blocks
+      for (var i = 0; i < htmlBlocks.length; i++) {
 
-        console.log(tag, "Block (" + i + ") has image block.");
+        // execute if html block contains image block
+        if ($(htmlBlocks[i]).has(".image-block")[0]) {
 
-        console.log(tag, htmlBlocks[i]);
+          console.log(tag, "Block (" + i + ") has image block.");
 
-        // retrieve blocks with images
-        var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+          console.log(tag, htmlBlocks[i]);
 
-        // initialize variables
-        var titleBlock;
-        var buttonBlock;
-        var textBlock;
+          // retrieve blocks with images
+          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
 
-        // exeucte if image block meets all requirements
-        if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
+          // initialize variables
+          var titleBlock;
+          var buttonBlock;
+          var textBlock;
 
-          // retrieve title block if it exists next to image block
-          if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-            titleBlock = $(imageBlock).next()[0];
-          }
+          // exeucte if image block meets all requirements
+          if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
 
-          // retrieve button block if it exists next to title block
-          if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-            buttonBlock = $(titleBlock).next()[0];
-          }
+            // retrieve title block if it exists next to image block
+            if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+              titleBlock = $(imageBlock).next()[0];
+            }
 
-          // retrieve text block if it exists next to button block
-          if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-            textBlock = $(buttonBlock).next()[0];
-          }
+            // retrieve button block if it exists next to title block
+            if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+              buttonBlock = $(titleBlock).next()[0];
+            }
 
-          // execute if all four blocks exist
-          if (imageBlock && titleBlock && buttonBlock && textBlock) {
+            // retrieve text block if it exists next to button block
+            if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+              textBlock = $(buttonBlock).next()[0];
+            }
 
-            console.log(tag, "All four blocks exist.");
+            // execute if all four blocks exist
+            if (imageBlock && titleBlock && buttonBlock && textBlock) {
 
-            // execute if article limit has not been reached
-            if (numAdsInserted < adPerPageLimit) {
+              console.log(tag, "All four blocks exist.");
 
-              console.log(tag, "Inserting ad into page.");
+              /* NOTE: Ignore ad limit on image+button+text sections */
 
               // insert advertisement after text block
               $(textBlock).after(adHTML);
 
-              numAdsInserted++;
+              /*
+              // execute if article limit has not been reached
+              if (numAdsInserted < adPerPageLimit) {
 
-            } // end if statement (insert if ad limit)
+                console.log(tag, "Inserting ad into page.");
 
-          } // end if statement (check all blocks exist)
+                // insert advertisement after text block
+                $(textBlock).after(adHTML);
 
-        }
+                numAdsInserted++;
 
-      } // end if statement (htmlBlock)
+              } // end if statement (insert if ad limit) */
 
-    } // end for-loop
+            } // end if statement (check all blocks exist)
 
-  } // end if statements
+          }
+
+        } // end if statement (htmlBlock)
+
+      } // end for-loop
+
+    } // end if statements
+
+    // execute if user is on a desktop device
+  } else {
+
+    // retrieve all html blocks
+    var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
+
+    // execute if article has more than one html blocks
+    if (htmlBlocks.length > 0) {
+
+      // loop through html blocks
+      for (var i = 0; i < htmlBlocks.length; i++) {
+
+        // execute if html block contains image block
+        if ($(htmlBlocks[i]).has(".image-block")[0]) {
+
+          console.log(tag, "Block (" + i + ") has image block.");
+
+          console.log(tag, htmlBlocks[i]);
+
+          // retrieve blocks with images
+          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+
+          // initialize variables
+          var titleBlock;
+          var buttonBlock;
+          var textBlock;
+
+          // exeucte if image block meets all requirements
+          if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
+
+            // retrieve title block if it exists next to image block
+            if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+              titleBlock = $(imageBlock).next()[0];
+            }
+
+            // retrieve button block if it exists next to title block
+            if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+              buttonBlock = $(titleBlock).next()[0];
+            }
+
+            // retrieve text block if it exists next to button block
+            if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+              textBlock = $(buttonBlock).next()[0];
+            }
+
+            // execute if all four blocks exist
+            if (imageBlock && titleBlock && buttonBlock && textBlock) {
+
+              console.log(tag, "All four blocks exist.");
+
+              /* NOTE: Ignore ad limit on image+button+text sections */
+
+              // insert advertisement after text block
+              $(textBlock).after(adHTML);
+
+              /*
+              // execute if article limit has not been reached
+              if (numAdsInserted < adPerPageLimit) {
+
+                console.log(tag, "Inserting ad into page.");
+
+                // insert advertisement after text block
+                $(textBlock).after(adHTML);
+
+                numAdsInserted++;
+
+              } // end if statement (insert if ad limit) */
+
+            } // end if statement (check all blocks exist)
+
+          }
+
+        } // end if statement (htmlBlock)
+
+      } // end for-loop
+
+    } // end if statements
+
+  }
 
 } // end function
 
