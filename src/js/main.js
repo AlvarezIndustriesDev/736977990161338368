@@ -971,7 +971,7 @@ function insertFeelGoodAds() {
   if (htmlBlocks.length > 0) {
 
     // execute if html block contains image block
-    if ($(htmlBlocks[i]).has(".image-block").length > 0) {
+    if ($(htmlBlocks[i]).has(".image-block")) {
 
       console.log(tag, "Block (" + i + ") has image block.");
 
