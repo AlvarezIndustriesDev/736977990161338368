@@ -184,7 +184,7 @@ function checkBlog() {
               } // end if statement
             } // end if statement
 
-            // insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+            insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
 
             if (secondaryPathName == "double-breasted-suit-for-women") {
               insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
@@ -258,9 +258,7 @@ function checkBlog() {
 
             } // end if statement
 
-            if (secondaryPathName == "double-breasted-suit-for-women") {
-              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
-            }
+            insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
 
             // execute if insertNoFollowLinks returns false
           } else {
