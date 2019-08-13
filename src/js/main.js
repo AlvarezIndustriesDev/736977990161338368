@@ -913,7 +913,7 @@ function insertAdvertisements(isFeelGoods) {
   }, 100);
 } // end function
 
-// new method that inserts advertisements for feel good articles
+// new method that inserts advertisements for feel-good(s) articles
 function insertFeelGoodAds() {
 
   let tag = "FEEL GOOD(S):";
