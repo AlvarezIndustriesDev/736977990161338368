@@ -258,7 +258,7 @@ function checkBlog() {
 
             } // end if statement
 
-            insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+            insertFeelGoodAds(); // call new method that inserts advertisement for feel-good(s) articles
 
             // execute if insertNoFollowLinks returns false
           } else {
