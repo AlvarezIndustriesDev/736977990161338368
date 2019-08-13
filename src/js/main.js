@@ -184,6 +184,12 @@ function checkBlog() {
               } // end if statement
             } // end if statement
 
+            // insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+
+            if (secondaryPathName == "double-breasted-suit-for-women") {
+              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+            }
+
           } else {
             checkForExternalLinks(false); // method called to check if anchor tags (links) found in document are external
 
@@ -905,6 +911,97 @@ function insertAdvertisements(isFeelGoods) {
   }, 100);
 } // end function
 
+// new method that inserts advertisements for feel good articles
+function insertFeelGoodAds() {
+
+  let tag = "FEEL GOOD(S):";
+
+  console.log(tag, "Article is a feel good article.");
+
+  var adHTML = "<div class='content_hint custom-appended'></div>";
+
+  var finalAdRatio;
+
+  // execute if user is on a mobile device
+  if (isMobile()) {
+    finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
+  } else {
+    finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
+  }
+
+  var adPerPageLimit;
+
+  // execute if ad ratio exceeds the limit
+  if (finalAdRatio > 8) {
+    adPerPageLimit = 8; // set limit value to ad-per-page limit variable
+  } else {
+    adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
+  }
+
+  var numAdsInserted = 0; // set number of ads inserted to zero
+
+  // remove any current content hint
+  $(".content_hint.custom-appended").remove();
+
+  // retrieve all html blocks
+  var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
+
+  // execute if article has more than one html blocks
+  if (htmlBlocks.length > 0) {
+
+    // execute if html block contains image block
+    if ($(htmlBlocks[i]).has(".image-block").length > 0) {
+
+      console.log(tag, "Block (" + i + ") has image block.");
+
+      // retrieve blocks with images
+      var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+
+      // initialize variables
+      var titleBlock;
+      var buttonBlock;
+      var textBlock;
+
+      // retrieve title block if it exists next to image block
+      if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+        titleBlock = $(imageBlock).next()[0];
+      }
+
+      // retrieve button block if it exists next to title block
+      if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+        buttonBlock = $(titleBlock).next()[0];
+      }
+
+      // retrieve text block if it exists next to button block
+      if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+        textBlock = $(buttonBlock).next()[0];
+      }
+
+      // execute if all four blocks exist
+      if (imageBlock && titleBlock && buttonBlock && textBlock) {
+
+        console.log(tag, "All four blocks exist.");
+
+        // execute if article limit has not been reached
+        if (numAdsInserted < adPerPageLimit) {
+
+          console.log(tag, "Inserting ad into page.");
+
+          // insert advertisement after text block
+          $(textBlock).after(adHTML);
+
+          numAdsInserted++;
+
+        }
+
+      }
+
+    } // end if statement (htmlBlock)
+
+  } // end if statements
+
+} // end function
+
 function returnAdPositions(array, limit) {
   var finalElementsArray = [];
   var elementsRemaining = limit;
@@ -1095,7 +1192,8 @@ function insertAdSidebar() {
         */
 
         // new custom image block that expands images to fit article text content
-        var customImageBlockHTML = $("<div class='sqs-block code-block sqs-block-code new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
+        // code-block sqs-block-code
+        var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
 
         console.log("We were able to find the top row.");
         // insert new image block element
