@@ -988,17 +988,17 @@ function insertFeelGoodAds() {
 
         // retrieve title block if it exists next to image block
         if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-          titleBlock = $(imageBlock).next()[0];
+          titleBlock = $(imageBlock).next();
         }
 
         // retrieve button block if it exists next to title block
         if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-          buttonBlock = $(titleBlock).next()[0];
+          buttonBlock = $(titleBlock).next();
         }
 
         // retrieve text block if it exists next to button block
         if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-          textBlock = $(buttonBlock).next()[0];
+          textBlock = $(buttonBlock).next();
         }
 
         // execute if all four blocks exist
