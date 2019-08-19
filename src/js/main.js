@@ -102,8 +102,6 @@ function checkBlog() {
       insertAdSidebar();
     }
 
-    handleSEOChanges(); // call method that handles SEO changes
-
     // execute if page is article page (pathname exists after "/blog/")
     /*
       if (secondaryPathName == "narcissistic-mother") {
@@ -370,13 +368,6 @@ function checkBlog() {
 
 }
 
-// method that handles SEO changes to blog pages
-function handleSEOChanges() {
-  // console.log("[SEO CHANGES] Method was called.");
-
-
-}
-
 // method that loads mediavine's videos
 function loadMediavineVideo() {
   var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
@@ -461,155 +452,6 @@ function checkForElements() {
       insertAdSidebar();
     }
   }, 100);
-}
-
-// method that inserts custom pinterest & facebook buttons for images
-function insertImageButtons() {
-  let tag = "[PINTEREST]";
-
-  // console.log(tag, "Insert new pinterest save buttons");
-
-  // var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
-
-  // retrieve all image elements within the article content
-  var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
-
-  // execute if more than one image exists
-  if (images.length > 0) {
-    // loop through images
-    for (var i = 0; i < images.length; i++) {
-      // console.log(tag, images[i]);
-
-      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
-
-      $(images[i]).after(saveItButton);
-
-      // // console.log("Images", images);
-
-      // retrieve pinterest button
-      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
-      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
-
-      // method that inserts event listener and executes a function when button is pressed
-      pinterestButton.addEventListener('click', function (e) {
-        // // console.log(e);
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-        // var customURL = location.href;
-
-        // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
-
-        /*
-        
-        // execute if href exists
-        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
-          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
-  
-          // console.log("[PINTEREST] HREF LOCATED.", customURL);
-  
-        } else {
-          customURL = location.href;
-        } */
-
-
-        PinUtils.pinOne({
-          'url': location.href,
-          'media': e.target.attributes['data-image'].value,
-          'description': e.target.attributes['data-desc'].value
-        });
-      });
-
-      // method that inserts event listener and executes function when button is pressed
-      facebookButton.addEventListener('click', function (e) {
-
-        e.preventDefault(); // prevent anchor tag from automatically changing page
-        e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
-
-        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
-      });
-
-    }
-  }
-
-  // retrieve all thumb image galleries
-  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
-
-  // execute if more than one image exists
-  if (thumbImages.length > 0) {
-
-    var pinTag = "[PINTEREST BUTTONS]";
-
-    // console.log(pinTag, "Thumb images found: " + thumbImages.length);
-
-    // loop through images
-    for (var i = 0; i < thumbImages.length; i++) {
-
-      // retrieve height of image text
-      var textHeight = $(thumbImages[i]).parent().parent().find(".image-slide-title").outerHeight();
-
-      // retrieve height of image anchor tag
-      var anchorHeight = $(thumbImages[i]).parent().outerHeight();
-
-      // retrieve height of margin wrapper tag
-      var marginWrapperHeight = $(thumbImages[i]).parent().parent().outerHeight();
-
-      // set default height of image
-      var imageHeight = $(thumbImages[i]).outerHeight();
-
-      // check if image height is larger than anchor tag
-      if (imageHeight > anchorHeight) {
-        imageHeight = 0;
-      }
-
-      // set default bottom calculation
-      var bottomCalculation = 0;
-
-      // check if image height is 0 (if so, calculate bottom value by subtracting anchor tag height from margin wrapper height)
-      if (imageHeight == 0) {
-        // calculate bottom value of pinterest button
-        bottomCalculation = marginWrapperHeight - anchorHeight;
-        // calculate bottom value by subtracting anchor tag height from margin wrapper height and adding the subtraction of image height from anchor height / 2 (we want to get height of bottom difference)
-      } else {
-        // calculate bottom value of pinterest button
-        bottomCalculation = (marginWrapperHeight - anchorHeight) + ((anchorHeight - imageHeight) / 2);
-      }
-
-      // console.log(pinTag, textHeight, imageHeight, anchorHeight, bottomCalculation);
-
-      // construct custom container for pinterest button
-      var customContainer = "<div class='custom-image-button-section' style='bottom: " + bottomCalculation + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
-
-      // append into margin wrapper
-      $(thumbImages[i]).parent().parent().append(customContainer);
-
-      // retrieve pinterest button from margin wrapper
-      var thumbPinterestButton = $(thumbImages[i]).parent().parent().find(".custom-pinterest-button")[0];
-
-      // execute if pinterest button exists
-      if (thumbPinterestButton) {
-
-        // method that inserts event listener and executes a function when button is pressed
-        thumbPinterestButton.addEventListener('click', function (e) {
-          // // console.log(e);
-          e.preventDefault(); // prevent anchor tag from automatically changing page
-          e.stopPropagation(); // prevents anchor tag from being handled by another event
-
-          PinUtils.pinOne({
-            'url': location.href,
-            'media': e.target.attributes['data-image'].value,
-            'description': e.target.attributes['data-desc'].value
-          });
-        });
-
-      }
-
-    }
-
-  }
-
 }
 
 // method that changes image URLs in shop page
@@ -775,6 +617,7 @@ function insertAdvertisements(isFeelGoods) {
 
     }
     //$mediavine.web.fillContentHints();
+
     /* Non-Feel-Good(s)
     -------------------------------------------------------------------------------
     */
@@ -916,49 +759,22 @@ function insertAdvertisements(isFeelGoods) {
 // new method that inserts advertisements for feel-good(s) articles
 function insertFeelGoodAds() {
 
+  /* TODO:
+          
+          1. Retrieve all HTML blocks
+          2. Retrieve images within HTML blocks
+          3. If image+title+button+text combo exists then insert ad after each
+          4. If image+title+button+text combo does not exist, try image+title+text but check for html blocks with images (next)
+          4. Repeat with mobile devices
+      
+  */
+
   let tag = "FEEL GOOD(S):";
 
   console.log(tag, "Article is a feel good article.");
- 
+
   // initialize and declare ad HTML for feel-good(s) ads
   var adHTML = "<div class='content_hint custom-appended'></div>";
-
-  // -- Line blocks
-  var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-  // console.log("Line blocks:", lineBlocks.length);
-  // -- H2 elements
-  var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
-  // console.log("H2 elements:", h2Elements.length);
-  // -- H3 elements
-  var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
-  // console.log("H3 elements:", h3Elements.length);
-  // -- P elements
-  var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
-  // console.log("P elements:", pElements.length);
-
-  var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
-
-  var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
-
-  var finalAdRatio;
-
-  // execute if user is on a mobile device
-  if (isMobile()) {
-    finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
-  } else {
-    finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
-  }
-
-  var adPerPageLimit;
-
-  // execute if ad ratio exceeds the limit
-  if (finalAdRatio > 8) {
-    adPerPageLimit = 8; // set limit value to ad-per-page limit variable
-  } else {
-    adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
-  }
-
-  var numAdsInserted = 0; // set number of ads inserted to zero
 
   // remove any current content hint
   $(".content_hint.custom-appended").remove();
@@ -971,21 +787,55 @@ function insertFeelGoodAds() {
       return $(this).parent().attr('class').indexOf("col sqs-col-12 span-12") != -1;
     });
 
+    // console.log(tag, "Mobile HTML Blocks:", htmlBlocks);
+
     // execute if article has more than one html blocks
     if (htmlBlocks.length > 0) {
+
+      /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
+
+      // execute if html block contains image block or gallery block
+      if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
+
+        // retrieve the paragraphs in the content section after the first image in the article
+        var paragraphs = $(htmlBlocks[0]).next().find("p");
+
+        console.log(tag, "Mobile number of paragraphs in content section:", paragraphs.length);
+
+        // execute if there is only one paragraph in the content section of Feel-Good(s) articles
+        if (paragraphs.length < 2) {
+
+          // insert after the first paragraph
+          $(htmlBlocks[0]).next().after(adHTML);
+
+        } else {
+
+          // insert after every two paragraphs
+          $(paragraphs).each(function (i, e) {
+            // execute if paragraph index is even
+            if ((i + 1) % 2 == 0) {
+              // insert advertisement every 2 paragraphs
+              $(e).after(adHTML);
+            }
+
+          });
+
+        }
+
+      }
 
       // loop through html blocks
       for (var i = 0; i < htmlBlocks.length; i++) {
 
-        // execute if html block contains image block
-        if ($(htmlBlocks[i]).has(".image-block")[0]) {
+        // execute if html block contains image block or gallery block
+        if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
 
-          console.log(tag, "Block (" + i + ") has image block.");
+          // console.log(tag, "Block (" + i + ") has image block.");
 
-          console.log(tag, htmlBlocks[i]);
+          // console.log(tag, htmlBlocks[i]);
 
           // retrieve blocks with images
-          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
 
           // initialize variables
           var titleBlock;
@@ -1013,7 +863,7 @@ function insertFeelGoodAds() {
             // execute if all four blocks exist
             if (imageBlock && titleBlock && buttonBlock && textBlock) {
 
-              console.log(tag, "All four blocks exist.");
+              // console.log(tag, "All four blocks exist.");
 
               /* NOTE: Ignore ad limit on image+button+text sections */
 
@@ -1034,6 +884,31 @@ function insertFeelGoodAds() {
               } // end if statement (insert if ad limit) */
 
             } // end if statement (check all blocks exist)
+
+            // execute if image block meets all requirements for html blocks with image+text+(no image)
+          } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
+
+            // execute if image block is not the first one (will manually add content hints to content section)
+            if (i != 0) {
+
+              // retrieve text block if it exists next to an image
+              if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+                textBlock = $(imageBlock).next()[0];
+              }
+
+              // execute if image and text block exist
+              if (imageBlock && textBlock) {
+
+                // console.log("Both image and text blocks exist");
+
+                /* NOTE: Ignore ad limit on image+text+(no image) sections */
+
+                // insert advertisement after text block
+                $(textBlock).after(adHTML);
+
+              }
+
+            }
 
           }
 
@@ -1049,26 +924,64 @@ function insertFeelGoodAds() {
     // retrieve all html blocks
     var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
 
+    // console.log(htmlBlocks);
+
     // execute if article has more than one html blocks
     if (htmlBlocks.length > 0) {
+
+      /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
+
+      // execute if html block contains image block or gallery block
+      if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
+
+        // retrieve the paragraphs in the content section after the first image in the article
+        var paragraphs = $(htmlBlocks[0]).next().find("p");
+
+        // console.log(tag, "Number of paragraphs in content section:", paragraphs.length);
+
+        // execute if there is only one paragraph in the content section of Feel-Good(s) articles
+        if (paragraphs.length < 2) {
+
+          // insert after the first paragraph
+          $(htmlBlocks[0]).next().after(adHTML);
+
+        } else {
+
+          // insert after every two paragraphs
+          $(paragraphs).each(function (i, e) {
+            // execute if paragraph index is even
+            if ((i + 1) % 2 == 0) {
+              // insert advertisement every 2 paragraphs
+              $(e).after(adHTML);
+            }
+
+          });
+
+        }
+
+      }
 
       // loop through html blocks
       for (var i = 0; i < htmlBlocks.length; i++) {
 
-        // execute if html block contains image block
-        if ($(htmlBlocks[i]).has(".image-block")[0]) {
+        // execute if html block contains image block or gallery block
+        if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
 
-          console.log(tag, "Block (" + i + ") has image block.");
+          // console.log(tag, "Block (" + i + ") has image block.");
 
-          console.log(tag, htmlBlocks[i]);
+          // console.log(tag, htmlBlocks[i]);
 
           // retrieve blocks with images
-          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0];
+          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
 
           // initialize variables
           var titleBlock;
           var buttonBlock;
           var textBlock;
+
+          // console.log(tag, "Image Block:", imageBlock);
+          // console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
+
 
           // exeucte if image block meets all requirements
           if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
@@ -1091,7 +1004,7 @@ function insertFeelGoodAds() {
             // execute if all four blocks exist
             if (imageBlock && titleBlock && buttonBlock && textBlock) {
 
-              console.log(tag, "All four blocks exist.");
+              // console.log(tag, "All four blocks exist.");
 
               /* NOTE: Ignore ad limit on image+button+text sections */
 
@@ -1112,6 +1025,31 @@ function insertFeelGoodAds() {
               } // end if statement (insert if ad limit) */
 
             } // end if statement (check all blocks exist)
+
+            // execute if image block meets all requirements for html blocks with image+text+(no image)
+          } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
+
+            // execute if image block is not the first one (will manually add content hints to content section)
+            if (i != 0) {
+
+              // retrieve text block if it exists next to an image
+              if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+                textBlock = $(imageBlock).next()[0];
+              }
+
+              // execute if image and text block exist
+              if (imageBlock && textBlock) {
+
+                // console.log("Both image and text blocks exist");
+
+                /* NOTE: Ignore ad limit on image+text+(no image) sections */
+
+                // insert advertisement after text block
+                $(textBlock).after(adHTML);
+
+              }
+
+            }
 
           }
 
@@ -1351,7 +1289,6 @@ function insertAdSidebar() {
     } // end for-loop statement
   } // end if statement
 
-  /* NOTE 08/11/2019: UPDATE TO HTML BLOCK ELEMENTS FOR BIGGER PICTURE SIZE, FIX PINTEREST BUTTON BOTTOM IF DOING SO */
   // execute if article has image gallery blocks
   if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
     // console.log("[MSG] Retrieving image gallery blocks");
@@ -1369,7 +1306,9 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       if (topRow != null) {
-        var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+        // var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+
+        var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-gallery-row-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
 
         // retrieve previous row
         var previousRow = topRow;
@@ -1378,13 +1317,14 @@ function insertAdSidebar() {
         $(previousRow).before(customImageBlockHTML);
 
         // append image gallery to new image gallery block element
-        $(".custom-image-gallery-row-" + i).find(".col.sqs-col-8.span-8").append(galleries[i]);
+        $(".custom-image-gallery-row-" + i).find(".sqs-block-content").append(galleries[i]);
 
         // delete old row
         previousRow.remove();
 
       } // end if statement
     } // end for-loop statement
+
   } // end if statement
 
   // call function to display latest articles
@@ -1607,6 +1547,167 @@ function insertAdsExtraPages() {
         loadMediavineScripts();
       }
     }, 100);
+
+  }
+
+}
+
+// method that inserts custom pinterest & facebook buttons for images
+function insertImageButtons() {
+  let tag = "[PINTEREST]";
+
+  console.log(tag, "Insert new pinterest save buttons");
+
+  // var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+
+  // retrieve all image elements within the article content
+  var images = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.image-block.sqs-block-image img");
+
+  // execute if more than one image exists
+  if (images.length > 0) {
+    // loop through images
+    for (var i = 0; i < images.length; i++) {
+      // console.log(tag, images[i]);
+
+      var saveItButton = "<div class='custom-image-button-section'><i class='fab fa-facebook-f custom-image-button custom-facebook-button' style='z-index: 3;'></i><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(images[i]).attr('data-image') + "' data-desc='" + $(images[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+      $(images[i]).after(saveItButton);
+
+      // // console.log("Images", images);
+
+      // retrieve pinterest button
+      var pinterestButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-pinterest-button")[0];
+      var facebookButton = $(images[i]).siblings(".custom-image-button-section").find(".custom-facebook-button")[0];
+
+      // method that inserts event listener and executes a function when button is pressed
+      pinterestButton.addEventListener('click', function (e) {
+        // // console.log(e);
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        // var customURL = location.href;
+
+        // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
+
+        /*
+        
+        // execute if href exists
+        if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
+          customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
+  
+          // console.log("[PINTEREST] HREF LOCATED.", customURL);
+  
+        } else {
+          customURL = location.href;
+        } */
+
+
+        PinUtils.pinOne({
+          'url': location.href,
+          'media': e.target.attributes['data-image'].value,
+          'description': e.target.attributes['data-desc'].value
+        });
+      });
+
+      // method that inserts event listener and executes function when button is pressed
+      facebookButton.addEventListener('click', function (e) {
+
+        e.preventDefault(); // prevent anchor tag from automatically changing page
+        e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+        var formattedURL = "https://www.facebook.com/sharer/sharer.php?u=" + location.href;
+
+        window.open(formattedURL, "shareBlog", "toolbar = 0, status = 0, height = 225, width = 420, resizable = 0")
+      });
+
+    }
+  }
+
+}
+
+// method that inserts custom pinterest buttons on thumbnail images in gallery blocks
+function insertGalleryImageButtons() {
+
+  let tag = "[PINTEREST]";
+
+  console.log(tag, "Insert new pinterest save buttons on thumbnails");
+
+  // retrieve all thumb image galleries
+  // var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-design-grid .image-slide-anchor img");
+  var thumbImages = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block-gallery .sqs-gallery-container img");
+
+  // console.log(tag, "Thumb images:", thumbImages);
+
+  // execute if more than one image exists
+  if (thumbImages.length > 0) {
+
+    var pinTag = "[PINTEREST BUTTONS]";
+
+    // console.log(pinTag, "Thumb images found: " + thumbImages.length);
+
+    // loop through images
+    for (var i = 0; i < thumbImages.length; i++) {
+
+      // retrieve height of image text
+      var textHeight = $(thumbImages[i]).parent().parent().find(".image-slide-title").outerHeight();
+
+      // retrieve height of image anchor tag
+      var anchorHeight = $(thumbImages[i]).parent().outerHeight();
+
+      // retrieve height of margin wrapper tag
+      var marginWrapperHeight = $(thumbImages[i]).parent().parent().outerHeight();
+
+      // set default height of image
+      var imageHeight = $(thumbImages[i]).outerHeight();
+
+      // check if image height is larger than anchor tag
+      if (imageHeight > anchorHeight) {
+        imageHeight = 0;
+      }
+
+      // set default bottom calculation
+      var bottomCalculation = 0;
+
+      // check if image height is 0 (if so, calculate bottom value by subtracting anchor tag height from margin wrapper height)
+      if (imageHeight == 0) {
+        // calculate bottom value of pinterest button
+        bottomCalculation = marginWrapperHeight - anchorHeight;
+        // calculate bottom value by subtracting anchor tag height from margin wrapper height and adding the subtraction of image height from anchor height / 2 (we want to get height of bottom difference)
+      } else {
+        // calculate bottom value of pinterest button
+        bottomCalculation = (marginWrapperHeight - anchorHeight) + ((anchorHeight - imageHeight) / 2);
+      }
+
+      console.log(pinTag, "Text height: " + textHeight, "Image height: " + imageHeight, "Anchor height: " + anchorHeight, "Bottom calculation: " + bottomCalculation);
+
+      // construct custom container for pinterest button
+      var customContainer = "<div class='custom-image-button-section' style='bottom: " + bottomCalculation + "px !important;'><i class='fab fa-pinterest-p custom-image-button custom-pinterest-button' data-image='" + $(thumbImages[i]).attr('data-image') + "' data-desc='" + $(thumbImages[i]).attr('alt') + "' style='z-index: 3;'></i></div>";
+
+      // append into margin wrapper
+      $(thumbImages[i]).parent().parent().append(customContainer);
+
+      // retrieve pinterest button from margin wrapper
+      var thumbPinterestButton = $(thumbImages[i]).parent().parent().find(".custom-pinterest-button")[0];
+
+      // execute if pinterest button exists
+      if (thumbPinterestButton) {
+
+        // method that inserts event listener and executes a function when button is pressed
+        thumbPinterestButton.addEventListener('click', function (e) {
+          // // console.log(e);
+          e.preventDefault(); // prevent anchor tag from automatically changing page
+          e.stopPropagation(); // prevents anchor tag from being handled by another event
+
+          PinUtils.pinOne({
+            'url': location.href,
+            'media': e.target.attributes['data-image'].value,
+            'description': e.target.attributes['data-desc'].value
+          });
+        });
+
+      }
+
+    }
 
   }
 
@@ -2197,6 +2298,8 @@ function insertCustomHTML(articleCategory) {
       if (movePaginationHTML == true) {
         moveElements(); // method called to change position of elements in blog page
       }
+      // call method that inserts pinterest button for thumbnail images
+      insertGalleryImageButtons();
     }
   }, 100);
 
