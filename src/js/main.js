@@ -442,7 +442,7 @@ function loadMediavineScripts() {
     $.getScript(scriptSrc, function (data, textStatus, jqxhr) {
       // // console.log("[SCRIPT]", textStatus); // success message
       // // console.log("[SCRIPT]", jqxhr.status); // 200 message
-      // // console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
+      console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
     });
   }
 
