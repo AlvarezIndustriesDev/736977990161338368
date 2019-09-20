@@ -520,7 +520,7 @@ function editSearchPage(queryParameter) {
 
     // edit the current page url with the new parameter
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + searchValue;
-    window.history.pushState({path:newurl},'title',newurl);
+    window.history.pushState({path:newurl},'',newurl);
 
     // hide the search icon
     $(".sqs-search-page-input").addClass("loading");
