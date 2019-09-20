@@ -31,6 +31,7 @@ var isMobile = function () {
 var jsonData; // initialize variable
 var pageLoaded = false;
 var articleIsFeelGoods = false;
+var sentenceArray = [];
 
 // custom code begins here -----------------------------------------------------------------------------------
 //init(); //Start the code when the page loads
@@ -53,6 +54,7 @@ var checkElement = setInterval(function() {
 
 // method that checks if current page is "blog" page
 function checkBlog() {
+
   // execute if the page contains a blog list filter
   if (document.getElementsByClassName("BlogList-filter").length) {
     var blogFilters = document.getElementsByClassName("BlogList-filter"); // initialize and declare elements with blog filter class
@@ -95,6 +97,7 @@ function checkBlog() {
     // // // console.log(location.href);
     var formattedURL; // initialize formatted URL variaWble
     var urlHasParameters = checkForParameters(location.href); // call method to check if current URL has parameters
+    var blogHasVideo = false;
 
     // execute if not on mobile device
     if (!isMobile()) {
@@ -128,6 +131,14 @@ function checkBlog() {
     // call method that inserts Pinterest buttons to images
     insertImageButtons();
     // // console.log("Formatted URL:", formattedURL);
+
+    // check if article has reddit blocks
+    if ($(".reddit-card").length > 0) {
+      console.log("[REDDIT] Cards were found.");
+
+      loadRedditScripts(); // load reddit scripts
+    }
+
     // method to retrieve page in JSON format
     $.ajax({
       url: formattedURL,
@@ -275,6 +286,58 @@ function checkBlog() {
               insertAdvertisements(false);
             }
 
+            // loop through scripts and find mediavine video
+            $('script[data-noptimize]').each(function () {
+              var src = this.src; // initialize and retrieve script source link
+              var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+
+              // // console.log("[VIDEO] SRC: ", src);
+              // execute if search string returns a valid match
+              if (searchString != -1) {
+                var searchText = "/videos/"; // initialize search text variable
+                var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+
+                console.log("[VIDEO] Mediavine video script found.");
+
+                blogHasVideo = true;
+
+                // call method that loads mediavine's videos 
+                loadMediavineVideo(src, videoID, false);
+
+                return false;
+
+              }
+            });
+
+            console.log("[VIDEO] Blog has video or not:", blogHasVideo);
+
+            // execute if blog does not have video
+            if (!blogHasVideo) {
+
+              console.log("[VIDEO] Blog does not have a video.");
+
+              // retrieve video information from database
+              $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                console.log(response);
+                if (response['status'] == "success") {
+
+                  // initialize variables
+                  var videoID = response['data'][0]['video_id'];
+                  var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                  var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                  // insert video element after third paragraph
+                  $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+
+                  // call method that loads mediavine's videos 
+                  loadMediavineVideo(scriptURL, videoID, true, response);
+
+                }
+              });
+
+            }
+
+
           }
 
           // loop through result array
@@ -301,11 +364,13 @@ function checkBlog() {
           }
 
         }
+
+
       }
     });
     // execute if current page is an author's page
     // && (authorPathName[1] == "5b5b442a88251bc96fcdcdd7" || authorPathName[1] == "5b5b442a88251bc96fcdcdd7#show-archive")
-  } else if (pathName == "blog" && extraPathName[0] == "author") {
+  } else if (pathName == "blog" && extraPathName && extraPathName[0] == "author") {
     var prependHTML = "<div class='custom-author-container sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
     $(".Main .Main-content").prepend(prependHTML);
@@ -326,8 +391,8 @@ function checkBlog() {
 
     insertAuthorBio(formattedURL); // method called to insert author bio information to page
     // execute if current page is a category page
-  } else if (pathName == "blog" && extraPathName[0] == "category") {
-    // // console.log("This page is a category page");
+  } else if (pathName == "blog" && extraPathName && extraPathName[0] == "category") {
+    // console.log("This page is a category page");
 
     insertAdsExtraPages(); // call method that inserts advertisements on author & category pages
 
@@ -370,68 +435,496 @@ function checkBlog() {
     // call method to redirect to affiliate link
     redirectToAffiliate();
 
+  } else if (pathName == "blog" && !secondaryPathName && !extraPathName) {
+
+    console.log("This is the blog page.");
+
+    insertAdsExtraPages(); // call method that inserts advertisements on author & category pages
+
+  } else if (pathName == "search") {
+
+    console.log("[SEARCH PAGE]", "This page is the search page.");
+
+    // hide the default search page result container
+    $(".sqs-search-page-result").hide();
+    $(".sqs-search-page-more-wrapper").hide();
+    $(".sqs-search-page-notice").hide();
+
+    // check if the input element exists in the page
+    var checkSearchElement = setInterval(function () {
+
+      // check if input element exists
+      if ($(".sqs-search-page-input input").length > 0) {
+
+        // stop the loop from running
+        clearInterval(checkSearchElement);
+
+        // check if the URL has query parameters
+        if (extraPathName) {
+          // call function that edits the search page
+          editSearchPage(extraPathName);
+        } else {
+          // call function that edits the search page
+          editSearchPage();
+        }
+
+      }
+
+    });
+
+  }
+
+}
+
+// method that returns search results to the search page
+function editSearchPage(queryParameter) {
+
+  // empty the default search page result container
+  $(".sqs-search-page-result").remove();
+
+  // declare HTML code for spinner icon
+  var spinnerHTML = "<div class='yui3-widget sqs-spin dark large'><div class='sqs-spin-content'></div></div>";
+
+  // declare number of columns for articles
+  var columns = 3;
+
+  if (isMobile()) {
+    columns = 1;
+  }
+
+  // declare HTML code for search results
+  var sectionHTML = "<section class='BlogList BlogList--posts-excerpt sqs-blog-list clear' data-columns='" + columns + "'></section>";
+
+  // declare a clone of the form element
+  var searchFormElement = $(".sqs-search-page-input form").clone();
+
+  // remove the form element (removes any default event listeners)
+  $(".sqs-search-page-input form").remove();
+
+  // append new form element to page
+  $(".sqs-search-page-input").append(searchFormElement);
+
+  // append new search results container
+  $(".sqs-search-page").find(".sqs-search-page-output").append(sectionHTML);
+
+  // add event listener to form that listens for a form submission event
+  searchFormElement.submit(function (e) {
+
+    // prevent any default events from executing
+    e.preventDefault();
+
+    // declare and retrieve the value of the input
+    var searchValue = $(searchFormElement).find("input").val();
+
+    console.log("[SEARCH PAGE] Input value:", searchValue);
+
+    // edit the current page url with the new parameter
+    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + searchValue;
+    window.history.pushState({path:newurl},'title',newurl);
+
+    // hide the search icon
+    $(".sqs-search-page-input").addClass("loading");
+
+    // check if spinner wrapper HTML already exists
+    if ($(".sqs-search-page-input .spinner-wrapper").children().length > 0) {
+      // display the spinner icon
+      $(".sqs-search-page-input .spinner-wrapper").show();
+    } else {
+      // insert the spinner HTML
+      $(".sqs-search-page-input .spinner-wrapper").append(spinnerHTML);
+    }
+
+    // try statement to ensure Squarespace function exists
+    try {
+
+      // execute AJAX request to Squarespace search API
+      Y.Data.get({
+        url: "/api/search/GeneralSearch",
+        data: { q: searchValue },
+        success: function (data) {
+
+          // remove any articles already present in search result container
+          $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").empty();
+
+          // hide the spinner icon
+          $(".sqs-search-page-input .spinner-wrapper").hide();
+
+          // display the search icon
+          $(".sqs-search-page-input").removeClass("loading");
+
+          // declare empty variable containing the article HTML
+          var middleHTML = "";
+
+          // check if article elements were returned
+          if (data["items"] && data["items"].length > 0) {
+
+            console.log("[SEARCH PAGE] Data:", data);
+
+            // loop through each article item
+            for (var i = 0; i < data["items"].length; i++) {
+
+              // check if the item is a stories item
+              if (data["items"][i]["collectionDisplayName"] == "Stories") {
+                // declare variables containing article information
+                var articleTitle = decodeText(data["items"][i]["title"]);
+                articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
+                var articleAuthorID = data["items"][i]["author"]["id"];
+                var articleAuthor = data["items"][i]["author"]["displayName"];
+                var articleImage = data["items"][i]["imageUrl"];
+                var articleURL = data["items"][i]["itemUrl"];
+
+                console.log(articleTitle);
+
+                // fill in data to HTML template
+                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
+              } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
+                // declare variables containing article information
+                var title = decodeText(data["items"][i]["title"]);
+                title = title.replace("&<em>amp</em>;", "&");
+                var image = data["items"][i]["imageUrl"];
+                var url = data["items"][i]["itemUrl"];
+                var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+
+                // fill in data to HTML template
+                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+              }
+
+            }
+          } else {
+            // append an error message
+            $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append("<center><h4>No results found. Please try again.</h4></center>");
+          }
+
+          // append article elements to article container section
+          $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append(middleHTML);
+
+          // insert ads
+          insertAdsExtraPages();
+
+        }
+      }, this);
+
+      // catch error messages
+    } catch (error) {
+
+      // log the error
+      console.log("[SEARCH PAGE]", error);
+
+    }
+
+  });
+
+  // check if query parameters exist
+  if (queryParameter && queryParameter[0] == "q" && queryParameter[1].length > 0) {
+
+    // trigger form submission
+    searchFormElement.trigger("submit");
+
   }
 
 }
 
 // method that loads mediavine's videos
-function loadMediavineVideo() {
-  var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
-  var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
+function loadMediavineVideo(src, videoID, addObserver, response) {
 
-  // execute if page is an article page under "blog" pathname
-  if (pathName == "blog" && secondaryPathName) {
+  var hrElement = "<div class='sqs-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block custom-hr-element'><div class='sqs-block-content'><hr></div></div>";
 
-    $('script[data-noptimize]').each(function () {
-      var src = this.src; // initialize and retrieve script source link
-      var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+  console.log("[VIDEO] SRC:", src);
 
-      // // console.log("[VIDEO] SRC: ", src);
-      // execute if search string returns a valid match
-      if (searchString != -1) {
-        var searchText = "/videos/"; // initialize search text variable
-        var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
-        // // console.log("[VIDEO] Video ID:", videoID);
+  // set autoplay property to true
+  $('#' + videoID).attr('data-autoplay', 'true');
 
-        // set autoplay property to true
-        $('#' + videoID).attr('data-autoplay', 'true');
+  // set autoplay property to true for video element
+  $('#' + videoID).find('.video-js').find('video').attr('autoplay', 'true');
 
-        // load javascript
-        $.getScript(src, function (data, textStatus, jqxhr) {
-          // // console.log("[VIDEO]", textStatus); // success message
-          // // console.log("[VIDEO]", jqxhr.status); // 200 message
-          // // console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
-        });
+  // add horizontal lines
+  $('#' + videoID).before(hrElement);
+  $('#' + videoID).after(hrElement);
+
+  // load javascript
+  $.getScript(src, function (data, textStatus, jqxhr) {
+    console.log("[VIDEO]", textStatus); // success message
+    console.log("[VIDEO]", jqxhr.status); // 200 message
+    console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
+
+    // execute if addObserver element is true
+    if (addObserver && response) {
+
+      // method to check if all custom HTML variables exist
+      var checkElement = setInterval(function () {
+        // check if ad container exists inside video
+        if ($('#' + videoID).find(".ima-ad-container").length > 0) {
+          clearInterval(checkElement); // stop the loop
+          console.log("[VIDEO] Element found.");
+          // set the title of the mediavine bar
+          $('#' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
+          $('#' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
+          $('#' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
+          // hide the default image
+          $('#' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
+          var targetElement = $('#' + videoID).find(".ima-ad-container");
+          var miniVideoElement = $('#' + videoID).find(".mediavine-video__sticky-container");
+          addMutationObserver(targetElement, videoID, response);
+          addMutationObserver(miniVideoElement, videoID, response);
+        }
+      }, 100);
+
+    }
+
+  });
+
+}
+
+// method that adds mutation observer to mediavine's videos
+function addMutationObserver(targetElement, videoID, data) {
+
+  console.log("[VIDEO] Element:", targetElement, "ID:", videoID);
+
+  // execute if target element exists
+  if (targetElement.length > 0) {
+
+    // retrieve the target element
+    var adElement = targetElement[0];
+
+    // retrieve anchor tags from data
+    var videoInformation = data['data'][0];
+
+    // retrieve time interval from data
+    var timeInterval = videoInformation['time_interval']; // (in seconds)
+
+    // initialize counter
+    var counter = 0;
+
+    // initialize word limit per sentence (8 is ideal)
+    var wordLimit = 8;
+
+    // set options for observer
+    var config = {
+      attributes: true,
+      childList: false,
+      subtree: false
+    };
+
+    // declare the function that creates the changing title animation
+    var changeTitles = function () {
+      // declare headline HTML
+      var headlineHTML = "<div class='video-headline-container'></div>";
+
+      // add headline HTML inside video
+      $('#' + videoID).find('.mediavine-video__sticky-video').prepend(headlineHTML);
+
+      // add an event listener that executes when the video ends
+      $('#' + videoID).find('video')[0].addEventListener('ended', function () {
+        // $('#' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
+
+        /* remove from video */
+        $('#' + videoID).find('.video-headline-container').empty();
+
+      }, false);
+
+      // set video's current time to 0 seconds
+      $('#' + videoID).find('video')[0].currentTime = 0;
+
+      /* retrieve formatted strings based on article title */
+      retrieveStrings(videoInformation['video_links'][counter]['article_title'].split(" "), wordLimit);
+
+      console.log("[VIDEO] Sentence:", sentenceArray);
+
+      /* loop through sentence array and append text to video-headline-container */
+      for (var i = 0; i < sentenceArray.length; i++) {
+
+        var textHTML = "<div class='video-headline-text'>" + sentenceArray[i] + "</div>";
+
+        $('#' + videoID).find('.video-headline-container').append(textHTML);
+
       }
-    });
-    /* 
-      var phrase = "an important number comes after this: 123456";
-      var word = "this: ";
-      var number = phrase.substr(phrase.indexOf(word) + word.length);
-      // number = 123456
-    */
+
+      /* reset the sentence array */
+      sentenceArray.length = 0;
+
+      // set initial text and anchor href
+      // $('#' + videoID).find(".mediavine-video__sticky-title a").html(videoInformation['video_links'][counter]['article_title'] + " <span class='mediavine-sticky-title-arrow'>>></span>");
+      // $('#' + videoID).find(".mediavine-video__sticky-title a").attr("href", videoInformation['video_links'][counter]['article_link']);
+
+
+
+      counter++;
+
+      var changeURLs = setInterval(function () {
+
+        /* empty the headline-text elements */
+        $('#' + videoID).find('.video-headline-container').empty();
+
+        /* retrieve formatted strings based on article title */
+        retrieveStrings(videoInformation['video_links'][counter]['article_title'].split(" "), wordLimit);
+
+        console.log("[VIDEO] Sentence:", sentenceArray);
+
+        /* loop through sentence array and append text to video-headline-container */
+        for (var i = 0; i < sentenceArray.length; i++) {
+
+          var textHTML = "<div class='video-headline-text'>" + sentenceArray[i] + "</div>";
+
+          $('#' + videoID).find('.video-headline-container').append(textHTML);
+
+        }
+
+        /* reset the sentence array */
+        sentenceArray.length = 0;
+
+        // $('#' + videoID).find(".mediavine-video__sticky-title a").html(videoInformation['video_links'][counter]['article_title'] + " <span class='mediavine-sticky-title-arrow'>>></span>");
+        // $('#' + videoID).find(".mediavine-video__sticky-title a").attr("href", videoInformation['video_links'][counter]['article_link']);
+        console.log("[VIDEO]", videoInformation['video_links'][counter]['article_title']);
+
+        counter++;
+
+        // if counter exceeds video links
+        if (counter > videoInformation['video_links'].length - 1) {
+          // reset counter, clear the interval and stop changing links
+          clearInterval(changeURLs);
+          counter = 0;
+          // stop observing later on
+          // observer.disconnect();
+        }
+
+      }, timeInterval * 1000);
+    }
+
+    // callback function to execute when mutations are observed
+    var callback = function (mutationList, observer) {
+      // loop through every mutation in the mutation list
+      mutationList.forEach((mutation) => {
+        // console.log("[VIDEO]:", mutation);
+        // execute if the ad becomes invisible
+        if (mutation.target.style.display == 'none') {
+          console.log("[VIDEO] Ad stopped playing...", $('#' + videoID).find('video')[0].paused);
+
+          /* ADD CHECKS FOR VIDEOS THAT ARE PAUSED AND THE USER PRESSES PLAY */
+
+          // execute if video starts playing
+          if (!$('#' + videoID).find('video')[0].paused) {
+
+            // call function that changes tht title animations
+            changeTitles();
+
+          } else {
+
+            console.log("[VIDEO] Well, this is the else statement.");
+            // add an event listener for when the user clicks on the big play button
+            document.getElementsByClassName('vjs-big-play-button')[0].addEventListener('click', function () {
+
+              console.log("[VIDEO] Button was pressed!", mutation.target.style.display == 'none');
+
+              // set video's current time to 0 seconds
+              $('#' + videoID).find('video')[0].paused = true;
+              $('#' + videoID).find('video')[0].currentTime = 0;
+
+              setTimeout(function () {
+                // check if the video is playing
+                if (mutation.target.style.display == 'none') {
+
+                  // call function that changes the title animations
+                  changeTitles();
+
+                }
+              }, 2000);
+
+
+            });
+
+          }
+
+          // execute if the mini-video exists
+        } else if (mutation.target.className.indexOf('mediavine-video__is-stick') > -1) {
+          console.log("[VIDEO] Class names: ", mutation.target.className);
+
+          // hide the "READ MORE" text
+          $('#' + videoID).find('.read-more-text').attr('hidden', 'true');
+
+          // hide the video headline container
+          $('#' + videoID).find('.video-headline-container').attr('hidden', 'true');
+
+        } else {
+          // execute if the document has the "READ MORE" text
+          if ($('#' + videoID).find('.read-more-text').length > 0) {
+
+            // execute if the document has the video headline container
+            if ($('#' + videoID).find('.video-headline-container').length > 0 && $('#' + videoID).find('.video-headline-container').is(':hidden')) {
+              $('#' + videoID).find('.video-headline-container').removeAttr('hidden');
+            }
+
+            // execute if they have the hidden attribute
+            if ($('#' + videoID).find('.read-more-text').is(':hidden')) {
+              // display the hidden containers
+              $('#' + videoID).find('.read-more-text').removeAttr('hidden');
+
+            }
+
+          }
+
+        }
+      });
+    };
+
+    // create an observer instance linked to the callback function
+    var observer = new MutationObserver(callback);
+
+    // check if video ID matches Mediavine video ID
+    if (videoInformation['video_id'] === videoID) {
+      console.log("[VIDEO] Both video IDs match!");
+      // start observing the target node for configured mutations
+      observer.observe(adElement, config);
+    } else {
+      console.log("[VIDEO] Video IDs do not match!");
+    }
+
 
   }
 
-  /*
-  if (pathName == "blog" && secondaryPathName == "karamo-brown") {
-    var videoID = "hh392mxhnfhmt3cwx1ku";
-    var videoURL = "//video.mediavine.com/videos/hh392mxhnfhmt3cwx1ku.js";
-    // set autoplay property to true
-    $('#' + videoID).attr('data-autoplay', 'true');
+}
 
-    // load javascript
-    $.getScript(videoURL, function( data, textStatus, jqxhr ) {
-      // // console.log("[VIDEO]", textStatus); // Success
-      // // console.log("[VIDEO]", jqxhr.status); // 200
-      // // console.log("[VIDEO]", "Load was performed.");
-    });
-  } */
+// method that returns an array of strings
+function retrieveStrings(array, limitPerString) {
+
+  // execute if the array has elements
+  if (array.length > 0) {
+
+    // format a string based on the limit of words
+    var string = array.splice(0, limitPerString).join(" ");
+
+    // push to the array
+    sentenceArray.push(string);
+
+    // call function again to format a string based on remaining words
+    retrieveStrings(array, limitPerString);
+
+  }
+
 }
 
 // method that loads mediavine's script
 function loadMediavineScripts() {
   var scriptSrc = "//scripts.mediavine.com/tags/i-am-and-co.js"; // initialize and retrieve script source link
+
+  var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+  var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
+
+  // execute if page is an article page under "blog" pathname
+  if (pathName == "blog" && secondaryPathName) {
+    // load javascript
+    $.getScript(scriptSrc, function (data, textStatus, jqxhr) {
+      // // console.log("[SCRIPT]", textStatus); // success message
+      // // console.log("[SCRIPT]", jqxhr.status); // 200 message
+      console.log("[SCRIPT]", "Javascript load was performed successfully."); // custom success message
+    });
+  }
+
+}
+
+// method that loads reddit scripts
+function loadRedditScripts() {
+
+  var scriptSrc = "https://embed.redditmedia.com/widgets/platform.js"; // initialize and retrieve script source link
 
   var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
   var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
@@ -985,8 +1478,8 @@ function insertFeelGoodAds() {
           var buttonBlock;
           var textBlock;
 
-          // // console.log(tag, "Image Block:", imageBlock);
-          // // console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
+          console.log(tag, "Image Block:", imageBlock);
+          console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
 
 
           // exeucte if image block meets all requirements
@@ -1034,6 +1527,8 @@ function insertFeelGoodAds() {
 
             // execute if image block meets all requirements for html blocks with image+text+(no image)
           } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
+
+            // console.log(tag, "The following image block meets the requirements for no image only, I guess:", $(imageBlock));
 
             // execute if image block is not the first one (will manually add content hints to content section)
             if (i != 0) {
@@ -1308,9 +1803,11 @@ function insertAdSidebar() {
         $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
 
         // execute if previous row has price text and button
-        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
+        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6").has(".sqs-block-button")) {
 
-          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
+
+
+          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6 .sqs-block.html-block.sqs-block-html")[0];
 
           priceButtonElement = $(priceElement).next();
 
@@ -1319,8 +1816,8 @@ function insertAdSidebar() {
           // console.log("[PREV ROW ELEMENTS]:", priceElement);
 
           // insert price element and button element
-          $(".custom-image-block-" + i).find(".sqs-block-content").append(priceElement);
-          $(".custom-image-block-" + i).find(".sqs-block-content").append(priceButtonElement);
+          $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceElement);
+          $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceButtonElement);
 
         }
 
@@ -1566,7 +2063,7 @@ function insertAuthorBio(linkURL) {
 // method that inserts advertisements on author & category pages
 function insertAdsExtraPages() {
   // // console.log("[FUNCTION] Insert ads into author pages!");
-  var advertisementHTML = "<br><article class='BlogList-item' style='width: 100%;'><div class='content_hint'></div></article><br>";
+  var advertisementHTML = "<br><article class='BlogList-item hentry post-type-text' style='width: 100%;'><div class='content_hint'></div></article><br>";
   var groupHTML = "<div class='custom-author-group'></div>";
 
   // execute if article elements exist
@@ -1773,9 +2270,19 @@ function callback(data) {
   jsonData = data; // set variable value to data passed in parameter
 }
 
-// method thtat checks if number is even
+// method that checks if number is even
 function isEven(number) {
   return number % 2 == 0; // uses mod to return boolean value to indicate if parameter number is even or odd
+}
+
+// method that converts unix timestamp to Squarespace date
+function convertTimestamp(timestamp) {
+  var date = new Date(timestamp);
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var month = months[date.getMonth()];
+  var day = date.getDate();
+  var year = date.getFullYear();
+  return month + " " + day + ", " + year;
 }
 
 // method that decodes entities in JSON data
@@ -2403,7 +2910,6 @@ function watch() {
     checkBlog();
     // // console.log("Will be calling function to load custom video javascript...");
     window.instgrm.Embeds.process();
-    loadMediavineVideo(); // call method that loads mediavine's video
     // // console.log("Called function to load customm video javascript!");
   });
 }
