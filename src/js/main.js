@@ -32,6 +32,7 @@ var jsonData; // initialize variable
 var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
+var searchPageIndex = 0;
 
 // custom code begins here -----------------------------------------------------------------------------------
 //init(); //Start the code when the page loads
@@ -485,6 +486,9 @@ function editSearchPage(queryParameter) {
   // declare HTML code for spinner icon
   var spinnerHTML = "<div class='yui3-widget sqs-spin dark large'><div class='sqs-spin-content'></div></div>";
 
+  // declare HTML code for "see more" button
+  var buttonHTML = "<div class='sqs-search-page-more-wrapper'><button class='sqs-search-page-more sqs-system-button-style-mixin sqs-editable-button search-more-button'>See more</button></div>";
+
   // declare number of columns for articles
   var columns = 3;
 
@@ -507,11 +511,19 @@ function editSearchPage(queryParameter) {
   // append new search results container
   $(".sqs-search-page").find(".sqs-search-page-output").append(sectionHTML);
 
+  // append new search "see more" button
+  $(".sqs-search-page").find(".sqs-search-page-output").append(buttonHTML);
+
+  $(".search-more-button").hide();
+
   // add event listener to form that listens for a form submission event
   searchFormElement.submit(function (e) {
 
     // prevent any default events from executing
     e.preventDefault();
+
+    // set default value of search index
+    searchPageIndex = 0;
 
     // declare and retrieve the value of the input
     var searchValue = $(searchFormElement).find("input").val();
@@ -520,7 +532,7 @@ function editSearchPage(queryParameter) {
 
     // edit the current page url with the new parameter
     var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?q=' + searchValue;
-    window.history.pushState({path:newurl},'',newurl);
+    window.history.pushState({ path: newurl }, '', newurl);
 
     // hide the search icon
     $(".sqs-search-page-input").addClass("loading");
@@ -540,7 +552,7 @@ function editSearchPage(queryParameter) {
       // execute AJAX request to Squarespace search API
       Y.Data.get({
         url: "/api/search/GeneralSearch",
-        data: { q: searchValue },
+        data: { q: searchValue, p: searchPageIndex },
         success: function (data) {
 
           // remove any articles already present in search result container
@@ -549,8 +561,19 @@ function editSearchPage(queryParameter) {
           // hide the spinner icon
           $(".sqs-search-page-input .spinner-wrapper").hide();
 
+          // hide "see-more" button
+          $(".search-more-button").hide();
+
           // display the search icon
           $(".sqs-search-page-input").removeClass("loading");
+
+          // remove any search results text
+          if ($(".custom-search-result-text").length > 0) {
+            $(".custom-search-result-text").remove();
+          }
+
+          // display the search results text
+          $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").before('<h1 class="custom-search-result-text">Search results for "' + searchValue + '"</h1>');
 
           // declare empty variable containing the article HTML
           var middleHTML = "";
@@ -559,6 +582,18 @@ function editSearchPage(queryParameter) {
           if (data["items"] && data["items"].length > 0) {
 
             console.log("[SEARCH PAGE] Data:", data);
+
+            // assign data to new variable to be able to sort by date
+            var searchData = data["items"];
+
+            // sort the data array by descending order (new to old)
+            searchData.sort(function (item1, item2) {
+              item1 = new Date(item1["publishOn"]);
+              item2 = new Date(item2["publishOn"]);
+              return item1 > item2 ? -1 : item1 < item2 ? 1 : 0;
+            });
+
+            console.log("[SEARCH PAGE] Sorted Data:", searchData);
 
             // loop through each article item
             for (var i = 0; i < data["items"].length; i++) {
@@ -592,14 +627,143 @@ function editSearchPage(queryParameter) {
             }
           } else {
             // append an error message
-            $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append("<center><h4>No results found. Please try again.</h4></center>");
+            $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append("<h4 style='text-align: center !important;'>No results found. Please try again.</h4>");
           }
 
           // append article elements to article container section
           $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append(middleHTML);
 
+          // check if article elements were returned
+          if (data["items"] && data["items"].length > 0 && $(".BlogList-item .BlogList-item-image").length < data["totalCount"]) {
+            // display "see-more" button
+            $(".search-more-button").show();
+          }
+
           // insert ads
           insertAdsExtraPages();
+
+        }
+      }, this);
+
+      // catch error messages
+    } catch (error) {
+
+      // log the error
+      console.log("[SEARCH PAGE]", error);
+
+    }
+
+  });
+
+  // add event listener to form button that listens for a button press
+  $(".search-more-button").click(function () {
+    console.log("[SEARCH PAGE]", "Button was clicked!");
+
+    // disable the button
+    $(this).prop("disabled", true);
+    // change the button's background color to a disabled color
+    $(this).addClass("custom-search-more-button-disabled");
+
+    // increment the search page number
+    searchPageIndex++;
+
+    // declare and retrieve the value of the input
+    var searchValue = $(searchFormElement).find("input").val();
+
+    // try statement to ensure Squarespace function exists
+    try {
+
+      // execute AJAX request to Squarespace search API
+      Y.Data.get({
+        url: "/api/search/GeneralSearch",
+        data: { q: searchValue, p: searchPageIndex },
+        success: function (data) {
+
+          // declare empty variable containing the article HTML
+          var middleHTML = "";
+
+          // check if article elements were returned
+          if (data["items"] && data["items"].length > 0) {
+
+            console.log("[SEARCH PAGE] Data:", data);
+
+            // assign data to new variable to be able to sort by date
+            var searchData = data["items"];
+
+            // sort the data array by descending order (new to old)
+            searchData.sort(function (item1, item2) {
+              item1 = new Date(item1["publishOn"]);
+              item2 = new Date(item2["publishOn"]);
+              return item1 > item2 ? -1 : item1 < item2 ? 1 : 0;
+            });
+
+            console.log("[SEARCH PAGE] Sorted Data:", searchData);
+
+            // loop through each article item
+            for (var i = 0; i < data["items"].length; i++) {
+
+              // check if the item is a stories item
+              if (data["items"][i]["collectionDisplayName"] == "Stories") {
+                // declare variables containing article information
+                var articleTitle = decodeText(data["items"][i]["title"]);
+                articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
+                var articleAuthorID = data["items"][i]["author"]["id"];
+                var articleAuthor = data["items"][i]["author"]["displayName"];
+                var articleImage = data["items"][i]["imageUrl"];
+                var articleURL = data["items"][i]["itemUrl"];
+
+                console.log(articleTitle);
+
+                // fill in data to HTML template
+                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
+              } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
+                // declare variables containing article information
+                var title = decodeText(data["items"][i]["title"]);
+                title = title.replace("&<em>amp</em>;", "&");
+                var image = data["items"][i]["imageUrl"];
+                var url = data["items"][i]["itemUrl"];
+                var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+
+                // fill in data to HTML template
+                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+              }
+
+            }
+          } else {
+            // hide the button
+            $(this).hide();
+
+          }
+
+          // append article elements to article container section
+          $(".BlogList.BlogList--posts-excerpt.sqs-blog-list").append(middleHTML);
+
+          // check if article elements were returned
+          if (data["items"] && data["items"].length > 0) {
+
+            // check if there are more items to be inserted
+            if ($(".BlogList-item .BlogList-item-image").length < data["totalCount"]) {
+              // disable the button
+              $(this).prop("disabled", false);
+              // change the button's background color to a disabled color
+              $(this).removeClass("custom-search-more-button-disabled");
+            } else {
+              $(this).hide();
+            }
+
+            // check if content hints exist
+            if ($(".content_hint").length > 0) {
+              // remove the content hints
+              $(".content_hint").parent().remove();
+
+              // remove any break elements
+              $("br").remove();
+
+              // insert ads
+              insertAdsExtraPages();
+            }
+
+          }
 
         }
       }, this);
@@ -2906,6 +3070,7 @@ function watch() {
   window.addEventListener('mercury:load', function () {
     summaryBlockArticleLimit = 4; // initialize value that indicates the number of articles to retrieve from RSS feed for custom summary block
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
+    searchPageIndex = 0; // initialize value that indicates the index of the search page index
     articleIsFeelGoods = false;
     checkBlog();
     // // console.log("Will be calling function to load custom video javascript...");
