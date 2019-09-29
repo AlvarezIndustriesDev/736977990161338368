@@ -3426,13 +3426,21 @@ function watch() {
     articleIsFeelGoods = false;
     checkBlog();
     // console.log("Will be calling function to load custom video javascript...");
+    // try {
+    //   window.instgrm.Embeds.process();
+    // } catch (error) {
+    //   // call method that process the instagram embeds
+    //   loadScript("https://platform.instagram.com/en_US/embeds.js", window.instgrm.Embeds.process);
+    // }
 
-    try {
-      window.instgrm.Embeds.process();
-    } catch (error) {
-      // call method that process the instagram embeds
-      loadScript("https://platform.instagram.com/en_US/embeds.js", window.instgrm.Embeds.process);
-    }
+    // method to check if instagram embeds have loaded
+    var checkEmbeds = setInterval(function () {
+      // check if instagram embeds exist
+      if ($(".instagram-media").length > 0) {
+        clearInterval(checkEmbeds); // stop the loop
+        window.instgrm.Embeds.process();
+      }
+    }, 100);
     // console.log("Called function to load customm video javascript!");
   });
 
