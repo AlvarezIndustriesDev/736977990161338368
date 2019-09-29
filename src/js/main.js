@@ -1,3 +1,85 @@
+/* NOTE: The following are customaizable variables that enhance features in article pages */
+var insertPubExchangeHTML = true; // setting this variable to true will insert the pubExchange HTML into the footer of article
+var insertMailChimpHTML = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
+var insertSummaryBlockHTML = true; // setting this variable to true will insert the custom summary block HTML into the bottom of article pages
+var insertCategoryBlockHTML = true; // setting this variable to true will insert the custom category link block HTML into the bottom of article pages
+var insertAuthorBlockHTML = true; // setting this variable to true will insert the custom author block HTML into the bottom of article pages
+var movePaginationHTML = true; // setting this variable to true will reposition the pagination element HTML into the bottom of article pages
+var insertBreadcrumbHTML = true; // setting this variable to true will insert a custom breadcrumb HTML into the top of article pages
+var insertCustomDisclaimerText = true; // setting this variable to true will replace Feel Good(s) article disclaimers
+var newDisclaimerText = "At I AM & CO, we have a blast curating products that we think you’ll love. Every editorial product is independently selected by our editorial team. When you make a purchase, I AM Media may earn a commission."; // this text will display as Feel Good(s) article disclaimer
+var redirectDelay = 1; // initialize and set number of seconds delay before redirecting
+var mailChimpPopupDelay = 5; // initialize and set number of seconds delay before displaying mailchimp popup
+var summaryBlockArticleLimit = 4; // value of this variable indicates the number of articles to retrieve from RSS feed for custom summary block
+var desktopAdRatio = 25; // in percent (%)
+var mobileAdRatio = 28; // in percent(%)
+var sidebarArticleLimit = 5; // value of this variable indicates the number of articles tot retrieve from RSS feed for sidebar article block
+var sidebarArticleTitle = "Latest Stories"; // this text will display as sidebar article block title
+var buttonText = "SIGN ME UP!"; // this text will display as subscribe button text in MailChimp embed form
+var customEmbedTitle = "Related Stories"; // this text will display as the title text in custom summary embed
+var customMediavineVideoTitle = "READ MORE >>"; // this text will display as the title text in the Mediavine video header
+// initialize and declare array of objects containing MailChimp List data
+/* NOTE: DO NOT EDIT ARTICLE NAME, ACTION ID, OR INPUT NAME VALUE UNLESS YOU KNOW WHAT YOU ARE DOING! */
+var articleData = [{
+  articleName: "Latest Articles",
+  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=87c8918b92",
+  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_87c8918b92",
+  formTitle: "Get our weekly updates so you never miss an article like this one."
+}, {
+  articleName: "Feel Good(s)",
+  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=fbc7732645",
+  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_fbc7732645",
+  formTitle: "Get our weekly updates so you never miss an article like this one."
+}, {
+  articleName: "Astrology",
+  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=a05ec12fa8",
+  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_a05ec12fa8",
+  formTitle: "Be Notified. Never Miss An Astrology Report."
+}];
+var articlesForEmbed = ["Feel Good(s)", "Astrology"]; // initialize and declare array of blog articles for MailChimp embed (NOTE: any article that does not contain a category from this array will be shown the "Latest Articles" embed)
+var categoriesForPopup = ["Astrology", "Spirit"]; // initialize and declare array of blog articles categories that will display MailChimp popups
+var summaryBlockData = [{
+  categoryName: "Relationships",
+  categoryURL: "https://iamandco.com/blog?category=Relationships"
+}, {
+  categoryName: "Spirit",
+  categoryURL: "https://iamandco.com/blog?category=Spirit"
+}, {
+  categoryName: "Living",
+  categoryURL: "https://iamandco.com/blog?category=Living"
+}, {
+  categoryName: "Culture",
+  categoryURL: "https://iamandco.com/blog?category=Culture"
+}, {
+  categoryName: "Entertainment",
+  categoryURL: "https://iamandco.com/blog?category=Entertainment"
+}, {
+  categoryName: "Career & Money",
+  categoryURL: "https://iamandco.com/blog?category=Career%20%26%20Money"
+}, {
+  categoryName: "Self-Care",
+  categoryURL: "https://iamandco.com/blog?category=Self-Care"
+}, {
+  categoryName: "Health",
+  categoryURL: "https://iamandco.com/blog?category=Health"
+}, {
+  categoryName: "Beauty",
+  categoryURL: "https://iamandco.com/blog?category=Beauty"
+}, {
+  categoryName: "Style",
+  categoryURL: "https://iamandco.com/blog?category=Style"
+}, {
+  categoryName: "Satire",
+  categoryURL: "https://iamandco.com/blog?category=Satire"
+}, {
+  categoryName: "News",
+  categoryURL: "https://iamandco.com/blog?category=News"
+}]; // initialize and declare array of article objects for custom summary block embed
+/* var selection = [".sqs-block.html-block.sqs-block-html", ":header", "p"]; // initialize and declare array of pre-defined HTML selectors for positioning of custom summary block **/
+var stockAvatarURL = "https://static1.squarespace.com/static/5b527b0e45776e1abae27d13/5b528263758d4613dec6268a/5c53e1840d9297839d5e4992/1549001094734/generic-user-icon.jpg"; // initialize and declare stock avatar image URL
+
+/* Scripts */
+/* ------------------------------------------------------------------------------- */
 (function (w, d, s, id) {
   w.PUBX = w.PUBX || {
     pub: "fit_gal_ri",
@@ -139,6 +221,7 @@ function checkBlog() {
 
       loadRedditScripts(); // load reddit scripts
     }
+
 
     // method to retrieve page in JSON format
     $.ajax({
@@ -302,7 +385,7 @@ function checkBlog() {
 
                 blogHasVideo = true;
 
-                // call method that loads mediavine's videos 
+                // call method that loads mediavine's videos
                 loadMediavineVideo(src, videoID, false);
 
                 return false;
@@ -330,7 +413,7 @@ function checkBlog() {
                   // insert video element after third paragraph
                   $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
 
-                  // call method that loads mediavine's videos 
+                  // call method that loads mediavine's videos
                   loadMediavineVideo(scriptURL, videoID, true, response);
 
                 }
@@ -345,8 +428,9 @@ function checkBlog() {
           for (var i = 0; i < categoryArray.length; i++) {
             // // console.log("[CHECK BLOG] Category Array:", categoryArray);
 
+            /* REMOVED IN UPDATE 09/28/2019:
             checkArticlesForPopup(categoryArray[i], categoriesForPopup); // method called to check if element exists in articles array
-
+            */
             var existsInArticlesForEmbed = articlesForEmbed.some(function (item) {
               return item === categoryArray[i];
             }); // filter through articlesForEmbed array and return true if article category exists
@@ -828,6 +912,7 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
           $('#' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
           var targetElement = $('#' + videoID).find(".ima-ad-container");
           var miniVideoElement = $('#' + videoID).find(".mediavine-video__sticky-container");
+          //observeVideoAd(targetElement, videoID, response);
           addMutationObserver(targetElement, videoID, response);
           addMutationObserver(miniVideoElement, videoID, response);
         }
@@ -1047,6 +1132,88 @@ function addMutationObserver(targetElement, videoID, data) {
 
 }
 
+// method that adds mutation observer to Mediavine's videos
+function observeVideoAd(targetElement, videoID, data) {
+
+  console.log("[VIDEO] Element:", targetElement, "ID:", videoID);
+
+  // execute if target element exist
+  if (targetElement.length > 0) {
+
+    // retrieve the target element
+    var adElement = targetElement[0];
+
+    // retrieve anchor tag from data
+    var videoInformation = data['data'][0];
+
+    // set options for observer
+    var config = { attributes: true, childList: false, subtree: false };
+
+    // callback function to execute when mutations are observed
+    var callback = function (mutationsList, observer) {
+      // loop through every mutation in the mutation list
+      mutationsList.forEach((mutation) => {
+        // execute if the ad becomes invisible
+        if (mutation.target.style.display == 'none') {
+          console.log("[VIDEO] ID:", $('#' + videoID));
+          console.log("[VIDEO] Ad stopped playing...", $('#' + videoID).find('video')[0].paused);
+          // call method that displays the title animations
+          animateAdVideo(videoID, videoInformation);
+          // stop observing
+          observer.disconnect();
+        }
+      });
+    };
+
+    // create observer instance linked to the callback function
+    var observer = new MutationObserver(callback);
+
+    // check if video ID matches Mediavine video ID
+    if (videoInformation['video_id'] === videoID) {
+      // begin observing the target node for configured mutations
+      observer.observe(adElement, config);
+    } else {
+      console.log("[VIDEO] Video IDs do not match!");
+    }
+
+  }
+
+}
+
+// method that displays and animates the video titles
+function animateAdVideo(videoID, information) {
+
+  console.log("[VIDEO] Animate video method called.");
+
+  console.log("[VIDEO] Information:", information);
+
+  // pause the video and set time to 0:00
+  $('#' + videoID).find('video')[0].pause();
+  $('#' + videoID).find('video')[0].currentTime = 0;
+
+  // declare the headline HTML
+  var headlineHTML = "<div class='video-headline-container'></div>";
+
+  // retrieve the time interval from data
+  var timeInterval = information['time_interval']; // in seconds
+
+  // declare word limit per sentence (8 is ideal)
+  var wordLimit = 8;
+
+  // add headline HTML inside video
+  $('#' + videoID).find('.mediavine-video__sticky-video').prepend(headlineHTML);
+
+  // add an event listener that executes when the video ends
+  document.getElementById(videoID).getElementsByTagName('video')[0].addEventListener('ended', function () {
+
+    console.log("[VIDEO] Video has ended.");
+
+  });
+
+
+
+}
+
 // method that returns an array of strings
 function retrieveStrings(array, limitPerString) {
 
@@ -1083,6 +1250,50 @@ function loadMediavineScripts() {
     });
   }
 
+}
+
+// method that loads javascripts asynchronously
+function loadScript(scriptURL, callback) {
+
+  // load javascript
+  $.getScript(scriptURL, function (data, textStatus, jqxhr) {
+    console.log("[SCRIPT]", "File:", scriptURL, "loaded", textStatus);
+
+    // check if valid function was passed for callback
+    if (typeof callback == "function") {
+      callback();
+    }
+
+  });
+
+}
+
+// method that executes javascript for OneSignal
+function displayOneSignal() {
+  var numSecondsDelay = 15; // number of seconds delay
+  var OneSignal = window.OneSignal || [];
+  /* Why use .push? See: http://stackoverflow.com/a/38466780/555547 */
+  OneSignal.push(function () {
+    OneSignal.init({
+      appId: "cfad4a73-3fa8-4622-80d8-43d0e0ddaf6e",
+    });
+    /* In milliseconds, time to wait before prompting user. This time is relative to right after the user presses <ENTER> on the address bar and navigates to your page */
+    var notificationPromptDelay = numSecondsDelay * 1000;
+    /* Use navigation timing to find out when the page actually loaded instead of using setTimeout() only which can be delayed by script execution */
+    var navigationStart = window.performance.timing.navigationStart;
+    /* Get current time */
+    var timeNow = Date.now();
+    /* Prompt the user if enough time has elapsed */
+    setTimeout(promptAndSubscribeUser, Math.max(notificationPromptDelay - (timeNow - navigationStart), 0));
+  });
+  var promptAndSubscribeUser = function () {
+    console.log("15 seconds have passed...");
+    window.OneSignal.isPushNotificationsEnabled(function (isEnabled) {
+      if (!isEnabled) {
+        window.OneSignal.showSlidedownPrompt();
+      }
+    });
+  }
 }
 
 // method that loads reddit scripts
@@ -1191,7 +1402,7 @@ function insertAdvertisements(isFeelGoods) {
     line blocks, spacer blocks, H2 and H3s are the main ways we break up our content.
     on feel-good(s) articles can you insert the code above line blocks or spacer blocks
     --
-    on non feel-good(s) articles can you insert the code above line blocks, spacer blocks, 		H2's and H3's up to (8) ads per article */
+    on non feel-good(s) articles can you insert the code above line blocks, spacer blocks, H2's and H3's up to (8) ads per article */
   // --------------------------------------------------------------------------
   /* Feel-Good(s)
   -------------------------------------------------------------------------------
@@ -1229,9 +1440,11 @@ function insertAdvertisements(isFeelGoods) {
 
     var adPerPageLimit;
 
+    /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
+
     // execute if ad ratio exceeds the limit
-    if (finalAdRatio > 8) {
-      adPerPageLimit = 8; // set limit value to ad-per-page limit variable
+    if (finalAdRatio > 4) {
+      adPerPageLimit = 4; // set limit value to ad-per-page limit variable
     } else {
       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
     }
@@ -1321,9 +1534,11 @@ function insertAdvertisements(isFeelGoods) {
 
     var adPerPageLimit;
 
+    /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
+
     // execute if ad ratio exceeds the limit
-    if (finalAdRatio > 8) {
-      adPerPageLimit = 8; // set limit value to ad-per-page limit variable
+    if (finalAdRatio > 4) {
+      adPerPageLimit = 4; // set limit value to ad-per-page limit variable
     } else {
       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
     }
@@ -1380,7 +1595,7 @@ function insertAdvertisements(isFeelGoods) {
       /*
       if (!$(elementArray[i]).prev().is(".content_hint")) {
         // // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
-        
+       
         if ($(elementArray[i]).is("p")) {
           // // console.log("[ADS] Element is a paragraph!");
           $(elementArray[i]).after(adHTML);
@@ -1388,7 +1603,7 @@ function insertAdvertisements(isFeelGoods) {
           // // console.log("[ADS] Element is not a paragraph!");
           $(elementArray[i]).before(adHTML);
         }
-        
+       
       } */
 
     } // end for-loop
@@ -1423,13 +1638,13 @@ function insertAdvertisements(isFeelGoods) {
 function insertFeelGoodAds() {
 
   /* TODO:
-          
+         
           1. Retrieve all HTML blocks
           2. Retrieve images within HTML blocks
           3. If image+title+button+text combo exists then insert ad after each
           4. If image+title+button+text combo does not exist, try image+title+text but check for html blocks with images (next)
           4. Repeat with mobile devices
-      
+     
   */
 
   let tag = "FEEL GOOD(S):";
@@ -1441,6 +1656,12 @@ function insertFeelGoodAds() {
 
   // remove any current content hint
   $(".content_hint.custom-appended").remove();
+
+  // declare ad counter variable
+  var numAdsInserted = 0;
+
+  // declare ad limit [REMOVE FOR OLD COUNTER]
+  adPerPageLimit = 4;
 
   // execute if user is on a mobile device
   if (isMobile()) {
@@ -1456,6 +1677,8 @@ function insertFeelGoodAds() {
     if (htmlBlocks.length > 0) {
 
       /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
+
+      /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
 
       // execute if html block contains image block or gallery block
       if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
@@ -1485,7 +1708,7 @@ function insertFeelGoodAds() {
 
         }
 
-      }
+      } */
 
       // loop through html blocks
       for (var i = 0; i < htmlBlocks.length; i++) {
@@ -1528,10 +1751,12 @@ function insertFeelGoodAds() {
 
               // // console.log(tag, "All four blocks exist.");
 
-              /* NOTE: Ignore ad limit on image+button+text sections */
+              /* NOTE: Ignore ad limit on image+button+text sections
 
               // insert advertisement after text block
               $(textBlock).after(adHTML);
+
+              */
 
               /*
               // execute if article limit has not been reached
@@ -1545,6 +1770,8 @@ function insertFeelGoodAds() {
                 numAdsInserted++;
 
               } // end if statement (insert if ad limit) */
+              // insert placeholder for ads
+              $(textBlock).after("<div class='custom-placeholder'></div>");
 
             } // end if statement (check all blocks exist)
 
@@ -1567,7 +1794,23 @@ function insertFeelGoodAds() {
                 /* NOTE: Ignore ad limit on image+text+(no image) sections */
 
                 // insert advertisement after text block
-                $(textBlock).after(adHTML);
+                // $(textBlock).after(adHTML);
+
+                /*
+                // execute if article limit has not been reached
+                if (numAdsInserted < adPerPageLimit) {
+
+                  // console.log(tag, "Inserting ad into page.");
+
+                  // insert advertisement after text block
+                  $(textBlock).after(adHTML);
+
+                  numAdsInserted++;
+
+                } // end if statement (insert if ad limit) */
+
+                // insert placeholder for ads
+                $(textBlock).after("<div class='custom-placeholder'></div>");
 
               }
 
@@ -1578,6 +1821,30 @@ function insertFeelGoodAds() {
         } // end if statement (htmlBlock)
 
       } // end for-loop
+
+      // retrieve number of ad placeholders
+      var adPlaceholders = $("div.custom-placeholder");
+
+      // calculate even spaces for ads
+      var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
+
+      console.log(tag, "Number of placeholders:", adPlaceholders.length);
+
+      // loop through all ad placeholders
+      for (var i = 0; i < adPlaceholders.length; i++) {
+
+        // insert ad if even space if found
+        if (i % evenSpaces == 0 && numAdsInserted < adPerPageLimit) {
+          console.log(tag, "Current number:", i);
+          // insert advertisement after text block
+          $(adPlaceholders[i]).after(adHTML);
+          numAdsInserted++;
+        }
+
+      }
+
+      // remove all placeholders
+      $("div.custom-placeholder").remove();
 
     } // end if statements
 
@@ -1594,35 +1861,38 @@ function insertFeelGoodAds() {
 
       /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
 
-      // execute if html block contains image block or gallery block
-      if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
+      /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
 
-        // retrieve the paragraphs in the content section after the first image in the article
-        var paragraphs = $(htmlBlocks[0]).next().find("p");
 
-        // // console.log(tag, "Number of paragraphs in content section:", paragraphs.length);
+     // execute if html block contains image block or gallery block
+     if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
 
-        // execute if there is only one paragraph in the content section of Feel-Good(s) articles
-        if (paragraphs.length < 2) {
+       // retrieve the paragraphs in the content section after the first image in the article
+       var paragraphs = $(htmlBlocks[0]).next().find("p");
 
-          // insert after the first paragraph
-          $(htmlBlocks[0]).next().after(adHTML);
+       // // console.log(tag, "Number of paragraphs in content section:", paragraphs.length);
 
-        } else {
+       // execute if there is only one paragraph in the content section of Feel-Good(s) articles
+       if (paragraphs.length < 2) {
 
-          // insert after every two paragraphs
-          $(paragraphs).each(function (i, e) {
-            // execute if paragraph index is even
-            if ((i + 1) % 2 == 0) {
-              // insert advertisement every 2 paragraphs
-              $(e).after(adHTML);
-            }
+         // insert after the first paragraph
+         $(htmlBlocks[0]).next().after(adHTML);
 
-          });
+       } else {
 
-        }
+         // insert after every two paragraphs
+         $(paragraphs).each(function (i, e) {
+           // execute if paragraph index is even
+           if ((i + 1) % 2 == 0) {
+             // insert advertisement every 2 paragraphs
+             $(e).after(adHTML);
+           }
 
-      }
+         });
+
+       }
+
+     } */
 
       // loop through html blocks
       for (var i = 0; i < htmlBlocks.length; i++) {
@@ -1642,8 +1912,8 @@ function insertFeelGoodAds() {
           var buttonBlock;
           var textBlock;
 
-          console.log(tag, "Image Block:", imageBlock);
-          console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
+          // console.log(tag, "Image Block:", imageBlock);
+          // console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
 
 
           // exeucte if image block meets all requirements
@@ -1672,9 +1942,10 @@ function insertFeelGoodAds() {
               /* NOTE: Ignore ad limit on image+button+text sections */
 
               // insert advertisement after text block
-              $(textBlock).after(adHTML);
+              // $(textBlock).after(adHTML);
 
               /*
+
               // execute if article limit has not been reached
               if (numAdsInserted < adPerPageLimit) {
 
@@ -1686,6 +1957,9 @@ function insertFeelGoodAds() {
                 numAdsInserted++;
 
               } // end if statement (insert if ad limit) */
+
+              // insert placeholder for ads
+              $(textBlock).after("<div class='custom-placeholder'></div>");
 
             } // end if statement (check all blocks exist)
 
@@ -1710,7 +1984,23 @@ function insertFeelGoodAds() {
                 /* NOTE: Ignore ad limit on image+text+(no image) sections */
 
                 // insert advertisement after text block
-                $(textBlock).after(adHTML);
+                // $(textBlock).after(adHTML);
+
+                /*
+                // execute if article limit has not been reached
+                if (numAdsInserted < adPerPageLimit) {
+
+                  // console.log(tag, "Inserting ad into page.");
+
+                  // insert advertisement after text block
+                  $(textBlock).after(adHTML);
+
+                  numAdsInserted++;
+
+                } // end if statement (insert if ad limit) */
+
+                // insert placeholder for ads
+                $(textBlock).after("<div class='custom-placeholder'></div>");
 
               }
 
@@ -1722,6 +2012,30 @@ function insertFeelGoodAds() {
 
       } // end for-loop
 
+      // retrieve number of ad placeholders
+      var adPlaceholders = $("div.custom-placeholder");
+
+      // calculate even spaces for ads
+      var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
+
+      console.log(tag, "Number of placeholders:", adPlaceholders.length);
+
+      // loop through all ad placeholders
+      for (var i = 0; i < adPlaceholders.length; i++) {
+
+        // insert ad if even space if found
+        if (i % evenSpaces == 0 && numAdsInserted < adPerPageLimit) {
+          console.log(tag, "Current number:", i);
+          // insert advertisement after text block
+          $(adPlaceholders[i]).after(adHTML);
+          numAdsInserted++;
+        }
+
+      }
+
+      // remove all placeholders
+      $("div.custom-placeholder").remove();
+
     } // end if statements
 
   }
@@ -1731,6 +2045,10 @@ function insertFeelGoodAds() {
 function returnAdPositions(array, limit) {
   var finalElementsArray = [];
   var elementsRemaining = limit;
+
+  console.log("What is the limit of the ads?", limit);
+
+  /* 09/27/2019 REMOVED FOR 4 LIMIT AD
 
   // loop through the array to find the array with the paragraphs
   for (var i = 0; i < array.length; i++) {
@@ -1765,22 +2083,27 @@ function returnAdPositions(array, limit) {
       });
     }
 
-  }
+  } */
 
   // // console.log("[AD POSITIONING]: Elements in final array:", finalElementsArray);
 
   // loop through array
   for (var i = 0; i < array.length; i++) {
-    // // // console.log("Element Array:", array[i]);
+    // console.log("Element Array:", array[i]);
 
     // remove first element in all element arrays
     array[i] = array[i].slice(1);
 
     // execute if current array is pElements array
-    /*
-    if (i == 3) {
-     array[i] = array[i].splice(1); // remove first paragraph element
-    } */
+
+    if (i == 3 && array[i].length > 4) {
+      // console.log("Is exexuting!");
+      array[i] = array[i].splice(0); // remove first paragraph element
+      array[i] = array[i].splice(1); // remove second paragraph element
+      array[i] = array[i].splice(2); // remove third paragraph element
+      array[i] = array[i].splice(3); // remove fourth paragraph element
+      // console.log("Element Array:", array[i]);
+    }
 
     // execute if elements exist
     if (array[i].length) {
@@ -1837,7 +2160,7 @@ function checkContentSiblings(element) {
   // execute if previous element is a horizontal rule block (to prevent ads from re-appearing after content hint was inserted prior to horizontal rule block
   if (closestSqsBlock.prev().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
     // // console.log("[PREV ELEMENT]:", "Is correct horizontal element!");
-    return true; // return true   
+    return true; // return true  
   } else {
     return false; // return false
   }
@@ -1949,7 +2272,7 @@ function insertAdSidebar() {
         }
 
         // delete old row
-        previousRow.remove(); 
+        previousRow.remove();
         ------------------------------------------------------------------------------------------------------------------------------------------------------
         */
 
@@ -2293,13 +2616,13 @@ function insertImageButtons() {
         // // // console.log("[PINTEREST][URLS]", e.target.parentElement.parentElement.attributes['href'].value);
 
         /*
-        
+       
         // execute if href exists
         if (e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value) {
           customURL = "https://iamandco.com/splash?ref=" + e.target.parentNode.previousSibling.parentNode.parentNode.attributes['href'].value;
-  
+ 
           // // console.log("[PINTEREST] HREF LOCATED.", customURL);
-  
+ 
         } else {
           customURL = location.href;
         } */
@@ -2324,6 +2647,9 @@ function insertImageButtons() {
       });
 
     }
+
+    // call method that loads Pinterest scripts
+    loadScript("https://assets.pinterest.com/js/pinit.js");
   }
 
 }
@@ -2457,6 +2783,28 @@ function decodeText(encodedString) {
   textArea.parentNode.removeChild(textArea);
 }
 
+/* REMOVED IN UPDATE 09/28/2019 9:00 PM
+
+<!-- Pinterest Tag -->
+<!-- REMOVE: 09/27/2019 -->
+<!--
+<script>
+!function(e){if(!window.pintrk){window.pintrk = function () {
+window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+      n=window.pintrk;n.queue=[],n.version="3.0";var
+      t=document.createElement("script");t.async=!0,t.src=e;var
+      r=document.getElementsByTagName("script")[0];
+      r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+pintrk('load', '2612611324691', {em: '<user_email_address>'});
+pintrk('page');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt=""
+      src="https://ct.pinterest.com/v3/?tid=2612611324691&pd[em]=<hashed_email_address>&noscript=1" />
+</noscript>
+-->
+<!-- end Pinterest Tag -->
+
 // method that checks if an article category matches categoriesForPopup array
 function checkArticlesForPopup(category, array) {
 
@@ -2480,6 +2828,8 @@ function checkArticlesForPopup(category, array) {
   }
 
 }
+
+*/
 
 // method that displays subscription popup
 function displaySubscriptionPopup(categoryToDisplay) {
@@ -2997,7 +3347,7 @@ function insertCustomHTML(articleCategory) {
 
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
-    // 
+    //
     if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML) {
       // // // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
@@ -3077,4 +3427,10 @@ function watch() {
     window.instgrm.Embeds.process();
     // // console.log("Called function to load customm video javascript!");
   });
+
+  // call method that loads OneSignal script
+  loadScript("https://cdn.onesignal.com/sdks/OneSignalSDK.js", displayOneSignal);
+
+  // call method that handles 
+
 }
