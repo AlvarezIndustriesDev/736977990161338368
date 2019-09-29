@@ -2805,6 +2805,8 @@ pintrk('page');
 -->
 <!-- end Pinterest Tag -->
 
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+
 // method that checks if an article category matches categoriesForPopup array
 function checkArticlesForPopup(category, array) {
 
@@ -3423,14 +3425,18 @@ function watch() {
     searchPageIndex = 0; // initialize value that indicates the index of the search page index
     articleIsFeelGoods = false;
     checkBlog();
-    // // console.log("Will be calling function to load custom video javascript...");
-    window.instgrm.Embeds.process();
-    // // console.log("Called function to load customm video javascript!");
+    // console.log("Will be calling function to load custom video javascript...");
+
+    try {
+      window.instgrm.Embeds.process();
+    } catch (error) {
+      // call method that process the instagram embeds
+      loadScript("https://platform.instagram.com/en_US/embeds.js", window.instgrm.Embeds.process);
+    }
+    // console.log("Called function to load customm video javascript!");
   });
 
   // call method that loads OneSignal script
   loadScript("https://cdn.onesignal.com/sdks/OneSignalSDK.js", displayOneSignal);
-
-  // call method that handles 
 
 }
