@@ -3438,7 +3438,7 @@ function watch() {
       // check if instagram embeds exist
       if ($(".instagram-media").length > 0) {
         clearInterval(checkEmbeds); // stop the loop
-        loadScript("https://platform.instagram.com/en_US/embeds.js", window.instgrm.Embeds.process);
+        window.instgrm.Embeds.process();
       }
     }, 100);
     // console.log("Called function to load customm video javascript!");
