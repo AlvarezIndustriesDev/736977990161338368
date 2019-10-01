@@ -933,7 +933,7 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
       $(".content_hint").remove();
 
-      if ($('#' + videoID).next().is("p")) {
+      if ($('#' + videoID).next().next().is("p")) {
 
         $('#' + videoID).next().after(adHTML);
 
