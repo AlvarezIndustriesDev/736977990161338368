@@ -920,6 +920,9 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
     }
 
+    var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
+    var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
+
     if (secondaryPathName == "how-to-deal-with-sexual-frustration") {
 
       // initialize and declare ad HTML for feel-good(s) ads
