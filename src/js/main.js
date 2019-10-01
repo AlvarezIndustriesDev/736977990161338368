@@ -935,11 +935,11 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
       if ($('#' + videoID).next().next().is("p")) {
 
-        $('#' + videoID).next().after(adHTML);
+        $('#' + videoID).next().next().after(adHTML);
 
-        $('#' + videoID).next().next().next().after(adHTML);
+        $('#' + videoID).next().next().next().next().next().after(adHTML);
 
-        $('#' + videoID).next().next().next().next().next().next().after(adHTML);
+        $('#' + videoID).next().next().next().next().next().next().next().next().after(adHTML);
 
       }
 
