@@ -920,6 +920,29 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
     }
 
+    if (secondaryPathName == "how-to-deal-with-sexual-frustration") {
+
+      // initialize and declare ad HTML for feel-good(s) ads
+      var adHTML = "<div class='content_hint custom-appended'></div>";
+
+
+      console.log("[SPECIAL ADS] Loading on this site.");
+
+      $(".content_hint").remove();
+
+      if ($('#' + videoID).next().is("p")) {
+
+        $('#' + videoID).next().after(adHTML);
+
+        $('#' + videoID).next().next().next().after(adHTML);
+
+        $('#' + videoID).next().next().next().next().next().next().after(adHTML);
+
+      }
+
+
+    }
+
   });
 
 }
@@ -1389,6 +1412,14 @@ function redirectToAffiliate() {
 
 
 }
+
+/* NOTES:
+  1. ONE AD INSERTED AFTER FIRST PARAGRAPH OF VIDEO
+  2. THE REMAINING EVERY THREE PARAGRAPHS
+  3. MAXIMUM OF 4 ADS - POSSIBLE UPDATE TO 6
+
+
+*/
 
 // method that inserts custom HTML for advertisements
 function insertAdvertisements(isFeelGoods) {
