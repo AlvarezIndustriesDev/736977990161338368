@@ -941,6 +941,10 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
         $('#' + videoID).next().next().next().next().next().next().next().next().after(adHTML);
 
+        $('#' + videoID).next().next().next().next().next().next().next().next().next().next().next().after(adHTML);
+
+        loadMediavineScripts();
+
       }
 
 
