@@ -2100,23 +2100,31 @@ function returnAdPositions(array, limit) {
     if ($(".mediavine-video__target-div").length > 0) {
       // stop the loop
       clearInterval(checkMediavineVideoExists);
-      // retrieve all paragraph elements after video
-      var nextElements = $(".mediavine-video__target-div").nextAll("p");
-      // declare number of paragraphs already inserted
-      var numAdsInserted = 0;
-      console.log("[AD POSITIONS] Elements after video:", nextElements);
-
-      // loop through the array containing the paragraphs
-      $(nextElements).each(function (i, e) {
-        // execute if paragraph index matches every three
-        if (i % 3 == 0) {
-          // execute if paragraph ad limit has not been met
-          if ((numAdsInserted < limit)) {
-            finalElementsArray.push(e);
-            numAdsInserted++;
-          }
+      // loop through array to find array with paragraphs
+      for (var i = 0; i < array.length; i++) {
+        // check if element is a paragraph element
+        if ($(array[i][0]).is("p")) {
+          // retrieve all paragraph elements
+          var paragraphElements = array[i];
+          // declare number of paragraph elements already inserted
+          var numAdsInserted = 0;
+          // retrieve number of paragraphs before video element
+          var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
+          // remove paragraphs before video element
+          paragraphElements.splice(0, numPrevParagraphs);
+          // loop through the array containing the paragraphs
+          $(nextElements).each(function (i, e) {
+            // execute if paragraph index matches every three
+            if (i % 3 == 0) {
+              // execute if paragraph ad limit has not been met
+              if ((numAdsInserted < limit)) {
+                finalElementsArray.push(e);
+                numAdsInserted++;
+              }
+            }
+          });
         }
-      });
+      }
 
     }
   }, 100);
