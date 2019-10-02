@@ -2113,7 +2113,7 @@ function returnAdPositions(array, limit) {
           // remove paragraphs before video element
           paragraphElements.splice(0, numPrevParagraphs);
           // loop through the array containing the paragraphs
-          $(nextElements).each(function (i, e) {
+          $(paragraphElements).each(function (i, e) {
             // execute if paragraph index matches every three
             if (i % 3 == 0) {
               // execute if paragraph ad limit has not been met
