@@ -1591,66 +1591,74 @@ function insertAdvertisements(isFeelGoods) {
 
     // ---------------------------------------------------
 
-    var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
+    /* UPDATE: 10/01/2019 - CHECK IF MEDIAVINE VIDEO EXISTS */
+    var checkMediavineVideoExists = setInterval(function () {
+      // check if video element is inserted
+      if ($(".mediavine-video__target-div").length > 0) {
+        // stop the loop
+        clearInterval(checkMediavineVideoExists);
+        var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
 
-    // // console.log("Final Element Array:", elementArray);
+        console.log("Final Element Array:", elementArray, elementArray.length);
 
-    // loop through elements array and append div content avove
+        // loop through elements array and append div content avove
 
-    for (var i = 0; i < elementArray.length; i++) {
-      // // // console.log(elementArray[i]);
+        for (var i = 0; i < elementArray.length; i++) {
+          // // // console.log(elementArray[i]);
 
-      // NOTE: Append paragraphs after, everything else before
+          // NOTE: Append paragraphs after, everything else before
 
-      if ($(elementArray[i]).is("p")) {
-        // // console.log("[ADS] Element is a paragraph!");
-        $(elementArray[i]).after(adHTML);
+          if ($(elementArray[i]).is("p")) {
+            console.log("[ADS] Element is a paragraph!");
+            $(elementArray[i]).after(adHTML);
 
-        /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-        if ($(elementArray[i]).next().is(".content_hint")) {
-          var elementAppended = $(elementArray[i]).next();
-          // // console.log("[JUST APPENDED AFTER]", elementAppended);
+            /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+            if ($(elementArray[i]).next().is(".content_hint")) {
+              var elementAppended = $(elementArray[i]).next();
+              // // console.log("[JUST APPENDED AFTER]", elementAppended);
 
-          if (elementAppended.next().is(".content_hint")) {
-            elementAppended.remove();
+              if (elementAppended.next().is(".content_hint")) {
+                elementAppended.remove();
+              }
+
+            }
+
+          } else {
+            // // console.log("[ADS] Element is not a paragraph!");
+            $(elementArray[i]).before(adHTML);
+
+            /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+            if ($(elementArray[i]).prev().is(".content_hint")) {
+              var elementAppended = $(elementArray[i]).prev();
+              // // console.log("[JUST APPENDED BEFORE]", elementAppended);
+
+              if (elementAppended.prev().is(".content_hint")) {
+                elementAppended.remove();
+              }
+
+            }
+
           }
 
-        }
 
-      } else {
-        // // console.log("[ADS] Element is not a paragraph!");
-        $(elementArray[i]).before(adHTML);
 
-        /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-        if ($(elementArray[i]).prev().is(".content_hint")) {
-          var elementAppended = $(elementArray[i]).prev();
-          // // console.log("[JUST APPENDED BEFORE]", elementAppended);
+          /*
+          if (!$(elementArray[i]).prev().is(".content_hint")) {
+            // // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
+           
+            if ($(elementArray[i]).is("p")) {
+              // // console.log("[ADS] Element is a paragraph!");
+              $(elementArray[i]).after(adHTML);
+            } else {
+              // // console.log("[ADS] Element is not a paragraph!");
+              $(elementArray[i]).before(adHTML);
+            }
+           
+          } */
 
-          if (elementAppended.prev().is(".content_hint")) {
-            elementAppended.remove();
-          }
-
-        }
-
+        } // end for-loop
       }
-
-
-
-      /*
-      if (!$(elementArray[i]).prev().is(".content_hint")) {
-        // // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
-       
-        if ($(elementArray[i]).is("p")) {
-          // // console.log("[ADS] Element is a paragraph!");
-          $(elementArray[i]).after(adHTML);
-        } else {
-          // // console.log("[ADS] Element is not a paragraph!");
-          $(elementArray[i]).before(adHTML);
-        }
-       
-      } */
-
-    } // end for-loop
+    });
 
   } // end outer (is feel goods) statement
 
@@ -2091,44 +2099,40 @@ function returnAdPositions(array, limit) {
   var finalElementsArray = [];
   // var elementsRemaining = limit;
 
-  console.log("[AD POSITIONS]", limit);
+  // console.log("[AD POSITIONS]", limit);
 
   /* 10/01/2019 INSERT 4 ADS AFTER MEDIAVINE VIDEO */
-
   // check if video element is inserted
-  var checkMediavineVideoExists = setInterval(function () {
-    if ($(".mediavine-video__target-div").length > 0) {
-      // stop the loop
-      clearInterval(checkMediavineVideoExists);
-      // loop through array to find array with paragraphs
-      for (var i = 0; i < array.length; i++) {
-        // check if element is a paragraph element
-        if ($(array[i][0]).is("p")) {
-          // retrieve all paragraph elements
-          var paragraphElements = array[i];
-          // declare number of paragraph elements already inserted
-          var numAdsInserted = 0;
-          // retrieve number of paragraphs before video element
-          var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
-          // remove paragraphs before video element
-          paragraphElements.splice(0, numPrevParagraphs);
-          // loop through the array containing the paragraphs
-          $(paragraphElements).each(function (i, e) {
-            // execute if paragraph index matches every three
-            if (i % 3 == 0) {
-              // execute if paragraph ad limit has not been met
-              if ((numAdsInserted < limit)) {
-                finalElementsArray.push(e);
-                numAdsInserted++;
-              }
+  if ($(".mediavine-video__target-div").length > 0) {
+    console.log("[AD POSITIONS] Yes, video exist!")
+    // loop through array to find array with paragraphs
+    for (var i = 0; i < array.length; i++) {
+      // check if element is a paragraph element
+      if ($(array[i][0]).is("p")) {
+        // retrieve all paragraph elements
+        var paragraphElements = array[i];
+        // declare number of paragraph elements already inserted
+        var numAdsInserted = 0;
+        // retrieve number of paragraphs before video element
+        var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
+        // remove paragraphs before video element
+        paragraphElements.splice(0, numPrevParagraphs + 1);
+        // console.log("[AD POSITIONS] Paragraphs:", paragraphElements);
+        // loop through the array containing the paragraphs
+        $(paragraphElements).each(function (i, e) {
+          // execute if paragraph index matches every three
+          if (i % 3 == 0) {
+            // execute if paragraph ad limit has not been met
+            if ((numAdsInserted < limit)) {
+              finalElementsArray.push(e);
+              numAdsInserted++;
             }
-          });
-          return finalElementsArray;
-        }
+          }
+        });
       }
-
     }
-  }, 100);
+    // return finalElementsArray;
+  }
 
   /* 09/27/2019 REMOVED FOR 4 LIMIT AD
 
@@ -2224,8 +2228,7 @@ function returnAdPositions(array, limit) {
     } // end array[i][j] if statement
   } // end array[i] loop
   */
-  console.log("[AD POSITIONS] finalElementsArray:", finalElementsArray);
-  //return finalElementsArray; // return final array
+  return finalElementsArray; // return final array
 } // end function
 
 // method that checks for content siblings to prevent ads from appearing too close to eachother
