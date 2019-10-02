@@ -2098,6 +2098,8 @@ function returnAdPositions(array, limit) {
   // check if video element is inserted
   var checkMediavineVideoExists = setInterval(function () {
     if ($(".mediavine-video__target-div").length > 0) {
+      // stop the loop
+      clearInterval(checkMediavineVideoExists);
       // retrieve all paragraph elements after video
       var nextElements = $(".mediavine-video__target-div").nextAll("p");
       // declare number of paragraphs already inserted
@@ -2117,7 +2119,7 @@ function returnAdPositions(array, limit) {
       });
 
     }
-  });
+  }, 100);
 
   /* 09/27/2019 REMOVED FOR 4 LIMIT AD
 
