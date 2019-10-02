@@ -363,13 +363,6 @@ function checkBlog() {
                   insertAdvertisements(false);
             } */
 
-            // execute if button blocks exist within article (similar to feel-good(s) buttons)
-            if ($(".sqs-block.button-block").length > 0) {
-              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
-            } else {
-              insertAdvertisements(false);
-            }
-
             // loop through scripts and find mediavine video
             $('script[data-noptimize]').each(function () {
               var src = this.src; // initialize and retrieve script source link
@@ -421,6 +414,12 @@ function checkBlog() {
 
             }
 
+            // execute if button blocks exist within article (similar to feel-good(s) buttons)
+            if ($(".sqs-block.button-block").length > 0) {
+              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+            } else {
+              insertAdvertisements(false);
+            }
 
           }
 
@@ -923,32 +922,32 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
     var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
     var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
 
-    if (secondaryPathName == "how-to-deal-with-sexual-frustration") {
+    // if (secondaryPathName == "how-to-deal-with-sexual-frustration") {
 
-      // initialize and declare ad HTML for feel-good(s) ads
-      var adHTML = "<div class='content_hint custom-appended'></div>";
-
-
-      console.log("[SPECIAL ADS] Loading on this site.");
-
-      $(".content_hint").remove();
-
-      if ($('#' + videoID).next().next().is("p")) {
-
-        $('#' + videoID).next().next().after(adHTML);
-
-        $('#' + videoID).next().next().next().next().next().after(adHTML);
-
-        $('#' + videoID).next().next().next().next().next().next().next().next().after(adHTML);
-
-        $('#' + videoID).next().next().next().next().next().next().next().next().next().next().next().after(adHTML);
-
-        loadMediavineScripts();
-
-      }
+    //   // initialize and declare ad HTML for feel-good(s) ads
+    //   var adHTML = "<div class='content_hint custom-appended'></div>";
 
 
-    }
+    //   console.log("[SPECIAL ADS] Loading on this site.");
+
+    //   $(".content_hint").remove();
+
+    //   if ($('#' + videoID).next().next().is("p")) {
+
+    //     $('#' + videoID).next().next().after(adHTML);
+
+    //     $('#' + videoID).next().next().next().next().next().after(adHTML);
+
+    //     $('#' + videoID).next().next().next().next().next().next().next().next().after(adHTML);
+
+    //     $('#' + videoID).next().next().next().next().next().next().next().next().next().next().next().after(adHTML);
+
+    //     loadMediavineScripts();
+
+    //   }
+
+
+    // }
 
   });
 
@@ -1421,9 +1420,16 @@ function redirectToAffiliate() {
 }
 
 /* NOTES:
+  Regular articles
+  -------------------------------------------------------
   1. ONE AD INSERTED AFTER FIRST PARAGRAPH OF VIDEO
   2. THE REMAINING EVERY THREE PARAGRAPHS
   3. MAXIMUM OF 4 ADS - POSSIBLE UPDATE TO 6
+
+  Feel Good(s) articles
+  -------------------------------------------------------
+  1. ONE IN THE FIRST BLOCK
+  2. THE REMAINING THREE EVERY OTHER BLOCK
 
 
 */
@@ -1872,7 +1878,7 @@ function insertFeelGoodAds() {
       for (var i = 0; i < adPlaceholders.length; i++) {
 
         // insert ad if even space if found
-        if (i % evenSpaces == 0 && numAdsInserted < adPerPageLimit) {
+        if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
           console.log(tag, "Current number:", i);
           // insert advertisement after text block
           $(adPlaceholders[i]).after(adHTML);
@@ -2061,8 +2067,8 @@ function insertFeelGoodAds() {
       // loop through all ad placeholders
       for (var i = 0; i < adPlaceholders.length; i++) {
 
-        // insert ad if even space if found
-        if (i % evenSpaces == 0 && numAdsInserted < adPerPageLimit) {
+        // insert ad if even space if found (every two)
+        if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
           console.log(tag, "Current number:", i);
           // insert advertisement after text block
           $(adPlaceholders[i]).after(adHTML);
@@ -2080,11 +2086,40 @@ function insertFeelGoodAds() {
 
 } // end function
 
+// method that returns ad 
 function returnAdPositions(array, limit) {
   var finalElementsArray = [];
-  var elementsRemaining = limit;
+  // var elementsRemaining = limit;
 
-  console.log("What is the limit of the ads?", limit);
+  console.log("[AD POSITIONS]", limit);
+
+  // check if video element is inserted
+  var checkMediavineVideoExists = setInterval(function () {
+    if ($(".mediavine-video__target-div").length > 0) {
+      // retrieve all paragraph elements after video
+      var nextElements = $(".mediavine-video__target-div").nextAll("p");
+      // declare number of paragraphs already inserted
+      var numAdsInserted = 0;
+      console.log("[AD POSITIONS] Elements after video:", nextElements);
+
+      // loop through the array containing the paragraphs
+      $(nextElements).each(function (i, e) {
+        // execute if paragraph index matches every three
+        if (i % 3 == 0) {
+          // execute if paragraph ad limit has not been met
+          if ((numAdsInserted < limit)) {
+            finalElementsArray.push(e);
+            numAdsInserted++;
+          }
+        }
+      });
+
+    }
+  });
+
+  /* 10/01/2019 INSERT 4 ADS AFTER MEDIAVINE VIDEO */
+
+
 
   /* 09/27/2019 REMOVED FOR 4 LIMIT AD
 
@@ -2125,6 +2160,8 @@ function returnAdPositions(array, limit) {
 
   // // console.log("[AD POSITIONING]: Elements in final array:", finalElementsArray);
 
+  /* 10/01/2019 REMOVED FOR 4 LIMIT AD INSERTED AFTER MEDIAVINE VIDEO 
+
   // loop through array
   for (var i = 0; i < array.length; i++) {
     // console.log("Element Array:", array[i]);
@@ -2133,7 +2170,6 @@ function returnAdPositions(array, limit) {
     array[i] = array[i].slice(1);
 
     // execute if current array is pElements array
-
     if (i == 3 && array[i].length > 4) {
       // console.log("Is exexuting!");
       array[i] = array[i].splice(0); // remove first paragraph element
@@ -2178,6 +2214,8 @@ function returnAdPositions(array, limit) {
 
     } // end array[i][j] if statement
   } // end array[i] loop
+  */
+  console.log("[AD POSITIONS] finalElementsArray:", finalElementsArray);
   return finalElementsArray; // return final array
 } // end function
 
@@ -2616,6 +2654,56 @@ function insertAdsExtraPages() {
 
 }
 
+/* REMOVED IN UPDATE 09/28/2019 9:00 PM
+
+<!-- Pinterest Tag -->
+<!-- REMOVE: 09/27/2019 -->
+<!--
+<script>
+!function(e){if(!window.pintrk){window.pintrk = function () {
+window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+      n=window.pintrk;n.queue=[],n.version="3.0";var
+      t=document.createElement("script");t.async=!0,t.src=e;var
+      r=document.getElementsByTagName("script")[0];
+      r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
+pintrk('load', '2612611324691', {em: '<user_email_address>'});
+pintrk('page');
+</script>
+<noscript>
+<img height="1" width="1" style="display:none;" alt=""
+      src="https://ct.pinterest.com/v3/?tid=2612611324691&pd[em]=<hashed_email_address>&noscript=1" />
+</noscript>
+-->
+<!-- end Pinterest Tag -->
+
+<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
+
+// method that checks if an article category matches categoriesForPopup array
+function checkArticlesForPopup(category, array) {
+
+  // loop through categoriesForPopup array
+  for (var i = 0; i < array.length; i++) {
+
+    // execute if category exists in validation array
+    if (array[i] == category) {
+
+      // // console.log("[POPUP]", category, true);
+
+      displaySubscriptionPopup(category); // call method that displays subscription popup
+
+      // execute if category does not exist in validation array
+    } else {
+
+      // // console.log("[POPUP]", category, false);
+
+    }
+
+  }
+
+}
+
+*/
+
 // method that inserts custom pinterest & facebook buttons for images
 function insertImageButtons() {
   let tag = "[PINTEREST]";
@@ -2821,55 +2909,6 @@ function decodeText(encodedString) {
   textArea.parentNode.removeChild(textArea);
 }
 
-/* REMOVED IN UPDATE 09/28/2019 9:00 PM
-
-<!-- Pinterest Tag -->
-<!-- REMOVE: 09/27/2019 -->
-<!--
-<script>
-!function(e){if(!window.pintrk){window.pintrk = function () {
-window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
-      n=window.pintrk;n.queue=[],n.version="3.0";var
-      t=document.createElement("script");t.async=!0,t.src=e;var
-      r=document.getElementsByTagName("script")[0];
-      r.parentNode.insertBefore(t,r)}}("https://s.pinimg.com/ct/core.js");
-pintrk('load', '2612611324691', {em: '<user_email_address>'});
-pintrk('page');
-</script>
-<noscript>
-<img height="1" width="1" style="display:none;" alt=""
-      src="https://ct.pinterest.com/v3/?tid=2612611324691&pd[em]=<hashed_email_address>&noscript=1" />
-</noscript>
--->
-<!-- end Pinterest Tag -->
-
-<script type="text/javascript" src="//downloads.mailchimp.com/js/signup-forms/popup/unique-methods/embed.js" data-dojo-config="usePlainJson: true, isDebug: false"></script>
-
-// method that checks if an article category matches categoriesForPopup array
-function checkArticlesForPopup(category, array) {
-
-  // loop through categoriesForPopup array
-  for (var i = 0; i < array.length; i++) {
-
-    // execute if category exists in validation array
-    if (array[i] == category) {
-
-      // // console.log("[POPUP]", category, true);
-
-      displaySubscriptionPopup(category); // call method that displays subscription popup
-
-      // execute if category does not exist in validation array
-    } else {
-
-      // // console.log("[POPUP]", category, false);
-
-    }
-
-  }
-
-}
-
-*/
 
 // method that displays subscription popup
 function displaySubscriptionPopup(categoryToDisplay) {
