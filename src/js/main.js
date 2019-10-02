@@ -2123,6 +2123,7 @@ function returnAdPositions(array, limit) {
               }
             }
           });
+          return finalElementsArray;
         }
       }
 
@@ -2224,7 +2225,7 @@ function returnAdPositions(array, limit) {
   } // end array[i] loop
   */
   console.log("[AD POSITIONS] finalElementsArray:", finalElementsArray);
-  return finalElementsArray; // return final array
+  //return finalElementsArray; // return final array
 } // end function
 
 // method that checks for content siblings to prevent ads from appearing too close to eachother
