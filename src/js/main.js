@@ -2093,6 +2093,8 @@ function returnAdPositions(array, limit) {
 
   console.log("[AD POSITIONS]", limit);
 
+  /* 10/01/2019 INSERT 4 ADS AFTER MEDIAVINE VIDEO */
+
   // check if video element is inserted
   var checkMediavineVideoExists = setInterval(function () {
     if ($(".mediavine-video__target-div").length > 0) {
@@ -2116,10 +2118,6 @@ function returnAdPositions(array, limit) {
 
     }
   });
-
-  /* 10/01/2019 INSERT 4 ADS AFTER MEDIAVINE VIDEO */
-
-
 
   /* 09/27/2019 REMOVED FOR 4 LIMIT AD
 
