@@ -947,14 +947,11 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 .video-headline-container {
 	position: absolute;
 	z-index: 1;
-	/* bottom: 15px;
-	*/
 	top: 25px;
 	margin-left: 20px;
-	/* margin-bottom: 20px;
-	*/
 	margin-top: 20px;
 	line-height: 1.5;
+	max-width: 79%;
 }
 /* Custom CSS that styles the headline text blocks */
 .video-headline-text {
@@ -965,6 +962,14 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 	display: inline-block;
 	border-left: 5px solid #44d9e6;
 	color: #333333 !important;
+}
+/* Custom CSS that styles the headline text blocks animations */
+.video-headline-text-animated {
+	transition: width 2s;
+    white-space: nowrap;
+    overflow: hidden;
+	text-overflow: clip;
+	visibility: visible;
 }
 /* Custom CSS that handles the z-index of the control bar */
 /*.vjs-user-active .vjs-control-bar {
