@@ -2212,8 +2212,8 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       if (topRow != null) {
-        /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
-        ------------------------------------------------------------------------------------------------------------------------------------------------------
+        // NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------
         // var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
         // // console.log("We were able to find the top row.");
@@ -2244,9 +2244,10 @@ function insertAdSidebar() {
 
         // delete old row
         previousRow.remove();
-        ------------------------------------------------------------------------------------------------------------------------------------------------------
-        */
+        // ------------------------------------------------------------------------------------------------------------------------------------------------------
+        
 
+        /*
         // new custom image block that expands images to fit article text content
         // code-block sqs-block-code
         var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
@@ -2281,6 +2282,8 @@ function insertAdSidebar() {
 
         // delete old row
         previousRow.remove();
+
+        */
 
       } // end if statement
     } // end for-loop statement
