@@ -1019,3 +1019,8 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 		background: #000;
 	}
 }
+
+/* Custom CSS that styles the sidebar placeholder block */
+.sidebar-placeholder-block {
+	height: 7%;
+}

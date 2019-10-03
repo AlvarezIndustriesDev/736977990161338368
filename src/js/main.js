@@ -2328,7 +2328,10 @@ function insertAdSidebar() {
   var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
   // insert loading gif to sidebar
-  $("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
+  // $("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
+
+  // hide the sidebar
+  $("article .custom-content .custom-ad-sidebar").hide();
 
   var rssFeedURL = "https://iamandco.com/blog?format=rss";
   var sidebarArticleStartHTML = "<div class='sidebar-placeholder-block'></div><div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
@@ -2386,7 +2389,8 @@ function insertAdSidebar() {
       // && (location.pathname.split("/")[2] == "75-of-the-funniest-cheesy-pick-up-lines")
 
       $("article .custom-content .custom-ad-sidebar").append(completeHTML); // append to custom HTML element in custom sidebar
-      $("article .custom-content .custom-ad-sidebar .custom-loading-image-sidebar").remove(); // remove the loading image from sidebar
+      // $("article .custom-content .custom-ad-sidebar .custom-loading-image-sidebar").remove(); // remove the loading image from sidebar
+      $("article .custom-content .custom-ad-sidebar").fadeIn();
 
     } // end ajax success
   }); // end ajax function
