@@ -2212,7 +2212,7 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
-      if ($(imageBlocks).find("img").height() > $(imageBlocks).find("img").width()) {
+      if ($(imageBlocks).find("img").height() < $(imageBlocks).find("img").width()) {
         if (topRow != null) {
           /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
           ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2306,7 +2306,7 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
-      if ($(galleries).find("img").height() > $(galleries).find("img").width()) {
+      if ($(galleries).find("img").height() < $(galleries).find("img").width()) {
         if (topRow != null) {
           // var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
