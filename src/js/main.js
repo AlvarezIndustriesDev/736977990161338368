@@ -2317,7 +2317,7 @@ function insertAdSidebar() {
         $(".custom-image-gallery-row-" + i).find(".sqs-block-content").append(galleries[i]);
 
         // delete old row
-        previousRow.remove();
+        //previousRow.remove();
 
       } // end if statement
     } // end for-loop statement
