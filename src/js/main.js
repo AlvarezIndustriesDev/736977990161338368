@@ -2282,7 +2282,7 @@ function insertAdSidebar() {
           }
 
           // delete old row
-          // previousRow.remove();
+          previousRow.remove();
 
         } // end if statement
       }
@@ -2306,7 +2306,7 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
-      if ($(galleries).find("img").height() < $(galleries).find("img").width()) {
+      if ($(galleries[i]).find("img").height() < $(galleries[i]).find("img").width()) {
         if (topRow != null) {
           // var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
