@@ -2211,80 +2211,81 @@ function insertAdSidebar() {
       // // // // console.log("Row Index:", topRow);
       // PRAISE THE LORD, IT WORKS!
 
-      /*
+      // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
+      if ($(imageBlocks).find("img").height() > $(imageBlocks).find("img").width()) {
+        if (topRow != null) {
+          /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
+          ------------------------------------------------------------------------------------------------------------------------------------------------------
+          // var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+  
+          // // console.log("We were able to find the top row.");
+          // insert new image block element
+          var previousRow = topRow;
+          // // console.log(previousRow);
+  
+          $(previousRow).before(customImageBlockHTML);
+          // append image to new image block element
+          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
+  
+          // execute if previous row has price text and button
+          if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
+  
+            priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
+  
+            priceButtonElement = $(priceElement).next();
+  
+            // // console.log(priceElement, priceButtonElement);
+  
+            // console.log("[PREV ROW ELEMENTS]:", priceElement);
+  
+            // insert price element and button element
+            $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
+            $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
+  
+          }
+  
+          // delete old row
+          previousRow.remove();
+          ------------------------------------------------------------------------------------------------------------------------------------------------------
+          */
 
-      if (topRow != null) {
-        /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
-        ------------------------------------------------------------------------------------------------------------------------------------------------------
-        // var customImageBlockHTML = $("<div class='row sqs-row custom-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+          // new custom image block that expands images to fit article text content
+          // code-block sqs-block-code
+          var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
 
-        // // console.log("We were able to find the top row.");
-        // insert new image block element
-        var previousRow = topRow;
-        // // console.log(previousRow);
+          // console.log("We were able to find the top row.");
+          // insert new image block element
+          var previousRow = topRow;
+          // console.log(previousRow);
 
-        $(previousRow).before(customImageBlockHTML);
-        // append image to new image block element
-        $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(imageBlocks[i]);
+          $(previousRow).before(customImageBlockHTML);
+          // append image to new image block element
+          $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
 
-        // execute if previous row has price text and button
-        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0]) {
-
-          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0];
-
-          priceButtonElement = $(priceElement).next();
-
-          // // console.log(priceElement, priceButtonElement);
-
-          // console.log("[PREV ROW ELEMENTS]:", priceElement);
-
-          // insert price element and button element
-          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceElement);
-          $(".custom-row-" + i).find(".col.sqs-col-8.span-8").append(priceButtonElement);
-
-        }
-
-        // delete old row
-        previousRow.remove();
-        ------------------------------------------------------------------------------------------------------------------------------------------------------
-        
-
-        // new custom image block that expands images to fit article text content
-        // code-block sqs-block-code
-        var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
-
-        // console.log("We were able to find the top row.");
-        // insert new image block element
-        var previousRow = topRow;
-        // console.log(previousRow);
-
-        $(previousRow).before(customImageBlockHTML);
-        // append image to new image block element
-        $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
-
-        // execute if previous row has price text and button
-        if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6").has(".sqs-block-button")) {
+          // execute if previous row has price text and button
+          if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6").has(".sqs-block-button")) {
 
 
 
-          priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6 .sqs-block.html-block.sqs-block-html")[0];
+            priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6 .sqs-block.html-block.sqs-block-html")[0];
 
-          priceButtonElement = $(priceElement).next();
+            priceButtonElement = $(priceElement).next();
 
-          // console.log(priceElement, priceButtonElement);
+            // console.log(priceElement, priceButtonElement);
 
-          // console.log("[PREV ROW ELEMENTS]:", priceElement);
+            // console.log("[PREV ROW ELEMENTS]:", priceElement);
 
-          // insert price element and button element
-          $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceElement);
-          $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceButtonElement);
+            // insert price element and button element
+            $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceElement);
+            $(".custom-image-block-" + i).find(".sqs-block-content:first").append(priceButtonElement);
 
-        }
+          }
 
-        // delete old row
-        previousRow.remove();
+          // delete old row
+          // previousRow.remove();
 
-      } // end if statement */
+        } // end if statement
+      }
     } // end for-loop statement
   } // end if statement
 
@@ -2292,8 +2293,6 @@ function insertAdSidebar() {
   if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
     // // console.log("[MSG] Retrieving image gallery blocks");
     var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
-
-    /*
 
     // loop through image gallery blocks
     for (var i = 0; i < galleries.length; i++) {
@@ -2306,26 +2305,29 @@ function insertAdSidebar() {
       // // // console.log("Row Index:", topRow);
       // PRAISE THE LORD, IT WORKS!
 
-      if (topRow != null) {
-        // var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
+      // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
+      if ($(galleries).find("img").height() > $(galleries).find("img").width()) {
+        if (topRow != null) {
+          // var customImageBlockHTML = $("<div class='row sqs-row custom-image-gallery-row-" + i + "'><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div><div class='col sqs-col-8 span-8'></div><div class='col sqs-col-2 span-2'><div class='sqs-block spacer-block sqs-block-spacer sized vsize-1'><div class='sqs-block-content'>&nbsp;</div></div></div></div>");
 
-        var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-gallery-row-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
+          var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-image-gallery-row-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
 
-        // retrieve previous row
-        var previousRow = topRow;
+          // retrieve previous row
+          var previousRow = topRow;
 
-        // insert new image gallery block element
-        $(previousRow).before(customImageBlockHTML);
+          // insert new image gallery block element
+          $(previousRow).before(customImageBlockHTML);
 
-        // append image gallery to new image gallery block element
-        $(".custom-image-gallery-row-" + i).find(".sqs-block-content").append(galleries[i]);
+          // append image gallery to new image gallery block element
+          $(".custom-image-gallery-row-" + i).find(".sqs-block-content").append(galleries[i]);
 
-        // delete old row
-        previousRow.remove();
+          // delete old row
+          previousRow.remove();
 
-      } // end if statement
+        } // end if statement
+      }
     } // end for-loop statement
-    */
+
   } // end if statement
 
   // call function to display latest articles
