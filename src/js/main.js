@@ -2280,7 +2280,7 @@ function insertAdSidebar() {
         }
 
         // delete old row
-        previousRow.remove();
+        // previousRow.remove();
 
       } // end if statement
     } // end for-loop statement
