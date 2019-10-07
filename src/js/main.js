@@ -2211,6 +2211,8 @@ function insertAdSidebar() {
       // // // // console.log("Row Index:", topRow);
       // PRAISE THE LORD, IT WORKS!
 
+      /*
+
       if (topRow != null) {
         /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
         ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2245,7 +2247,7 @@ function insertAdSidebar() {
         // delete old row
         previousRow.remove();
         ------------------------------------------------------------------------------------------------------------------------------------------------------
-        */
+        
 
         // new custom image block that expands images to fit article text content
         // code-block sqs-block-code
@@ -2280,9 +2282,9 @@ function insertAdSidebar() {
         }
 
         // delete old row
-        // previousRow.remove();
+        previousRow.remove();
 
-      } // end if statement
+      } // end if statement */
     } // end for-loop statement
   } // end if statement
 
@@ -2290,6 +2292,8 @@ function insertAdSidebar() {
   if ($("article .sqs-block.gallery-block.sqs-block-gallery").length) {
     // // console.log("[MSG] Retrieving image gallery blocks");
     var galleries = $("article .sqs-block.gallery-block.sqs-block-gallery");
+
+    /*
 
     // loop through image gallery blocks
     for (var i = 0; i < galleries.length; i++) {
@@ -2317,11 +2321,11 @@ function insertAdSidebar() {
         $(".custom-image-gallery-row-" + i).find(".sqs-block-content").append(galleries[i]);
 
         // delete old row
-        //previousRow.remove();
+        previousRow.remove();
 
       } // end if statement
     } // end for-loop statement
-
+    */
   } // end if statement
 
   // call function to display latest articles
