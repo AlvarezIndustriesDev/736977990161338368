@@ -2330,6 +2330,41 @@ function insertAdSidebar() {
 
   } // end if statement
 
+  // execute if article has video blocks
+  if ($("article .sqs-block.video-block").length) {
+    var videoBlocks = $("article .video-block");
+
+    // loop through video block
+    for (var i = 0; i < videoBlocks.length; i++) {
+      // find nearest row
+      var nearestRow = retrieveNearestRow(videoBlocks[i]);
+      // find nearest row's parent
+      var rowParent = retrieveRowParent(nearestRow);
+      // check if nearest row parent has class ".col.sqs-col-12.span-12"
+      var topRow = checkForClass(nearestRow, rowParent, 0);
+      // PRAISE THE LORD, IT WORKS!
+
+      if (topRow != null) {
+
+        // new custom video block that expands images to fit article text content
+        // code-block sqs-block-code
+        var customImageBlockHTML = $("<div class='sqs-block html-block sqs-block-html new-custom-article-sqs-block custom-video-block-" + i + "' style='padding-left: 0px !important; padding-right: 0px !important;'><div class='sqs-block-content'></div></div>");
+
+        // insert new video block element
+        var previousRow = topRow;
+        // console.log(previousRow);
+
+        $(previousRow).before(customImageBlockHTML);
+        // append image to new video block element
+        $(".custom-video-block-" + i).find(".sqs-block-content").append(videoBlocks[i]);
+
+        // delete old row
+        previousRow.remove();
+
+      } // end if statement
+    } // end for-loop statement
+  }
+
   // call function to display latest articles
   var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
