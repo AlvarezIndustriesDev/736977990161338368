@@ -2212,7 +2212,7 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
-      if ($(imageBlocks).find("img").height() < $(imageBlocks).find("img").width()) {
+      if ($(imageBlocks[i]).find("img").height() < $(imageBlocks[i]).find("img").width()) {
         if (topRow != null) {
           /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
           ------------------------------------------------------------------------------------------------------------------------------------------------------
