@@ -1026,7 +1026,17 @@ function animateAdVideo(videoID, information) {
   }
 
   // pause the video and set time to 0:00
-  $('#' + videoID).find('video')[0].play();
+  var autoplayPromise = $('#' + videoID).find('video')[0].play();
+
+  // check if promise is undefined
+  if (autoplayPromise !== undefined) {
+    autoplayPromise.then(_ => {
+      // autoplay started
+    }).catch(error => {
+      // autoplay was prevented
+      console.error(error);
+    });
+  }
 
   // reset the sentence array
   sentenceArray.length = 0;
