@@ -2272,7 +2272,7 @@ function insertAdSidebar() {
           $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
 
           // check if image is vertical
-          if ($(imageBlocks[i]).find("img").height() < $(imageBlocks[i]).find("img").width()) {
+          if ($(imageBlocks[i]).find("img").height() > $(imageBlocks[i]).find("img").width()) {
             $(".custom-image-block-" + i).find(".image-block").addClass("image-block-vertical");
           }
 
