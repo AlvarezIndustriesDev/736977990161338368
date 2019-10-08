@@ -22,21 +22,16 @@ var customMediavineVideoTitle = "READ MORE >>"; // this text will display as the
 /* NOTE: DO NOT EDIT ARTICLE NAME, ACTION ID, OR INPUT NAME VALUE UNLESS YOU KNOW WHAT YOU ARE DOING! */
 var articleData = [{
   articleName: "Latest Articles",
-  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=87c8918b92",
-  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_87c8918b92",
+  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=765d8a47fd",
+  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_765d8a47fd",
   formTitle: "Get our weekly updates so you never miss an article like this one."
 }, {
   articleName: "Feel Good(s)",
-  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=fbc7732645",
-  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_fbc7732645",
+  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=765d8a47fd",
+  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_765d8a47fd",
   formTitle: "Get our weekly updates so you never miss an article like this one."
-}, {
-  articleName: "Astrology",
-  actionID: "u=23fd1362e2fc3bca611d00b8b&amp;id=a05ec12fa8",
-  inputNameValue: "b_23fd1362e2fc3bca611d00b8b_a05ec12fa8",
-  formTitle: "Be Notified. Never Miss An Astrology Report."
 }];
-var articlesForEmbed = ["Feel Good(s)", "Astrology"]; // initialize and declare array of blog articles for MailChimp embed (NOTE: any article that does not contain a category from this array will be shown the "Latest Articles" embed)
+var articlesForEmbed = ["Feel Good(s)"]; // initialize and declare array of blog articles for MailChimp embed (NOTE: any article that does not contain a category from this array will be shown the "Latest Articles" embed)
 var categoriesForPopup = ["Astrology", "Spirit"]; // initialize and declare array of blog articles categories that will display MailChimp popups
 var summaryBlockData = [{
   categoryName: "Relationships",
