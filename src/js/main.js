@@ -2222,7 +2222,6 @@ function insertAdSidebar() {
       // PRAISE THE LORD, IT WORKS!
 
       // NEW ADDITION 10/07/2019 - CHECK IF IMAGE IS VERTICAL
-      // if ($(imageBlocks[i]).find("img").height() < $(imageBlocks[i]).find("img").width()) {
         if (topRow != null) {
           /* NOTE 08/11/2019: Former way to insert images into col-md-rows, new way expands images by inserting them into Squarespace divs with HTML block CSS
           ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2272,10 +2271,13 @@ function insertAdSidebar() {
           // append image to new image block element
           $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
 
+          // check if image is vertical
+          if ($(imageBlocks[i]).find("img").height() < $(imageBlocks[i]).find("img").width()) {
+            $(".custom-image-block-" + i).find(".image-block").addClass("image-block-vertical");
+          }
+
           // execute if previous row has price text and button
           if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6").has(".sqs-block-button")) {
-
-
 
             priceElement = $(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6 .sqs-block.html-block.sqs-block-html")[0];
 
@@ -2295,7 +2297,6 @@ function insertAdSidebar() {
           previousRow.remove();
 
         } // end if statement
-      // }
     } // end for-loop statement
   } // end if statement
 
