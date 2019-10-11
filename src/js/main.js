@@ -216,7 +216,6 @@ function checkBlog() {
       loadRedditScripts(); // load reddit scripts
     }
 
-
     // method to retrieve page in JSON format
     $.ajax({
       url: formattedURL,
@@ -348,6 +347,65 @@ function checkBlog() {
 
             insertFeelGoodAds(); // call new method that inserts advertisement for feel-good(s) articles
 
+            // loop through scripts and find mediavine video
+            $('script[data-noptimize]').each(function () {
+              var src = this.src; // initialize and retrieve script source link
+              var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+
+              // // console.log("[VIDEO] SRC: ", src);
+              // execute if search string returns a valid match
+              if (searchString != -1) {
+                var searchText = "/videos/"; // initialize search text variable
+                var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+
+                console.log("[VIDEO] Mediavine video script found.");
+
+                blogHasVideo = true;
+
+                // call method that loads mediavine's videos
+                loadMediavineVideo(src, videoID, false);
+
+                return false;
+
+              }
+            });
+
+            console.log("[VIDEO] Blog has video or not:", blogHasVideo);
+
+            // execute if blog does not have video
+            if (!blogHasVideo) {
+
+              console.log("[VIDEO] Blog does not have a video.");
+
+              // retrieve video information from database
+              $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                console.log(response);
+                if (response['status'] == "success") {
+
+                  // initialize variables
+                  var videoID = response['data'][0]['video_id'];
+                  var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                  var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                  // check if article has horizontal line after second paragraph indicating that it has a list?
+                  if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                    // remove horizontal rule
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                    // insert video element after second paragraph
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                  } else {
+                    // insert video element after third paragraph
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                  }
+
+                  // call method that loads mediavine's videos
+                  loadMediavineVideo(scriptURL, videoID, true, response);
+
+                }
+              });
+
+            }
+
             // execute if insertNoFollowLinks returns false
           } else {
             checkForExternalLinks(false); // method called to check if anchor tags (links) found in document are external
@@ -397,8 +455,16 @@ function checkBlog() {
                   var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                   var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
 
-                  // insert video element after third paragraph
-                  $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                  // check if article has horizontal line after second paragraph indicating that it has a list?
+                  if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                    // remove horizontal rule
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                    // insert video element after second paragraph
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                  } else {
+                    // insert video element after third paragraph
+                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                  }
 
                   // call method that loads mediavine's videos
                   loadMediavineVideo(scriptURL, videoID, true, response);
@@ -412,7 +478,8 @@ function checkBlog() {
             if ($(".sqs-block.button-block").length > 0) {
               insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
             } else {
-              insertAdvertisements(false);
+              // insertAdvertisements(false);
+              insertNonFeelGoodAds(); // call new method that inserts advertisements for non feel good articles
             }
 
           }
@@ -443,9 +510,9 @@ function checkBlog() {
 
         }
 
-
       }
     });
+
     // execute if current page is an author's page
     // && (authorPathName[1] == "5b5b442a88251bc96fcdcdd7" || authorPathName[1] == "5b5b442a88251bc96fcdcdd7#show-archive")
   } else if (pathName == "blog" && extraPathName && findKeywordInArray("author", extraPathName)) {
@@ -1323,260 +1390,259 @@ function redirectToAffiliate() {
 */
 
 // method that inserts custom HTML for advertisements
-function insertAdvertisements(isFeelGoods) {
-  // var adHTML = "<div class='test-content'>Test</div>";
+// function insertAdvertisements(isFeelGoods) {
+//   // var adHTML = "<div class='test-content'>Test</div>";
 
-  // // console.log("[FUNCTION] Insert advertisements!");
-  /* NOTE: For sidebar, use the flex option on the article element itself */
-  /* NOTES from client */
-  // --------------------------------------------------------------------------
-  /* Insert content hints above H2 tags and H3 tags
-    line blocks, spacer blocks, H2 and H3s are the main ways we break up our content.
-    on feel-good(s) articles can you insert the code above line blocks or spacer blocks
-    --
-    on non feel-good(s) articles can you insert the code above line blocks, spacer blocks, H2's and H3's up to (8) ads per article */
-  // --------------------------------------------------------------------------
-  /* Feel-Good(s)
-  -------------------------------------------------------------------------------
-  */
-  if (isFeelGoods) {
-    // // console.log("[FUNCTION] is feel good(s)");
-    // var adHTML = "<div class='test-content sqs-block html-block sqs-block-html'>Test</div>";
-    var adHTML = "<div class='content_hint custom-appended'></div>";
+//   // // console.log("[FUNCTION] Insert advertisements!");
+//   /* NOTE: For sidebar, use the flex option on the article element itself */
+//   /* NOTES from client */
+//   // --------------------------------------------------------------------------
+//   /* Insert content hints above H2 tags and H3 tags
+//     line blocks, spacer blocks, H2 and H3s are the main ways we break up our content.
+//     on feel-good(s) articles can you insert the code above line blocks or spacer blocks
+//     --
+//     on non feel-good(s) articles can you insert the code above line blocks, spacer blocks, H2's and H3's up to (8) ads per article */
+//   // --------------------------------------------------------------------------
+//   /* Feel-Good(s)
+//   -------------------------------------------------------------------------------
+//   */
+//   if (isFeelGoods) {
+//     // // console.log("[FUNCTION] is feel good(s)");
+//     // var adHTML = "<div class='test-content sqs-block html-block sqs-block-html'>Test</div>";
+//     var adHTML = "<div class='content_hint custom-appended'></div>";
 
-    // -- Line blocks
-    var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-    // // console.log("Line blocks:", lineBlocks.length);
-    // -- H2 elements
-    var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
-    // // console.log("H2 elements:", h2Elements.length);
-    // -- H3 elements
-    var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
-    // // console.log("H3 elements:", h3Elements.length);
-    // -- P elements
-    var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
-    // // console.log("P elements:", pElements.length);
+//     // -- Line blocks
+//     var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+//     // // console.log("Line blocks:", lineBlocks.length);
+//     // -- H2 elements
+//     var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
+//     // // console.log("H2 elements:", h2Elements.length);
+//     // -- H3 elements
+//     var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
+//     // // console.log("H3 elements:", h3Elements.length);
+//     // -- P elements
+//     var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+//     // // console.log("P elements:", pElements.length);
 
-    var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
+//     var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
 
-    var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
+//     var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
 
-    var finalAdRatio;
+//     var finalAdRatio;
 
-    // execute if user is on a mobile device
-    if (isMobile()) {
-      finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
-    } else {
-      finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
-    }
+//     // execute if user is on a mobile device
+//     if (isMobile()) {
+//       finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
+//     } else {
+//       finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
+//     }
 
-    var adPerPageLimit;
+//     var adPerPageLimit;
 
-    /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
+//     /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
 
-    // execute if ad ratio exceeds the limit
-    if (finalAdRatio > 4) {
-      adPerPageLimit = 4; // set limit value to ad-per-page limit variable
-    } else {
-      adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
-    }
+//     // execute if ad ratio exceeds the limit
+//     if (finalAdRatio > 4) {
+//       adPerPageLimit = 4; // set limit value to ad-per-page limit variable
+//     } else {
+//       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
+//     }
 
-    // // console.log("Ad Ratio:", adPerPageLimit);
+//     // // console.log("Ad Ratio:", adPerPageLimit);
 
-    // ---------------------------------------------------
-    var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
+//     // ---------------------------------------------------
+//     var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
 
-    // // console.log("Final Element Array:", elementArray);
+//     // // console.log("Final Element Array:", elementArray);
 
-    // loop through elements array and append div content avove
-    for (var i = 0; i < elementArray.length; i++) {
+//     // loop through elements array and append div content avove
+//     for (var i = 0; i < elementArray.length; i++) {
 
-      // NOTE: Append paragraphs after, everything else before
-      if ($(elementArray[i]).is("p")) {
-        // // console.log("[ADS] Element is a paragraph!");
-        $(elementArray[i]).after(adHTML);
+//       // NOTE: Append paragraphs after, everything else before
+//       if ($(elementArray[i]).is("p")) {
+//         // // console.log("[ADS] Element is a paragraph!");
+//         $(elementArray[i]).after(adHTML);
 
-        /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-        if ($(elementArray[i]).next().is(".content_hint")) {
-          var elementAppended = $(elementArray[i]).next();
-          // // console.log("[JUST APPENDED AFTER]", elementAppended);
+//         /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+//         if ($(elementArray[i]).next().is(".content_hint")) {
+//           var elementAppended = $(elementArray[i]).next();
+//           // // console.log("[JUST APPENDED AFTER]", elementAppended);
 
-          if (elementAppended.next().is(".content_hint")) {
-            elementAppended.remove();
-          }
-        }
+//           if (elementAppended.next().is(".content_hint")) {
+//             elementAppended.remove();
+//           }
+//         }
 
-      } else {
-        // // console.log("[ADS] Element is not a paragraph!");
-        $(elementArray[i]).before(adHTML);
+//       } else {
+//         // // console.log("[ADS] Element is not a paragraph!");
+//         $(elementArray[i]).before(adHTML);
 
-        /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-        if ($(elementArray[i]).prev().is(".content_hint")) {
-          var elementAppended = $(elementArray[i]).prev();
-          // // console.log("[JUST APPENDED BEFORE]", elementAppended);
+//         /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+//         if ($(elementArray[i]).prev().is(".content_hint")) {
+//           var elementAppended = $(elementArray[i]).prev();
+//           // // console.log("[JUST APPENDED BEFORE]", elementAppended);
 
-          if (elementAppended.prev().is(".content_hint")) {
-            elementAppended.remove();
-          }
+//           if (elementAppended.prev().is(".content_hint")) {
+//             elementAppended.remove();
+//           }
 
-        }
+//         }
 
-      }
+//       }
 
-    }
-    //$mediavine.web.fillContentHints();
+//     }
+//     //$mediavine.web.fillContentHints();
 
-    /* Non-Feel-Good(s)
-    -------------------------------------------------------------------------------
-    */
-  } else {
-    // // console.log("[FUNCTION] is not feel good(s)");
-    // var adHTML = "<div class='test-content'>Test</div>";
-    var adHTML = "<div class='content_hint custom-appended'></div>";
+//     /* Non-Feel-Good(s)
+//     -------------------------------------------------------------------------------
+//     */
+//   } else {
+//     // // console.log("[FUNCTION] is not feel good(s)");
+//     // var adHTML = "<div class='test-content'>Test</div>";
+//     var adHTML = "<div class='content_hint custom-appended'></div>";
 
-    // -- Line blocks
-    var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-    // // console.log("Line blocks:", lineBlocks.length);
-    // -- Spacer blocks
-    /* var spacerBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.spacer-block.sqs-block-spacer");
-    // // console.log("Spacer blocks:", spacerBlocks.length); */
-    // -- H2 elements
-    var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
-    // // console.log("H2 elements:", h2Elements.length);
-    // -- H3 elements
-    var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
-    // // console.log("H3 elements:", h3Elements.length);
-    // -- P elements
-    var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
-    // // console.log("P elements:", pElements.length);
+//     // -- Line blocks
+//     var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+//     // // console.log("Line blocks:", lineBlocks.length);
+//     // -- Spacer blocks
+//     /* var spacerBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.spacer-block.sqs-block-spacer");
+//     // // console.log("Spacer blocks:", spacerBlocks.length); */
+//     // -- H2 elements
+//     var h2Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h2");
+//     // // console.log("H2 elements:", h2Elements.length);
+//     // -- H3 elements
+//     var h3Elements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 h3");
+//     // // console.log("H3 elements:", h3Elements.length);
+//     // -- P elements
+//     var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+//     // // console.log("P elements:", pElements.length);
 
-    var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
+//     var totalElements = [lineBlocks, h2Elements, h3Elements, pElements];
 
-    var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
-
-
-    var finalAdRatio;
-
-    // execute if user is on a mobile device
-    if (isMobile()) {
-      finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
-    } else {
-      finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
-    }
-
-    var adPerPageLimit;
-
-    /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
-
-    // execute if ad ratio exceeds the limit
-    if (finalAdRatio > 4) {
-      adPerPageLimit = 4; // set limit value to ad-per-page limit variable
-    } else {
-      adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
-    }
-
-    // // console.log("Ad Ratio:", adPerPageLimit);
-
-    // ---------------------------------------------------
-
-    /* UPDATE: 10/01/2019 - CHECK IF MEDIAVINE VIDEO EXISTS */
-    var checkMediavineVideoExists = setInterval(function () {
-      // check if video element is inserted
-      if ($(".mediavine-video__target-div").length > 0) {
-        // stop the loop
-        clearInterval(checkMediavineVideoExists);
-        var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
-
-        console.log("Final Element Array:", elementArray, elementArray.length);
-
-        // loop through elements array and append div content avove
-
-        for (var i = 0; i < elementArray.length; i++) {
-          // // // console.log(elementArray[i]);
-
-          // NOTE: Append paragraphs after, everything else before
-
-          if ($(elementArray[i]).is("p")) {
-            console.log("[ADS] Element is a paragraph!");
-            $(elementArray[i]).after(adHTML);
-
-            /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-            if ($(elementArray[i]).next().is(".content_hint")) {
-              var elementAppended = $(elementArray[i]).next();
-              // // console.log("[JUST APPENDED AFTER]", elementAppended);
-
-              if (elementAppended.next().is(".content_hint")) {
-                elementAppended.remove();
-              }
-
-            }
-
-          } else {
-            // // console.log("[ADS] Element is not a paragraph!");
-            $(elementArray[i]).before(adHTML);
-
-            /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
-            if ($(elementArray[i]).prev().is(".content_hint")) {
-              var elementAppended = $(elementArray[i]).prev();
-              // // console.log("[JUST APPENDED BEFORE]", elementAppended);
-
-              if (elementAppended.prev().is(".content_hint")) {
-                elementAppended.remove();
-              }
-
-            }
-
-          }
+//     var totalElementsLength = lineBlocks.length + h2Elements.length + h3Elements.length + pElements.length;
 
 
+//     var finalAdRatio;
 
-          /*
-          if (!$(elementArray[i]).prev().is(".content_hint")) {
-            // // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
-           
-            if ($(elementArray[i]).is("p")) {
-              // // console.log("[ADS] Element is a paragraph!");
-              $(elementArray[i]).after(adHTML);
-            } else {
-              // // console.log("[ADS] Element is not a paragraph!");
-              $(elementArray[i]).before(adHTML);
-            }
-           
-          } */
+//     // execute if user is on a mobile device
+//     if (isMobile()) {
+//       finalAdRatio = Math.ceil(totalElementsLength * (mobileAdRatio / 100));
+//     } else {
+//       finalAdRatio = Math.ceil(totalElementsLength * (desktopAdRatio / 100));
+//     }
 
-        } // end for-loop
-      }
-    });
+//     var adPerPageLimit;
 
-  } // end outer (is feel goods) statement
+//     /* UPDATE 09/27/2019 CHANGED 8 TO 4 */
 
-  var checkForFinishedElementMovement = setInterval(function () {
-    // execute if element movement was finished
-    if ($("article .custom-content .custom-article-content .BlogItem-comments")) {
-      // // console.log("[FINAL MOVEMENT FINISHED]");
-      clearInterval(checkForFinishedElementMovement); // stop the loop
-      // insert ads below and above comment section
-      /*
-      $("article .custom-content .custom-article-content .BlogItem-comments").before("<div class='content_hint custom-appended'></div>");
-      $("article .custom-content .custom-article-content .BlogItem-comments").after("<div class='content_hint custom-appended'></div>");
-      */
-    }
-  });
+//     // execute if ad ratio exceeds the limit
+//     if (finalAdRatio > 4) {
+//       adPerPageLimit = 4; // set limit value to ad-per-page limit variable
+//     } else {
+//       adPerPageLimit = finalAdRatio; // set ad ratio value to ad-per-page limit variable
+//     }
 
-  var checkPageLoaded = setInterval(function () {
-    // execute if pageLoaded variable is true
-    if (pageLoaded == true) {
-      clearInterval(checkPageLoaded); // stop the loop
-      // // console.log("[ADVERTISEMENTS] PAGE LOADED!");
-      // $mediavine.web.fillContentHints();
-      loadMediavineScripts();
-    }
-  }, 100);
-} // end function
+//     // // console.log("Ad Ratio:", adPerPageLimit);
+
+//     // ---------------------------------------------------
+
+//     /* UPDATE: 10/01/2019 - CHECK IF MEDIAVINE VIDEO EXISTS */
+//     var checkMediavineVideoExists = setInterval(function () {
+//       // check if video element is inserted
+//       if ($(".mediavine-video__target-div").length > 0) {
+//         // stop the loop
+//         clearInterval(checkMediavineVideoExists);
+//         var elementArray = returnAdPositions(totalElements, adPerPageLimit); // call method that returns ad positions
+
+//         console.log("Final Element Array:", elementArray, elementArray.length);
+
+//         // loop through elements array and append div content avove
+
+//         for (var i = 0; i < elementArray.length; i++) {
+//           // // // console.log(elementArray[i]);
+
+//           // NOTE: Append paragraphs after, everything else before
+
+//           if ($(elementArray[i]).is("p")) {
+//             console.log("[ADS] Element is a paragraph!");
+//             $(elementArray[i]).after(adHTML);
+
+//             /* check if the element after the appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+//             if ($(elementArray[i]).next().is(".content_hint")) {
+//               var elementAppended = $(elementArray[i]).next();
+//               // // console.log("[JUST APPENDED AFTER]", elementAppended);
+
+//               if (elementAppended.next().is(".content_hint")) {
+//                 elementAppended.remove();
+//               }
+
+//             }
+
+//           } else {
+//             // // console.log("[ADS] Element is not a paragraph!");
+//             $(elementArray[i]).before(adHTML);
+
+//             /* check if prev element after appended content hint is also a content hint and if so, remove from DOM in order to prevent ads stacking up */
+//             if ($(elementArray[i]).prev().is(".content_hint")) {
+//               var elementAppended = $(elementArray[i]).prev();
+//               // // console.log("[JUST APPENDED BEFORE]", elementAppended);
+
+//               if (elementAppended.prev().is(".content_hint")) {
+//                 elementAppended.remove();
+//               }
+
+//             }
+
+//           }
+
+
+
+//           /*
+//           if (!$(elementArray[i]).prev().is(".content_hint")) {
+//             // // console.log("[ADS] Previous element is not a content hint!", $(elementArray[i]).prev());
+
+//             if ($(elementArray[i]).is("p")) {
+//               // // console.log("[ADS] Element is a paragraph!");
+//               $(elementArray[i]).after(adHTML);
+//             } else {
+//               // // console.log("[ADS] Element is not a paragraph!");
+//               $(elementArray[i]).before(adHTML);
+//             }
+
+//           } */
+
+//         } // end for-loop
+//       }
+//     });
+
+//   } // end outer (is feel goods) statement
+
+//   var checkForFinishedElementMovement = setInterval(function () {
+//     // execute if element movement was finished
+//     if ($("article .custom-content .custom-article-content .BlogItem-comments")) {
+//       // // console.log("[FINAL MOVEMENT FINISHED]");
+//       clearInterval(checkForFinishedElementMovement); // stop the loop
+//       // insert ads below and above comment section
+//       /*
+//       $("article .custom-content .custom-article-content .BlogItem-comments").before("<div class='content_hint custom-appended'></div>");
+//       $("article .custom-content .custom-article-content .BlogItem-comments").after("<div class='content_hint custom-appended'></div>");
+//       */
+//     }
+//   });
+
+//   var checkPageLoaded = setInterval(function () {
+//     // execute if pageLoaded variable is true
+//     if (pageLoaded == true) {
+//       clearInterval(checkPageLoaded); // stop the loop
+//       // // console.log("[ADVERTISEMENTS] PAGE LOADED!");
+//       // $mediavine.web.fillContentHints();
+//       loadMediavineScripts();
+//     }
+//   }, 100);
+// } // end function
 
 // new method that inserts advertisements for feel-good(s) articles
 function insertFeelGoodAds() {
-
   /* TODO:
          
           1. Retrieve all HTML blocks
@@ -1587,9 +1653,9 @@ function insertFeelGoodAds() {
      
   */
 
-  let tag = "FEEL GOOD(S):";
+  let tag = "[FEEL GOOD(S)]:";
 
-  // console.log(tag, "Article is a feel good article.");
+  console.log(tag, "Inserting advertisements for feel good(s) articles.");
 
   // initialize and declare ad HTML for feel-good(s) ads
   var adHTML = "<div class='content_hint custom-appended'></div>";
@@ -1669,7 +1735,7 @@ function insertFeelGoodAds() {
           var textBlock;
 
           // exeucte if image block meets all requirements
-          if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
+          if (($(imageBlock).next().length > 0 && $(imageBlock).next().next().length > 0 && $(imageBlock).next().next().next().length > 0) && ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
 
             // retrieve title block if it exists next to image block
             if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
@@ -1982,7 +2048,83 @@ function insertFeelGoodAds() {
 
 } // end function
 
-// method that returns ad 
+// new method that inserts advertisements for non-feel-good(s) articles
+function insertNonFeelGoodAds() {
+  let tag = "[NON-FEEL-GOOD(S)]:";
+
+  console.log(tag, "Inserting advertisements for non-feel-good(s) articles.");
+
+  // retrieve all p elements in the article
+  var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+
+  // declare and initialize advertisement html
+  var adHTML = "<div class='content_hint custom-appended'></div>";
+
+  // declare and initialize number of ads to insert
+  var limit = 4;
+
+  // check if there are instagram embeds in the article
+  if ($(".instagram-media").length > 0) {
+    // remove all paragraphs inside embeds
+    $(".instagram-media p").remove();
+    // re-assign pElements to value of current p elements in article
+    pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+  }
+
+  // check if article is inserted so that advertisements are inserted after video
+  var checkIfMediavineVideoExists = setInterval(function () {
+    // check if mediavine video exists in DOM
+    if ($(".mediavine-video__target-div").length > 0) {
+      // stop the loop
+      clearInterval(checkIfMediavineVideoExists);
+      // console.log(tag, "Video exists, executing code now.");
+      // retrieve all paragraph elements
+      var paragraphElements = pElements;
+      // declare number of paragraph elements already inserted
+      var numAdsInserted = 0;
+      // retrieve number of paragraphs before video element
+      var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
+      // remove paragraphs from array before video element
+      paragraphElements.splice(0, numPrevParagraphs + 1);
+      // loop through array containing paragraphs
+      $(paragraphElements).each(function (i, e) {
+        // execute if paragraph index matches every three
+        if (i % 3 == 0) {
+          // check if ad limit has not been reached
+          if (numAdsInserted < limit) {
+            // console.log(tag, "Inserting after:", i, $(e));
+            if (e.innerText.indexOf("A post") != -1) {
+              // console.log(tag, "This is one of those fake.");
+              // skip to the next iteration
+              return;
+            }
+            // insert advertisement to DOM
+            $(e).after(adHTML);
+            // increment value of ads inserted
+            numAdsInserted++;
+          }
+        }
+      });
+      // check if pageLoaded variable has been initialized
+      if (pageLoaded == true) {
+        // call function that fills in content hints
+        $mediavine.web.fillContentHints();
+      } else {
+        // wait until page is loaded
+        var checkPageLoaded = setInterval(function () {
+          // execute if pageLoaded variable is true
+          if (pageLoaded == true) {
+            clearInterval(checkPageLoaded); // stop the loop
+            loadMediavineScripts();
+          }
+        }, 100);
+      }
+    }
+  }, 100);
+
+}
+
+// method that returns ad
 function returnAdPositions(array, limit) {
   var finalElementsArray = [];
   // var elementsRemaining = limit;
@@ -2061,7 +2203,7 @@ function returnAdPositions(array, limit) {
 
   // // console.log("[AD POSITIONING]: Elements in final array:", finalElementsArray);
 
-  /* 10/01/2019 REMOVED FOR 4 LIMIT AD INSERTED AFTER MEDIAVINE VIDEO 
+  /* 10/01/2019 REMOVED FOR 4 LIMIT AD INSERTED AFTER MEDIAVINE VIDEO
 
   // loop through array
   for (var i = 0; i < array.length; i++) {
@@ -2203,7 +2345,6 @@ function insertAdSidebar() {
   if ($("article .image-block").length) {
     // // console.log("[MSG]:", "Retrieving image blocks...");
     var imageBlocks = $("article .image-block");
-    // console.log(imageBlocks);
 
     // loop through image block
     for (var i = 0; i < imageBlocks.length; i++) {
@@ -2266,13 +2407,16 @@ function insertAdSidebar() {
         // append image to new image block element
         $(".custom-image-block-" + i).find(".sqs-block-content").append(imageBlocks[i]);
 
-        // call method that gets image height and width
-        getImageSize($(imageBlocks[i]).find("img")[0], function (e, width, height) {
-          if (height > width) {
-            // add class that makes images smaller
-            $(e).parents(".image-block").addClass("image-block-vertical");
-          }
-        });
+        // check that the first image does not get affected by vertical image check
+        if (i != 0) {
+          // call method that gets image height and width
+          getImageSize($(imageBlocks[i]).find("img")[0], function (e, width, height) {
+            if (height > width) {
+              // add class that makes images smaller
+              $(e).parents(".image-block").addClass("image-block-vertical");
+            }
+          });
+        }
 
         // execute if previous row has price text and button
         if ($(previousRow).find(".col.sqs-col-9.span-9 .sqs-block.html-block.sqs-block-html")[0] || $(previousRow).find(".col.sqs-col-6.span-6").has(".sqs-block-button")) {
