@@ -61,7 +61,7 @@
     font-size: 15px;
     color: #000;
     text-transform: uppercase;
-    font-family: "arial", san-serif
+    font-family: arial, san-serif
 }
 
 .sqs-block-markdown h2 {
@@ -501,7 +501,9 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 }
 
 #customMCEmbed {
-    padding: 50px
+    /* padding: 50px; */
+    padding-left: 0px !important;
+    padding-right: 0px !important;
 }
 
 @media (max-width:768px) {
@@ -511,17 +513,17 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
     }
     #mc_embed_signup .clear {
         display: block;
-        width: 100%
+        width: 100%;
     }
     #mc_embed_signup .button {
         width: 100%;
-        margin: 0
+        margin: 0;
     }
 }
 
 @media (min-width:320px) and (max-width:1024px) {
     #customMCEmbed {
-        padding: 17px
+        padding: 17px;
     }
 }
 
@@ -713,15 +715,15 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
     letter-spacing: .03em;
     line-height: 1.2em;
     font-weight: 400;
-    font-family: "arial", sans-serif
+    font-family: arial, sans-serif
 }
 
 .custom-author-container .custom-author-website {
     font-size: 15px;
     font-weight: 400;
     letter-spacing: .03em;
-    font-family: "arial", sans-serif;
-    text-transform: uppercase;
+    font-family: arial, sans-serif;
+    text-transform: uppercase
 }
 
 .custom-author-container .custom-author-title {
@@ -1078,10 +1080,10 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 
 .tweak-blog-list-alignment-left .BlogList-item-title {
     text-align: left;
-    text-transform: capitalize;
+    text-transform: capitalize
 }
 
 .image-block-vertical {
-	width: 50% !important;
-	margin: auto !important;
+    width: 60%!important;
+    margin: auto!important
 }

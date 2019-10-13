@@ -420,7 +420,7 @@ function checkBlog() {
               var src = this.src; // initialize and retrieve script source link
               var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-              // // console.log("[VIDEO] SRC: ", src);
+              console.log("[VIDEO] SRC: ", src, searchString);
               // execute if search string returns a valid match
               if (searchString != -1) {
                 var searchText = "/videos/"; // initialize search text variable
@@ -1667,10 +1667,13 @@ function insertFeelGoodAds() {
   var numAdsInserted = 0;
 
   // declare ad limit [REMOVE FOR OLD COUNTER]
-  adPerPageLimit = 4;
+  adPerPageLimit = 5;
 
   // execute if user is on a mobile device
   if (isMobile()) {
+
+    // change the total ad limit for mobile
+    adPerPageLimit = 9;
 
     // retrieve all row blocks that contain images and whose parent class is the .col.sqs-col-12.span-12
     var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .row.sqs-row").filter(function (elem) {
@@ -2061,7 +2064,18 @@ function insertNonFeelGoodAds() {
   var adHTML = "<div class='content_hint custom-appended'></div>";
 
   // declare and initialize number of ads to insert
-  var limit = 4;
+  var limit = 5;
+
+  // check if user is on mobile or desktop
+  if (isMobile()) {
+    // assign mobile content hints
+    adHTML = "<div class='content_mobile_hint custom-appended'></div>";
+    // change the ad limit for mobile
+    limit = 9;
+  } else {
+    // assign desktop content hints
+    adHTML = "<div class='content_desktop_hint custom-appended'></div>";
+  }
 
   // check if there are instagram embeds in the article
   if ($(".instagram-media").length > 0) {
@@ -2089,7 +2103,34 @@ function insertNonFeelGoodAds() {
       // loop through array containing paragraphs
       $(paragraphElements).each(function (i, e) {
         // execute if paragraph index matches every three
-        if (i % 3 == 0) {
+        if (i % 2 == 0) {
+          // retrieve paragraph sqs-block parent
+          var paragraphParent = $(e).parents(".sqs-block.html-block");
+
+          // declare variable that determines if paragraph parent element is near horizontal rule element
+          var isNearHorizontalRule = false;
+
+          // declare variable that determines if paragraph parent element is neighbors with a content hint
+          var isNearContentHint = false;
+
+          // declare variable that determines if paragraph parent element is part of image section
+          var isNearImageSection = false;
+
+          // check if the next sibling is a horizontal rule
+          if ($(paragraphParent).next().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
+            isNearHorizontalRule = true;
+          }
+
+          // check if the next sibling is a content hint
+          if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
+            isNearContentHint = true;
+          }
+
+          // check if the paragraph element is part of image section
+          if ($(e).parent().hasClass("image-caption")) {
+            isNearImageSection = true;
+          }
+
           // check if ad limit has not been reached
           if (numAdsInserted < limit) {
             // console.log(tag, "Inserting after:", i, $(e));
@@ -2098,8 +2139,24 @@ function insertNonFeelGoodAds() {
               // skip to the next iteration
               return;
             }
-            // insert advertisement to DOM
-            $(e).after(adHTML);
+
+            console.log(tag, "Inserting ad for:", e);
+
+            // check if paragraph element is near another content hint
+            if (isNearContentHint || isNearImageSection) {
+              // skip to next iteration
+              return;
+            } else {
+              // insert before horizontal rule if paragraph element is near horizontal rule element
+              if (isNearHorizontalRule) {
+                // insert advertisement to DOM
+                $(paragraphParent).after(adHTML);
+              } else {
+                // insert advertisement to DOM
+                $(e).after(adHTML);
+              }
+            }
+
             // increment value of ads inserted
             numAdsInserted++;
           }
@@ -2519,7 +2576,7 @@ function insertAdSidebar() {
   }
 
   // call function to display latest articles
-  var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
+  // var loadingImage = "<div class='custom-loading-image-sidebar sqs-block-html'><div class='custom-loading-image'><img src='https://ds4bdrko1q549.cloudfront.net/assets/common/images/loader.gif' alt='' title='' /></div></div>";
 
   // insert loading gif to sidebar
   // $("article .custom-content .custom-ad-sidebar").prepend(loadingImage);
@@ -2528,10 +2585,16 @@ function insertAdSidebar() {
   $("article .custom-content .custom-ad-sidebar").hide();
 
   var rssFeedURL = "https://iamandco.com/blog?format=rss";
-  var sidebarArticleStartHTML = "<div class='sidebar-placeholder-block'></div><div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
-  var sidebarArticleMiddleHTML = "";
-  var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
+  // var sidebarArticleStartHTML = "<div class='sidebar-placeholder-block'></div><div class='mv_slot_target_desktop' data-slot='SidebarAtf'></div><div class='sqs-block-html custom-sidebar-article-wrapper'><div class='custom-sidebar-wrapper-title'>" + sidebarArticleTitle + "</div><ul class='custom-sidebar-article-list'>";
+  // var sidebarArticleMiddleHTML = "";
+  // var sidebarArticleEndHTML = "</ul></div><div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
 
+  // UPDATE 10/11/2019 Removed ATF sidebar ad, removed empty space, removed articles
+  var sidebarArticleNewHTML = "<div class='mv_slot_target_desktop' data-slot='SidebarBtf' data-sticky-slot='true' data-sticky-slot-stop='.Footer'></div>";
+  $("article .custom-content .custom-ad-sidebar").append(sidebarArticleNewHTML); // append to custom HTML element in custom sidebar
+  $("article .custom-content .custom-ad-sidebar").show();
+
+  /*
   // method to retrieve blog page RSS in XML format
   $.ajax({
     url: rssFeedURL,
@@ -2588,6 +2651,7 @@ function insertAdSidebar() {
 
     } // end ajax success
   }); // end ajax function
+  */
 }
 
 // method that retrives the nearest row for positioning advertisements on article content
@@ -3527,7 +3591,27 @@ function insertCustomHTML(articleCategory) {
       $(".custom-summary-container").prepend(authorBlockHTML); // append custom HTML into footer of article
       $(".custom-summary-container").prepend(categoryBlockHTML); // append to custom HTML element into footer of article
       if (articleIsFeelGoods == false) {
-        $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
+
+        // retrieve all p elements in the article
+        var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+
+        // retrieve middle p element index
+        var middleParagraphIndex = Math.ceil(pElements.length / 2);
+
+        // retrieve paragraph element
+        var element = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(" + middleParagraphIndex + ")");
+
+        // retrieve parent containing sqs-block-html class
+        var paragraphParent = $(element).parents(".sqs-block.html-block");
+
+        // check if the next sibling is a content hint
+        if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
+          $(paragraphParent).next().next().after(mailChimpHTML);
+        } else {
+          $(paragraphParent).after(mailChimpHTML);
+        }
+
+        // $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
       }
       if (movePaginationHTML == true) {
         moveElements(); // method called to change position of elements in blog page
