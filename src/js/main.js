@@ -1712,6 +1712,20 @@ function insertFeelGoodAds() {
           }
         }
       });
+      // check if pageLoaded variable has been initialized
+      if (pageLoaded == true) {
+        // call function that fills in content hints
+        $mediavine.web.fillContentHints();
+      } else {
+        // wait until page is loaded
+        var checkPageLoaded = setInterval(function () {
+          // execute if pageLoaded variable is true
+          if (pageLoaded == true) {
+            clearInterval(checkPageLoaded); // stop the loop
+            loadMediavineScripts();
+          }
+        }, 100);
+      }
     }
   });
 
