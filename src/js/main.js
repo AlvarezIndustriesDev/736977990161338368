@@ -475,7 +475,7 @@ function checkBlog() {
             }
 
             // execute if button blocks exist within article (similar to feel-good(s) buttons)
-            if ($(".sqs-block.button-block").length > 0) {
+            if ($(".sqs-block.button-block").length > 0 || $("div.sqs-block.horizontalrule-block.sqs-block-horizontalrule").length > 2) {
               insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
             } else {
               // insertAdvertisements(false);
@@ -1671,383 +1671,431 @@ function insertFeelGoodAds() {
 
   // execute if user is on a mobile device
   if (isMobile()) {
-
     // change the total ad limit for mobile
     adPerPageLimit = 9;
-
-    // retrieve all row blocks that contain images and whose parent class is the .col.sqs-col-12.span-12
-    var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .row.sqs-row").filter(function (elem) {
-      return $(this).parent().attr('class').indexOf("col sqs-col-12 span-12") != -1;
-    });
-
-    // // console.log(tag, "Mobile HTML Blocks:", htmlBlocks);
-
-    // execute if article has more than one html blocks
-    if (htmlBlocks.length > 0) {
-
-      /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
-
-      /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
-
-      // execute if html block contains image block or gallery block
-      if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
-
-        // retrieve the paragraphs in the content section after the first image in the article
-        var paragraphs = $(htmlBlocks[0]).next().find("p");
-
-        // console.log(tag, "Mobile number of paragraphs in content section:", paragraphs.length);
-
-        // execute if there is only one paragraph in the content section of Feel-Good(s) articles
-        if (paragraphs.length < 2) {
-
-          // insert after the first paragraph
-          $(htmlBlocks[0]).next().after(adHTML);
-
-        } else {
-
-          // insert after every two paragraphs
-          $(paragraphs).each(function (i, e) {
-            // execute if paragraph index is even
-            if ((i + 1) % 2 == 0) {
-              // insert advertisement every 2 paragraphs
-              $(e).after(adHTML);
-            }
-
-          });
-
-        }
-
-      } */
-
-      // loop through html blocks
-      for (var i = 0; i < htmlBlocks.length; i++) {
-
-        // execute if html block contains image block or gallery block
-        if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
-
-          // // console.log(tag, "Block (" + i + ") has image block.");
-
-          // // console.log(tag, htmlBlocks[i]);
-
-          // retrieve blocks with images
-          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
-
-          // initialize variables
-          var titleBlock;
-          var buttonBlock;
-          var textBlock;
-
-          // exeucte if image block meets all requirements
-          if (($(imageBlock).next().length > 0 && $(imageBlock).next().next().length > 0 && $(imageBlock).next().next().next().length > 0) && ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
-
-            // retrieve title block if it exists next to image block
-            if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-              titleBlock = $(imageBlock).next()[0];
-            }
-
-            // retrieve button block if it exists next to title block
-            if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-              buttonBlock = $(titleBlock).next()[0];
-            }
-
-            // retrieve text block if it exists next to button block
-            if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-              textBlock = $(buttonBlock).next()[0];
-            }
-
-            // execute if all four blocks exist
-            if (imageBlock && titleBlock && buttonBlock && textBlock) {
-
-              // // console.log(tag, "All four blocks exist.");
-
-              /* NOTE: Ignore ad limit on image+button+text sections
-
-              // insert advertisement after text block
-              $(textBlock).after(adHTML);
-
-              */
-
-              /*
-              // execute if article limit has not been reached
-              if (numAdsInserted < adPerPageLimit) {
-
-                // console.log(tag, "Inserting ad into page.");
-
-                // insert advertisement after text block
-                $(textBlock).after(adHTML);
-
-                numAdsInserted++;
-
-              } // end if statement (insert if ad limit) */
-              // insert placeholder for ads
-              $(textBlock).after("<div class='custom-placeholder'></div>");
-
-            } // end if statement (check all blocks exist)
-
-            // execute if image block meets all requirements for html blocks with image+text+(no image)
-          } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
-
-            // execute if image block is not the first one (will manually add content hints to content section)
-            if (i != 0) {
-
-              // retrieve text block if it exists next to an image
-              if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-                textBlock = $(imageBlock).next()[0];
-              }
-
-              // execute if image and text block exist
-              if (imageBlock && textBlock) {
-
-                // // console.log("Both image and text blocks exist");
-
-                /* NOTE: Ignore ad limit on image+text+(no image) sections */
-
-                // insert advertisement after text block
-                // $(textBlock).after(adHTML);
-
-                /*
-                // execute if article limit has not been reached
-                if (numAdsInserted < adPerPageLimit) {
-
-                  // console.log(tag, "Inserting ad into page.");
-
-                  // insert advertisement after text block
-                  $(textBlock).after(adHTML);
-
-                  numAdsInserted++;
-
-                } // end if statement (insert if ad limit) */
-
-                // insert placeholder for ads
-                $(textBlock).after("<div class='custom-placeholder'></div>");
-
-              }
-
-            }
-
-          }
-
-        } // end if statement (htmlBlock)
-
-      } // end for-loop
-
-      // retrieve number of ad placeholders
-      var adPlaceholders = $("div.custom-placeholder");
-
-      // calculate even spaces for ads
-      var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
-
-      console.log(tag, "Number of placeholders:", adPlaceholders.length);
-
-      // loop through all ad placeholders
-      for (var i = 0; i < adPlaceholders.length; i++) {
-
-        // insert ad if even space if found
-        if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
-          console.log(tag, "Current number:", i);
-          // insert advertisement after text block
-          $(adPlaceholders[i]).after(adHTML);
-          numAdsInserted++;
-        }
-
-      }
-
-      // remove all placeholders
-      $("div.custom-placeholder").remove();
-
-    } // end if statements
-
-    // execute if user is on a desktop device
+    // assign mobile content hints
+    adHTML = "<div class='content_mobile_hint custom-appended'></div>";
   } else {
-
-    // retrieve all html blocks
-    var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
-
-    // // console.log(htmlBlocks);
-
-    // execute if article has more than one html blocks
-    if (htmlBlocks.length > 0) {
-
-      /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
-
-      /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
-
-
-     // execute if html block contains image block or gallery block
-     if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
-
-       // retrieve the paragraphs in the content section after the first image in the article
-       var paragraphs = $(htmlBlocks[0]).next().find("p");
-
-       // // console.log(tag, "Number of paragraphs in content section:", paragraphs.length);
-
-       // execute if there is only one paragraph in the content section of Feel-Good(s) articles
-       if (paragraphs.length < 2) {
-
-         // insert after the first paragraph
-         $(htmlBlocks[0]).next().after(adHTML);
-
-       } else {
-
-         // insert after every two paragraphs
-         $(paragraphs).each(function (i, e) {
-           // execute if paragraph index is even
-           if ((i + 1) % 2 == 0) {
-             // insert advertisement every 2 paragraphs
-             $(e).after(adHTML);
-           }
-
-         });
-
-       }
-
-     } */
-
-      // loop through html blocks
-      for (var i = 0; i < htmlBlocks.length; i++) {
-
-        // execute if html block contains image block or gallery block
-        if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
-
-          // // console.log(tag, "Block (" + i + ") has image block.");
-
-          // // console.log(tag, htmlBlocks[i]);
-
-          // retrieve blocks with images
-          var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
-
-          // initialize variables
-          var titleBlock;
-          var buttonBlock;
-          var textBlock;
-
-          // console.log(tag, "Image Block:", imageBlock);
-          // console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
-          // console.log(tag, "Image Next Next Block:", $(imageBlock).next().next(), "Has Image:", $(imageBlock).next().next().has(".image-block").length);
-
-          // execute if image block meets all requirements
-          if (($(imageBlock).next().length > 0 && $(imageBlock).next().next().length > 0 && $(imageBlock).next().next().next().length > 0) && (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1))) {
-
-            // retrieve title block if it exists next to image block
-            if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-              titleBlock = $(imageBlock).next()[0];
-            }
-
-            // retrieve button block if it exists next to title block
-            if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
-              buttonBlock = $(titleBlock).next()[0];
-            }
-
-            // retrieve text block if it exists next to button block
-            if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-              textBlock = $(buttonBlock).next()[0];
-            }
-
-            // execute if all four blocks exist
-            if (imageBlock && titleBlock && buttonBlock && textBlock) {
-
-              // // console.log(tag, "All four blocks exist.");
-
-              /* NOTE: Ignore ad limit on image+button+text sections */
-
-              // insert advertisement after text block
-              // $(textBlock).after(adHTML);
-
-              /*
-
-              // execute if article limit has not been reached
-              if (numAdsInserted < adPerPageLimit) {
-
-                // console.log(tag, "Inserting ad into page.");
-
-                // insert advertisement after text block
-                $(textBlock).after(adHTML);
-
-                numAdsInserted++;
-
-              } // end if statement (insert if ad limit) */
-
-              // insert placeholder for ads
-              $(textBlock).after("<div class='custom-placeholder'></div>");
-
-            } // end if statement (check all blocks exist)
-
-            // execute if image block meets all requirements for html blocks with image+text+(no image)
-          } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
-
-            // console.log(tag, "The following image block meets the requirements for no image only, I guess:", $(imageBlock));
-
-            // execute if image block is not the first one (will manually add content hints to content section)
-            if (i != 0) {
-
-              // retrieve text block if it exists next to an image
-              if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
-                textBlock = $(imageBlock).next()[0];
-              }
-
-              // execute if image and text block exist
-              if (imageBlock && textBlock) {
-
-                // // console.log("Both image and text blocks exist");
-
-                /* NOTE: Ignore ad limit on image+text+(no image) sections */
-
-                // insert advertisement after text block
-                // $(textBlock).after(adHTML);
-
-                /*
-                // execute if article limit has not been reached
-                if (numAdsInserted < adPerPageLimit) {
-
-                  // console.log(tag, "Inserting ad into page.");
-
-                  // insert advertisement after text block
-                  $(textBlock).after(adHTML);
-
-                  numAdsInserted++;
-
-                } // end if statement (insert if ad limit) */
-
-                // insert placeholder for ads
-                $(textBlock).after("<div class='custom-placeholder'></div>");
-
-              }
-
-            }
-
-          }
-
-        } // end if statement (htmlBlock)
-
-      } // end for-loop
-
-      // retrieve number of ad placeholders
-      var adPlaceholders = $("div.custom-placeholder");
-
-      // calculate even spaces for ads
-      var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
-
-      console.log(tag, "Number of placeholders:", adPlaceholders.length);
-
-      // loop through all ad placeholders
-      for (var i = 0; i < adPlaceholders.length; i++) {
-
-        // insert ad if even space if found (every two)
-        if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
-          console.log(tag, "Current number:", i);
-          // insert advertisement after text block
-          $(adPlaceholders[i]).after(adHTML);
-          numAdsInserted++;
-        }
-
+    // assign desktop content hints
+    adHTML = "<div class='content_desktop_hint custom-appended'></div>";
+  }
+
+  // check if article is inserted so that advertisements are inserted after video
+  var checkIfMediavineVideoExists = setInterval(function () {
+    // check if mediavine video exists in DOM
+    if ($(".mediavine-video__target-div").length > 0) {
+      // stop the loop
+      clearInterval(checkIfMediavineVideoExists);
+      // retrieve all horizontal rule elements (line blocks)
+      var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+      // declare number of line blocks already inserted
+      var numAdsInserted = 0;
+
+      // check if there is a paragraph element after the video
+      if ($(".mediavine-video__target-div").next().next().is("p")) {
+        // insert advertisement after paragraph
+        $(".mediavine-video__target-div").next().next().after(adHTML);
+        // increment value of ads inserted
+        numAdsInserted++;
       }
 
-      // remove all placeholders
-      $("div.custom-placeholder").remove();
+      // loop through array containing line blocks
+      $(lineBlocks).each(function (i, e) {
+        // check if line blocks are not before or after mediavine video
+        if (!$(e).prev().is(".mediavine-video__target-div") && !$(e).next().is(".mediavine-video__target-div")) {
+          // check if ad limit has not been reached
+          if (numAdsInserted < adPerPageLimit) {
+            // insert advertisement to DOM
+            $(e).before(adHTML);
+            // increment value of ads inserted
+            numAdsInserted++;
+          }
+        }
+      });
+    }
+  });
 
-    } // end if statements
+  // loop through all line blocks
 
-  }
+  // // execute if user is on a mobile device
+  // if (isMobile()) {
+
+  //   // change the total ad limit for mobile
+  //   adPerPageLimit = 9;
+
+  //   // retrieve all row blocks that contain images and whose parent class is the .col.sqs-col-12.span-12
+  //   var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .row.sqs-row").filter(function (elem) {
+  //     return $(this).parent().attr('class').indexOf("col sqs-col-12 span-12") != -1;
+  //   });
+
+  //   // // console.log(tag, "Mobile HTML Blocks:", htmlBlocks);
+
+  //   // execute if article has more than one html blocks
+  //   if (htmlBlocks.length > 0) {
+
+  //     /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
+
+  //     /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
+
+  //     // execute if html block contains image block or gallery block
+  //     if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
+
+  //       // retrieve the paragraphs in the content section after the first image in the article
+  //       var paragraphs = $(htmlBlocks[0]).next().find("p");
+
+  //       // console.log(tag, "Mobile number of paragraphs in content section:", paragraphs.length);
+
+  //       // execute if there is only one paragraph in the content section of Feel-Good(s) articles
+  //       if (paragraphs.length < 2) {
+
+  //         // insert after the first paragraph
+  //         $(htmlBlocks[0]).next().after(adHTML);
+
+  //       } else {
+
+  //         // insert after every two paragraphs
+  //         $(paragraphs).each(function (i, e) {
+  //           // execute if paragraph index is even
+  //           if ((i + 1) % 2 == 0) {
+  //             // insert advertisement every 2 paragraphs
+  //             $(e).after(adHTML);
+  //           }
+
+  //         });
+
+  //       }
+
+  //     } */
+
+  //     // loop through html blocks
+  //     for (var i = 0; i < htmlBlocks.length; i++) {
+
+  //       // execute if html block contains image block or gallery block
+  //       if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
+
+  //         // // console.log(tag, "Block (" + i + ") has image block.");
+
+  //         // // console.log(tag, htmlBlocks[i]);
+
+  //         // retrieve blocks with images
+  //         var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
+
+  //         // initialize variables
+  //         var titleBlock;
+  //         var buttonBlock;
+  //         var textBlock;
+
+  //         // exeucte if image block meets all requirements
+  //         if (($(imageBlock).next().length > 0 && $(imageBlock).next().next().length > 0 && $(imageBlock).next().next().next().length > 0) && ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1)) {
+
+  //           // retrieve title block if it exists next to image block
+  //           if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //             titleBlock = $(imageBlock).next()[0];
+  //           }
+
+  //           // retrieve button block if it exists next to title block
+  //           if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+  //             buttonBlock = $(titleBlock).next()[0];
+  //           }
+
+  //           // retrieve text block if it exists next to button block
+  //           if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //             textBlock = $(buttonBlock).next()[0];
+  //           }
+
+  //           // execute if all four blocks exist
+  //           if (imageBlock && titleBlock && buttonBlock && textBlock) {
+
+  //             // // console.log(tag, "All four blocks exist.");
+
+  //             /* NOTE: Ignore ad limit on image+button+text sections
+
+  //             // insert advertisement after text block
+  //             $(textBlock).after(adHTML);
+
+  //             */
+
+  //             /*
+  //             // execute if article limit has not been reached
+  //             if (numAdsInserted < adPerPageLimit) {
+
+  //               // console.log(tag, "Inserting ad into page.");
+
+  //               // insert advertisement after text block
+  //               $(textBlock).after(adHTML);
+
+  //               numAdsInserted++;
+
+  //             } // end if statement (insert if ad limit) */
+  //             // insert placeholder for ads
+  //             $(textBlock).after("<div class='custom-placeholder'></div>");
+
+  //           } // end if statement (check all blocks exist)
+
+  //           // execute if image block meets all requirements for html blocks with image+text+(no image)
+  //         } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
+
+  //           // execute if image block is not the first one (will manually add content hints to content section)
+  //           if (i != 0) {
+
+  //             // retrieve text block if it exists next to an image
+  //             if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //               textBlock = $(imageBlock).next()[0];
+  //             }
+
+  //             // execute if image and text block exist
+  //             if (imageBlock && textBlock) {
+
+  //               // // console.log("Both image and text blocks exist");
+
+  //               /* NOTE: Ignore ad limit on image+text+(no image) sections */
+
+  //               // insert advertisement after text block
+  //               // $(textBlock).after(adHTML);
+
+  //               /*
+  //               // execute if article limit has not been reached
+  //               if (numAdsInserted < adPerPageLimit) {
+
+  //                 // console.log(tag, "Inserting ad into page.");
+
+  //                 // insert advertisement after text block
+  //                 $(textBlock).after(adHTML);
+
+  //                 numAdsInserted++;
+
+  //               } // end if statement (insert if ad limit) */
+
+  //               // insert placeholder for ads
+  //               $(textBlock).after("<div class='custom-placeholder'></div>");
+
+  //             }
+
+  //           }
+
+  //         }
+
+  //       } // end if statement (htmlBlock)
+
+  //     } // end for-loop
+
+  //     // retrieve number of ad placeholders
+  //     var adPlaceholders = $("div.custom-placeholder");
+
+  //     // calculate even spaces for ads
+  //     var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
+
+  //     console.log(tag, "Number of placeholders:", adPlaceholders.length);
+
+  //     // loop through all ad placeholders
+  //     for (var i = 0; i < adPlaceholders.length; i++) {
+
+  //       // insert ad if even space if found
+  //       if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
+  //         console.log(tag, "Current number:", i);
+  //         // insert advertisement after text block
+  //         $(adPlaceholders[i]).after(adHTML);
+  //         numAdsInserted++;
+  //       }
+
+  //     }
+
+  //     // remove all placeholders
+  //     $("div.custom-placeholder").remove();
+
+  //   } // end if statements
+
+  //   // execute if user is on a desktop device
+  // } else {
+
+  //   // retrieve all html blocks
+  //   var htmlBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 .sqs-block.html-block");
+
+  //   // // console.log(htmlBlocks);
+
+  //   // execute if article has more than one html blocks
+  //   if (htmlBlocks.length > 0) {
+
+  //     /* INSERT ADS IN CONTENT SECTION OF FEEL-GOOD(S) ARTICLES */
+
+  //     /* 09/27/2019 : NO ADS IN CONTENT SECTION UNTIL AFTER VIDEO
+
+
+  //    // execute if html block contains image block or gallery block
+  //    if ($(htmlBlocks[0]).has(".image-block")[0] || $(htmlBlocks[0]).has(".gallery-block")[0]) {
+
+  //      // retrieve the paragraphs in the content section after the first image in the article
+  //      var paragraphs = $(htmlBlocks[0]).next().find("p");
+
+  //      // // console.log(tag, "Number of paragraphs in content section:", paragraphs.length);
+
+  //      // execute if there is only one paragraph in the content section of Feel-Good(s) articles
+  //      if (paragraphs.length < 2) {
+
+  //        // insert after the first paragraph
+  //        $(htmlBlocks[0]).next().after(adHTML);
+
+  //      } else {
+
+  //        // insert after every two paragraphs
+  //        $(paragraphs).each(function (i, e) {
+  //          // execute if paragraph index is even
+  //          if ((i + 1) % 2 == 0) {
+  //            // insert advertisement every 2 paragraphs
+  //            $(e).after(adHTML);
+  //          }
+
+  //        });
+
+  //      }
+
+  //    } */
+
+  //     // loop through html blocks
+  //     for (var i = 0; i < htmlBlocks.length; i++) {
+
+  //       // execute if html block contains image block or gallery block
+  //       if ($(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0]) {
+
+  //         // // console.log(tag, "Block (" + i + ") has image block.");
+
+  //         // // console.log(tag, htmlBlocks[i]);
+
+  //         // retrieve blocks with images
+  //         var imageBlock = $(htmlBlocks[i]).has(".image-block")[0] || $(htmlBlocks[i]).has(".gallery-block")[0];
+
+  //         // initialize variables
+  //         var titleBlock;
+  //         var buttonBlock;
+  //         var textBlock;
+
+  //         // console.log(tag, "Image Block:", imageBlock);
+  //         // console.log(tag, "Image Next Block:", $(imageBlock).next(), "Has Image:", $(imageBlock).next().has(".image-block").length);
+  //         // console.log(tag, "Image Next Next Block:", $(imageBlock).next().next(), "Has Image:", $(imageBlock).next().next().has(".image-block").length);
+
+  //         // execute if image block meets all requirements
+  //         if (($(imageBlock).next().length > 0 && $(imageBlock).next().next().length > 0 && $(imageBlock).next().next().next().length > 0) && (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().next().attr("class").indexOf("sqs-block button-block") != -1) && ($(imageBlock).next().next().next().attr("class").indexOf("sqs-block html-block") != -1))) {
+
+  //           // retrieve title block if it exists next to image block
+  //           if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //             titleBlock = $(imageBlock).next()[0];
+  //           }
+
+  //           // retrieve button block if it exists next to title block
+  //           if ($(titleBlock).next().attr("class").indexOf("sqs-block button-block") != -1) {
+  //             buttonBlock = $(titleBlock).next()[0];
+  //           }
+
+  //           // retrieve text block if it exists next to button block
+  //           if ($(buttonBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //             textBlock = $(buttonBlock).next()[0];
+  //           }
+
+  //           // execute if all four blocks exist
+  //           if (imageBlock && titleBlock && buttonBlock && textBlock) {
+
+  //             // // console.log(tag, "All four blocks exist.");
+
+  //             /* NOTE: Ignore ad limit on image+button+text sections */
+
+  //             // insert advertisement after text block
+  //             // $(textBlock).after(adHTML);
+
+  //             /*
+
+  //             // execute if article limit has not been reached
+  //             if (numAdsInserted < adPerPageLimit) {
+
+  //               // console.log(tag, "Inserting ad into page.");
+
+  //               // insert advertisement after text block
+  //               $(textBlock).after(adHTML);
+
+  //               numAdsInserted++;
+
+  //             } // end if statement (insert if ad limit) */
+
+  //             // insert placeholder for ads
+  //             $(textBlock).after("<div class='custom-placeholder'></div>");
+
+  //           } // end if statement (check all blocks exist)
+
+  //           // execute if image block meets all requirements for html blocks with image+text+(no image)
+  //         } else if (($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) && ($(imageBlock).next().has(".image-block").length == 0) && ($(imageBlock).next().has(".gallery-block").length == 0)) {
+
+  //           // console.log(tag, "The following image block meets the requirements for no image only, I guess:", $(imageBlock));
+
+  //           // execute if image block is not the first one (will manually add content hints to content section)
+  //           if (i != 0) {
+
+  //             // retrieve text block if it exists next to an image
+  //             if ($(imageBlock).next().attr("class").indexOf("sqs-block html-block") != -1) {
+  //               textBlock = $(imageBlock).next()[0];
+  //             }
+
+  //             // execute if image and text block exist
+  //             if (imageBlock && textBlock) {
+
+  //               // // console.log("Both image and text blocks exist");
+
+  //               /* NOTE: Ignore ad limit on image+text+(no image) sections */
+
+  //               // insert advertisement after text block
+  //               // $(textBlock).after(adHTML);
+
+  //               /*
+  //               // execute if article limit has not been reached
+  //               if (numAdsInserted < adPerPageLimit) {
+
+  //                 // console.log(tag, "Inserting ad into page.");
+
+  //                 // insert advertisement after text block
+  //                 $(textBlock).after(adHTML);
+
+  //                 numAdsInserted++;
+
+  //               } // end if statement (insert if ad limit) */
+
+  //               // insert placeholder for ads
+  //               $(textBlock).after("<div class='custom-placeholder'></div>");
+
+  //             }
+
+  //           }
+
+  //         }
+
+  //       } // end if statement (htmlBlock)
+
+  //     } // end for-loop
+
+  //     // retrieve number of ad placeholders
+  //     var adPlaceholders = $("div.custom-placeholder");
+
+  //     // calculate even spaces for ads
+  //     var evenSpaces = Math.floor(adPlaceholders.length / adPerPageLimit);
+
+  //     console.log(tag, "Number of placeholders:", adPlaceholders.length);
+
+  //     // loop through all ad placeholders
+  //     for (var i = 0; i < adPlaceholders.length; i++) {
+
+  //       // insert ad if even space if found (every two)
+  //       if (i % 2 == 0 && numAdsInserted < adPerPageLimit) {
+  //         console.log(tag, "Current number:", i);
+  //         // insert advertisement after text block
+  //         $(adPlaceholders[i]).after(adHTML);
+  //         numAdsInserted++;
+  //       }
+
+  //     }
+
+  //     // remove all placeholders
+  //     $("div.custom-placeholder").remove();
+
+  //   } // end if statements
+
+  // }
 
 } // end function
 

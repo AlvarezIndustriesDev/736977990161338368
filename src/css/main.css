@@ -502,8 +502,8 @@ body.image-block-card-dynamic-font-sizing .sqs-block-image .image-block-outer-wr
 
 #customMCEmbed {
     /* padding: 50px; */
-    padding-left: 0px !important;
-    padding-right: 0px !important;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 @media (max-width:768px) {
