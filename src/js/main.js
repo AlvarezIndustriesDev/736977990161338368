@@ -284,7 +284,8 @@ function checkBlog() {
             if ($(".sqs-block.button-block").length > 0) {
               insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
             } else {
-              insertAdvertisements(false);
+              insertNonFeelGoodAds(); // call new method that inserts advertisements for non feel good articles
+              // insertAdvertisements(false);
             }
 
           }
@@ -300,6 +301,10 @@ function checkBlog() {
           var insertNoFollowLinks = categoryArray.some(function (item) {
             return item === "Feel Good(s)";
           }); // filter through category array and return true if "Feel Good(s)" category is returned
+
+          var contestCategoryExists = categoryArray.some(function (item) {
+            return item === "Contests";
+          }); // filter through category array and return true if "Contests" category is returned
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
 
@@ -345,65 +350,68 @@ function checkBlog() {
 
             } // end if statement
 
-            insertFeelGoodAds(); // call new method that inserts advertisement for feel-good(s) articles
+            // execute if contests category exists in article (if it does DO NOT display video or in-content ads)
+            if (!contestCategoryExists) {
+              insertFeelGoodAds(); // call new method that inserts advertisement for feel-good(s) articles
 
-            // loop through scripts and find mediavine video
-            $('script[data-noptimize]').each(function () {
-              var src = this.src; // initialize and retrieve script source link
-              var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+              // loop through scripts and find mediavine video
+              $('script[data-noptimize]').each(function () {
+                var src = this.src; // initialize and retrieve script source link
+                var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-              // // console.log("[VIDEO] SRC: ", src);
-              // execute if search string returns a valid match
-              if (searchString != -1) {
-                var searchText = "/videos/"; // initialize search text variable
-                var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+                // // console.log("[VIDEO] SRC: ", src);
+                // execute if search string returns a valid match
+                if (searchString != -1) {
+                  var searchText = "/videos/"; // initialize search text variable
+                  var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
 
-                console.log("[VIDEO] Mediavine video script found.");
+                  console.log("[VIDEO] Mediavine video script found.");
 
-                blogHasVideo = true;
-
-                // call method that loads mediavine's videos
-                loadMediavineVideo(src, videoID, false);
-
-                return false;
-
-              }
-            });
-
-            console.log("[VIDEO] Blog has video or not:", blogHasVideo);
-
-            // execute if blog does not have video
-            if (!blogHasVideo) {
-
-              console.log("[VIDEO] Blog does not have a video.");
-
-              // retrieve video information from database
-              $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
-                console.log(response);
-                if (response['status'] == "success") {
-
-                  // initialize variables
-                  var videoID = response['data'][0]['video_id'];
-                  var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                  var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-
-                  // check if article has horizontal line after second paragraph indicating that it has a list?
-                  if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
-                    // remove horizontal rule
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
-                    // insert video element after second paragraph
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
-                  } else {
-                    // insert video element after third paragraph
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
-                  }
+                  blogHasVideo = true;
 
                   // call method that loads mediavine's videos
-                  loadMediavineVideo(scriptURL, videoID, true, response);
+                  loadMediavineVideo(src, videoID, false);
+
+                  return false;
 
                 }
               });
 
+              console.log("[VIDEO] Blog has video or not:", blogHasVideo);
+
+              // execute if blog does not have video
+              if (!blogHasVideo) {
+
+                console.log("[VIDEO] Blog does not have a video.");
+
+                // retrieve video information from database
+                $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                  console.log(response);
+                  if (response['status'] == "success") {
+
+                    // initialize variables
+                    var videoID = response['data'][0]['video_id'];
+                    var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                    var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                    // check if article has horizontal line after second paragraph indicating that it has a list?
+                    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                      // remove horizontal rule
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                      // insert video element after second paragraph
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                    } else {
+                      // insert video element after third paragraph
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                    }
+
+                    // call method that loads mediavine's videos
+                    loadMediavineVideo(scriptURL, videoID, true, response);
+
+                  }
+                });
+
+              }
             }
 
             // execute if insertNoFollowLinks returns false
@@ -415,71 +423,74 @@ function checkBlog() {
                   insertAdvertisements(false);
             } */
 
-            // loop through scripts and find mediavine video
-            $('script[data-noptimize]').each(function () {
-              var src = this.src; // initialize and retrieve script source link
-              var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+            // execute if contests category exists in article (if it does, DO NOT display video or in-content ads)
+            if (!contestCategoryExists) {
+              // loop through scripts and find mediavine video
+              $('script[data-noptimize]').each(function () {
+                var src = this.src; // initialize and retrieve script source link
+                var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-              console.log("[VIDEO] SRC: ", src, searchString);
-              // execute if search string returns a valid match
-              if (searchString != -1) {
-                var searchText = "/videos/"; // initialize search text variable
-                var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+                console.log("[VIDEO] SRC: ", src, searchString);
+                // execute if search string returns a valid match
+                if (searchString != -1) {
+                  var searchText = "/videos/"; // initialize search text variable
+                  var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
 
-                console.log("[VIDEO] Mediavine video script found.");
+                  console.log("[VIDEO] Mediavine video script found.");
 
-                blogHasVideo = true;
-
-                // call method that loads mediavine's videos
-                loadMediavineVideo(src, videoID, false);
-
-                return false;
-
-              }
-            });
-
-            console.log("[VIDEO] Blog has video or not:", blogHasVideo);
-
-            // execute if blog does not have video
-            if (!blogHasVideo) {
-
-              console.log("[VIDEO] Blog does not have a video.");
-
-              // retrieve video information from database
-              $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
-                console.log(response);
-                if (response['status'] == "success") {
-
-                  // initialize variables
-                  var videoID = response['data'][0]['video_id'];
-                  var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                  var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-
-                  // check if article has horizontal line after second paragraph indicating that it has a list?
-                  if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
-                    // remove horizontal rule
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
-                    // insert video element after second paragraph
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
-                  } else {
-                    // insert video element after third paragraph
-                    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
-                  }
+                  blogHasVideo = true;
 
                   // call method that loads mediavine's videos
-                  loadMediavineVideo(scriptURL, videoID, true, response);
+                  loadMediavineVideo(src, videoID, false);
+
+                  return false;
 
                 }
               });
 
-            }
+              console.log("[VIDEO] Blog has video or not:", blogHasVideo);
 
-            // execute if button blocks exist within article (similar to feel-good(s) buttons)
-            if ($(".sqs-block.button-block").length > 0 || $("div.sqs-block.horizontalrule-block.sqs-block-horizontalrule").length > 2) {
-              insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
-            } else {
-              // insertAdvertisements(false);
-              insertNonFeelGoodAds(); // call new method that inserts advertisements for non feel good articles
+              // execute if blog does not have video
+              if (!blogHasVideo) {
+
+                console.log("[VIDEO] Blog does not have a video.");
+
+                // retrieve video information from database
+                $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                  console.log(response);
+                  if (response['status'] == "success") {
+
+                    // initialize variables
+                    var videoID = response['data'][0]['video_id'];
+                    var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                    var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                    // check if article has horizontal line after second paragraph indicating that it has a list?
+                    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                      // remove horizontal rule
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                      // insert video element after second paragraph
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                    } else {
+                      // insert video element after third paragraph
+                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                    }
+
+                    // call method that loads mediavine's videos
+                    loadMediavineVideo(scriptURL, videoID, true, response);
+
+                  }
+                });
+
+              }
+
+              // execute if button blocks exist within article (similar to feel-good(s) buttons)
+              if ($(".sqs-block.button-block").length > 0 || $("div.sqs-block.horizontalrule-block.sqs-block-horizontalrule").length > 2) {
+                insertFeelGoodAds(); // call new method that inserts advertisement for feel good articles
+              } else {
+                // insertAdvertisements(false);
+                insertNonFeelGoodAds(); // call new method that inserts advertisements for non feel good articles
+              }
             }
 
           }
@@ -3350,6 +3361,8 @@ function insertCustomHTML(articleCategory) {
 
         // retrieve mailchimp header
         var headerText = response['data'][0]['header_text'];
+
+        /* FIX HORIZONTAL RULE. CURRENT VERSIONv1.1.63, by making embed in html-block */
 
         mailChimpHTML = "<div class='sqs-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block custom-hr-element'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + headerText + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></div><div class='sqs-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block custom-hr-element'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
       } else {
