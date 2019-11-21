@@ -302,8 +302,8 @@ function checkBlog() {
             return item === "Feel Good(s)";
           }); // filter through category array and return true if "Feel Good(s)" category is returned
 
-          var contestCategoryExists = categoryArray.some(function (item) {
-            return item === "Contests";
+          var inDoNotShowList = categoryArray.some(function (item) {
+            return item === "Contests" || "Dedicated Feature";
           }); // filter through category array and return true if "Contests" category is returned
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
@@ -351,66 +351,74 @@ function checkBlog() {
             } // end if statement
 
             // execute if contests category exists in article (if it does DO NOT display video or in-content ads)
-            if (!contestCategoryExists) {
+            if (!inDoNotShowList) {
               insertFeelGoodAds(); // call new method that inserts advertisement for feel-good(s) articles
 
-              // loop through scripts and find mediavine video
-              $('script[data-noptimize]').each(function () {
-                var src = this.src; // initialize and retrieve script source link
-                var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+              // check if user is on mobile (if they are, do not show the video at all)
+              if (!isMobile()) {
+                // loop through scripts and find mediavine video
+                $('script[data-noptimize]').each(function () {
+                  var src = this.src; // initialize and retrieve script source link
+                  var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-                // // console.log("[VIDEO] SRC: ", src);
-                // execute if search string returns a valid match
-                if (searchString != -1) {
-                  var searchText = "/videos/"; // initialize search text variable
-                  var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+                  // // console.log("[VIDEO] SRC: ", src);
+                  // execute if search string returns a valid match
+                  if (searchString != -1) {
+                    var searchText = "/videos/"; // initialize search text variable
+                    var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
 
-                  console.log("[VIDEO] Mediavine video script found.");
+                    console.log("[VIDEO] Mediavine video script found.");
 
-                  blogHasVideo = true;
-
-                  // call method that loads mediavine's videos
-                  loadMediavineVideo(src, videoID, false);
-
-                  return false;
-
-                }
-              });
-
-              console.log("[VIDEO] Blog has video or not:", blogHasVideo);
-
-              // execute if blog does not have video
-              if (!blogHasVideo) {
-
-                console.log("[VIDEO] Blog does not have a video.");
-
-                // retrieve video information from database
-                $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
-                  console.log(response);
-                  if (response['status'] == "success") {
-
-                    // initialize variables
-                    var videoID = response['data'][0]['video_id'];
-                    var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                    var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-
-                    // check if article has horizontal line after second paragraph indicating that it has a list?
-                    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
-                      // remove horizontal rule
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
-                      // insert video element after second paragraph
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
-                    } else {
-                      // insert video element after third paragraph
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
-                    }
+                    blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo(scriptURL, videoID, true, response);
+                    loadMediavineVideo(src, videoID, false);
+
+                    return false;
 
                   }
                 });
 
+                console.log("[VIDEO] Blog has video or not:", blogHasVideo);
+
+                // execute if blog does not have video
+                if (!blogHasVideo) {
+
+                  console.log("[VIDEO] Blog does not have a video.");
+
+                  // retrieve video information from database
+                  $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                    console.log(response);
+                    if (response['status'] == "success") {
+
+                      // initialize variables
+                      var videoID = response['data'][0]['video_id'];
+                      var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                      // check if article has horizontal line after second paragraph indicating that it has a list?
+                      if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                        // remove horizontal rule
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                        // insert video element after second paragraph
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                      } else {
+                        // insert video element after third paragraph
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                      }
+
+                      // call method that loads mediavine's videos
+                      loadMediavineVideo(scriptURL, videoID, true, response);
+
+                    }
+                  });
+
+                }
+              } else {
+                // remove video from DOM if it exists
+                if ($(".mediavine-video__target-div").length > 0) {
+                  $(".mediavine-video__target-div").remove();
+                }
               }
             }
 
@@ -424,65 +432,75 @@ function checkBlog() {
             } */
 
             // execute if contests category exists in article (if it does, DO NOT display video or in-content ads)
-            if (!contestCategoryExists) {
-              // loop through scripts and find mediavine video
-              $('script[data-noptimize]').each(function () {
-                var src = this.src; // initialize and retrieve script source link
-                var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
+            if (!inDoNotShowList) {
 
-                console.log("[VIDEO] SRC: ", src, searchString);
-                // execute if search string returns a valid match
-                if (searchString != -1) {
-                  var searchText = "/videos/"; // initialize search text variable
-                  var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
+              // check if user is on mobile (if they are, do not show the video at all)
+              if (isMobile()) {
+                // loop through scripts and find mediavine video
+                $('script[data-noptimize]').each(function () {
+                  var src = this.src; // initialize and retrieve script source link
+                  var searchString = src.search("video.mediavine.com"); // declare variable REGEX search result for subdomain
 
-                  console.log("[VIDEO] Mediavine video script found.");
+                  console.log("[VIDEO] SRC: ", src, searchString);
+                  // execute if search string returns a valid match
+                  if (searchString != -1) {
+                    var searchText = "/videos/"; // initialize search text variable
+                    var videoID = src.substr(src.indexOf(searchText) + searchText.length).slice(0, -3); // retrieve video ID from script source link
 
-                  blogHasVideo = true;
+                    console.log("[VIDEO] Mediavine video script found.");
 
-                  // call method that loads mediavine's videos
-                  loadMediavineVideo(src, videoID, false);
-
-                  return false;
-
-                }
-              });
-
-              console.log("[VIDEO] Blog has video or not:", blogHasVideo);
-
-              // execute if blog does not have video
-              if (!blogHasVideo) {
-
-                console.log("[VIDEO] Blog does not have a video.");
-
-                // retrieve video information from database
-                $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
-                  console.log(response);
-                  if (response['status'] == "success") {
-
-                    // initialize variables
-                    var videoID = response['data'][0]['video_id'];
-                    var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                    var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-
-                    // check if article has horizontal line after second paragraph indicating that it has a list?
-                    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
-                      // remove horizontal rule
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
-                      // insert video element after second paragraph
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
-                    } else {
-                      // insert video element after third paragraph
-                      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
-                    }
+                    blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo(scriptURL, videoID, true, response);
+                    loadMediavineVideo(src, videoID, false);
+
+                    return false;
 
                   }
                 });
 
+                console.log("[VIDEO] Blog has video or not:", blogHasVideo);
+
+                // execute if blog does not have video
+                if (!blogHasVideo) {
+
+                  console.log("[VIDEO] Blog does not have a video.");
+
+                  // retrieve video information from database
+                  $.get("https://www.naxelo.com/iamandco/api/video/read.php", { type: "all-video-information" }).done(function (response) {
+                    console.log(response);
+                    if (response['status'] == "success") {
+
+                      // initialize variables
+                      var videoID = response['data'][0]['video_id'];
+                      var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+
+                      // check if article has horizontal line after second paragraph indicating that it has a list?
+                      if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
+                        // remove horizontal rule
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
+                        // insert video element after second paragraph
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
+                      } else {
+                        // insert video element after third paragraph
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                      }
+
+                      // call method that loads mediavine's videos
+                      loadMediavineVideo(scriptURL, videoID, true, response);
+
+                    }
+                  });
+
+                }
+              } else {
+                // remove video from DOM if it exists
+                if ($(".mediavine-video__target-div").length > 0) {
+                  $(".mediavine-video__target-div").remove();
+                }
               }
+
 
               // execute if button blocks exist within article (similar to feel-good(s) buttons)
               if ($(".sqs-block.button-block").length > 0 || $("div.sqs-block.horizontalrule-block.sqs-block-horizontalrule").length > 2) {
@@ -1264,32 +1282,32 @@ function loadScript(scriptURL, callback) {
 }
 
 // method that executes javascript for OneSignal
-function displayOneSignal() {
-  var numSecondsDelay = 15; // number of seconds delay
-  var OneSignal = window.OneSignal || [];
-  /* Why use .push? See: http://stackoverflow.com/a/38466780/555547 */
-  OneSignal.push(function () {
-    OneSignal.init({
-      appId: "cfad4a73-3fa8-4622-80d8-43d0e0ddaf6e",
-    });
-    /* In milliseconds, time to wait before prompting user. This time is relative to right after the user presses <ENTER> on the address bar and navigates to your page */
-    var notificationPromptDelay = numSecondsDelay * 1000;
-    /* Use navigation timing to find out when the page actually loaded instead of using setTimeout() only which can be delayed by script execution */
-    var navigationStart = window.performance.timing.navigationStart;
-    /* Get current time */
-    var timeNow = Date.now();
-    /* Prompt the user if enough time has elapsed */
-    setTimeout(promptAndSubscribeUser, Math.max(notificationPromptDelay - (timeNow - navigationStart), 0));
-  });
-  var promptAndSubscribeUser = function () {
-    console.log("15 seconds have passed...");
-    window.OneSignal.isPushNotificationsEnabled(function (isEnabled) {
-      if (!isEnabled) {
-        window.OneSignal.showSlidedownPrompt();
-      }
-    });
-  }
-}
+// function displayOneSignal() {
+//   var numSecondsDelay = 15; // number of seconds delay
+//   var OneSignal = window.OneSignal || [];
+//   /* Why use .push? See: http://stackoverflow.com/a/38466780/555547 */
+//   OneSignal.push(function () {
+//     OneSignal.init({
+//       appId: "cfad4a73-3fa8-4622-80d8-43d0e0ddaf6e",
+//     });
+//     /* In milliseconds, time to wait before prompting user. This time is relative to right after the user presses <ENTER> on the address bar and navigates to your page */
+//     var notificationPromptDelay = numSecondsDelay * 1000;
+//     /* Use navigation timing to find out when the page actually loaded instead of using setTimeout() only which can be delayed by script execution */
+//     var navigationStart = window.performance.timing.navigationStart;
+//     /* Get current time */
+//     var timeNow = Date.now();
+//     /* Prompt the user if enough time has elapsed */
+//     setTimeout(promptAndSubscribeUser, Math.max(notificationPromptDelay - (timeNow - navigationStart), 0));
+//   });
+//   var promptAndSubscribeUser = function () {
+//     console.log("15 seconds have passed...");
+//     window.OneSignal.isPushNotificationsEnabled(function (isEnabled) {
+//       if (!isEnabled) {
+//         window.OneSignal.showSlidedownPrompt();
+//       }
+//     });
+//   }
+// }
 
 // method that loads reddit scripts
 function loadRedditScripts() {
@@ -3788,6 +3806,6 @@ function watch() {
   });
 
   // call method that loads OneSignal script
-  loadScript("https://cdn.onesignal.com/sdks/OneSignalSDK.js", displayOneSignal);
+  // loadScript("https://cdn.onesignal.com/sdks/OneSignalSDK.js", displayOneSignal);
 
 }
