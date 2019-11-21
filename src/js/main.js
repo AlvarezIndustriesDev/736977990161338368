@@ -441,7 +441,7 @@ function checkBlog() {
             if (!inDoNotShowList) {
 
               // check if user is on mobile (if they are, do not show the video at all)
-              if (isMobile()) {
+              if (!isMobile()) {
                 // loop through scripts and find mediavine video
                 $('script[data-noptimize]').each(function () {
                   var src = this.src; // initialize and retrieve script source link
@@ -3917,6 +3917,7 @@ function watch() {
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
     searchPageIndex = 0; // initialize value that indicates the index of the search page index
     articleIsFeelGoods = false;
+    articleHasRemovedVideo = false;
     checkBlog();
     // console.log("Will be calling function to load custom video javascript...");
     // try {
