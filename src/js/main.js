@@ -110,6 +110,7 @@ var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
 var searchPageIndex = 0;
+var articleHasRemovedVideo = false;
 
 // custom code begins here -----------------------------------------------------------------------------------
 //init(); //Start the code when the page loads
@@ -307,6 +308,11 @@ function checkBlog() {
           }); // filter through category array and return true if "Contests" category is returned
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
+
+          // check if article is in "do not display in-content ads or video" list
+          if (inDoNotShowList) {
+            articleHasRemovedVideo = true;
+          }
 
           // execute if insertNoFollowLinks returns true
           if (insertNoFollowLinks) {
@@ -1704,59 +1710,94 @@ function insertFeelGoodAds() {
     adPerPageLimit = 9;
     // assign mobile content hints
     adHTML = "<div class='content_mobile_hint custom-appended'></div>";
+
+    // retrieve all horizontal rule elements (line blocks)
+    var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+    // declare number of line blocks already inserted
+    var numAdsInserted = 0;
+
+    // loop through array containing line blocks
+    $(lineBlocks).each(function (i, e) {
+      // check if line blocks are not before or after mediavine video
+      if (!$(e).prev().is(".mediavine-video__target-div") && !$(e).next().is(".mediavine-video__target-div")) {
+        // check if ad limit has not been reached
+        if (numAdsInserted < adPerPageLimit) {
+          // insert advertisement to DOM
+          $(e).before(adHTML);
+          // increment value of ads inserted
+          numAdsInserted++;
+        }
+      }
+    });
+    // check if pageLoaded variable has been initialized
+    if (pageLoaded == true) {
+      // call function that fills in content hints
+      $mediavine.web.fillContentHints();
+    } else {
+      // wait until page is loaded
+      var checkPageLoaded = setInterval(function () {
+        // execute if pageLoaded variable is true
+        if (pageLoaded == true) {
+          clearInterval(checkPageLoaded); // stop the loop
+          loadMediavineScripts();
+        }
+      }, 100);
+    }
+
   } else {
     // assign desktop content hints
     adHTML = "<div class='content_desktop_hint custom-appended'></div>";
+
+    // check if article is inserted so that advertisements are inserted after video
+    var checkIfMediavineVideoExists = setInterval(function () {
+      // check if mediavine video exists in DOM
+      if ($(".mediavine-video__target-div").length > 0) {
+        // stop the loop
+        clearInterval(checkIfMediavineVideoExists);
+        // retrieve all horizontal rule elements (line blocks)
+        var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
+        // declare number of line blocks already inserted
+        var numAdsInserted = 0;
+
+        // check if there is a paragraph element after the video
+        if ($(".mediavine-video__target-div").next().next().is("p")) {
+          // insert advertisement after paragraph
+          $(".mediavine-video__target-div").next().next().after(adHTML);
+          // increment value of ads inserted
+          numAdsInserted++;
+        }
+
+        // loop through array containing line blocks
+        $(lineBlocks).each(function (i, e) {
+          // check if line blocks are not before or after mediavine video
+          if (!$(e).prev().is(".mediavine-video__target-div") && !$(e).next().is(".mediavine-video__target-div")) {
+            // check if ad limit has not been reached
+            if (numAdsInserted < adPerPageLimit) {
+              // insert advertisement to DOM
+              $(e).before(adHTML);
+              // increment value of ads inserted
+              numAdsInserted++;
+            }
+          }
+        });
+        // check if pageLoaded variable has been initialized
+        if (pageLoaded == true) {
+          // call function that fills in content hints
+          $mediavine.web.fillContentHints();
+        } else {
+          // wait until page is loaded
+          var checkPageLoaded = setInterval(function () {
+            // execute if pageLoaded variable is true
+            if (pageLoaded == true) {
+              clearInterval(checkPageLoaded); // stop the loop
+              loadMediavineScripts();
+            }
+          }, 100);
+        }
+      }
+    }, 100);
   }
 
-  // check if article is inserted so that advertisements are inserted after video
-  var checkIfMediavineVideoExists = setInterval(function () {
-    // check if mediavine video exists in DOM
-    if ($(".mediavine-video__target-div").length > 0) {
-      // stop the loop
-      clearInterval(checkIfMediavineVideoExists);
-      // retrieve all horizontal rule elements (line blocks)
-      var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
-      // declare number of line blocks already inserted
-      var numAdsInserted = 0;
-
-      // check if there is a paragraph element after the video
-      if ($(".mediavine-video__target-div").next().next().is("p")) {
-        // insert advertisement after paragraph
-        $(".mediavine-video__target-div").next().next().after(adHTML);
-        // increment value of ads inserted
-        numAdsInserted++;
-      }
-
-      // loop through array containing line blocks
-      $(lineBlocks).each(function (i, e) {
-        // check if line blocks are not before or after mediavine video
-        if (!$(e).prev().is(".mediavine-video__target-div") && !$(e).next().is(".mediavine-video__target-div")) {
-          // check if ad limit has not been reached
-          if (numAdsInserted < adPerPageLimit) {
-            // insert advertisement to DOM
-            $(e).before(adHTML);
-            // increment value of ads inserted
-            numAdsInserted++;
-          }
-        }
-      });
-      // check if pageLoaded variable has been initialized
-      if (pageLoaded == true) {
-        // call function that fills in content hints
-        $mediavine.web.fillContentHints();
-      } else {
-        // wait until page is loaded
-        var checkPageLoaded = setInterval(function () {
-          // execute if pageLoaded variable is true
-          if (pageLoaded == true) {
-            clearInterval(checkPageLoaded); // stop the loop
-            loadMediavineScripts();
-          }
-        }, 100);
-      }
-    }
-  });
 
   // loop through all line blocks
 
@@ -2157,17 +2198,6 @@ function insertNonFeelGoodAds() {
   // declare and initialize number of ads to insert
   var limit = 5;
 
-  // check if user is on mobile or desktop
-  if (isMobile()) {
-    // assign mobile content hints
-    adHTML = "<div class='content_mobile_hint custom-appended'></div>";
-    // change the ad limit for mobile
-    limit = 9;
-  } else {
-    // assign desktop content hints
-    adHTML = "<div class='content_desktop_hint custom-appended'></div>";
-  }
-
   // check if there are instagram embeds in the article
   if ($(".instagram-media").length > 0) {
     // remove all paragraphs inside embeds
@@ -2176,99 +2206,201 @@ function insertNonFeelGoodAds() {
     pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
   }
 
-  // check if article is inserted so that advertisements are inserted after video
-  var checkIfMediavineVideoExists = setInterval(function () {
-    // check if mediavine video exists in DOM
-    if ($(".mediavine-video__target-div").length > 0) {
-      // stop the loop
-      clearInterval(checkIfMediavineVideoExists);
-      // console.log(tag, "Video exists, executing code now.");
-      // retrieve all paragraph elements
-      var paragraphElements = pElements;
-      // declare number of paragraph elements already inserted
-      var numAdsInserted = 0;
-      // retrieve number of paragraphs before video element
-      var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
-      // remove paragraphs from array before video element
-      paragraphElements.splice(0, numPrevParagraphs + 1);
-      // loop through array containing paragraphs
-      $(paragraphElements).each(function (i, e) {
-        // execute if paragraph index matches every three
-        if (i % 2 == 0) {
-          // retrieve paragraph sqs-block parent
-          var paragraphParent = $(e).parents(".sqs-block.html-block");
+  // check if user is on mobile or desktop
+  if (isMobile()) {
+    // assign mobile content hints
+    adHTML = "<div class='content_mobile_hint custom-appended'></div>";
+    // change the ad limit for mobile
+    limit = 9;
 
-          // declare variable that determines if paragraph parent element is near horizontal rule element
-          var isNearHorizontalRule = false;
+    // retrieve all paragraph elements
+    var paragraphElements = pElements;
+    // declare number of paragraph elements already inserted
+    var numAdsInserted = 0;
+    // retrieve number of paragraphs before video element
+    // var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
+    // // remove paragraphs from array before video element
+    // paragraphElements.splice(0, numPrevParagraphs + 1);
+    // loop through array containing paragraphs
+    $(paragraphElements).each(function (i, e) {
+      // execute if paragraph index matches every three
+      if (i % 2 == 0) {
+        // retrieve paragraph sqs-block parent
+        var paragraphParent = $(e).parents(".sqs-block.html-block");
 
-          // declare variable that determines if paragraph parent element is neighbors with a content hint
-          var isNearContentHint = false;
+        // declare variable that determines if paragraph parent element is near horizontal rule element
+        var isNearHorizontalRule = false;
 
-          // declare variable that determines if paragraph parent element is part of image section
-          var isNearImageSection = false;
+        // declare variable that determines if paragraph parent element is neighbors with a content hint
+        var isNearContentHint = false;
 
-          // check if the next sibling is a horizontal rule
-          if ($(paragraphParent).next().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
-            isNearHorizontalRule = true;
-          }
+        // declare variable that determines if paragraph parent element is part of image section
+        var isNearImageSection = false;
 
-          // check if the next sibling is a content hint
-          if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
-            isNearContentHint = true;
-          }
-
-          // check if the paragraph element is part of image section
-          if ($(e).parent().hasClass("image-caption")) {
-            isNearImageSection = true;
-          }
-
-          // check if ad limit has not been reached
-          if (numAdsInserted < limit) {
-            // console.log(tag, "Inserting after:", i, $(e));
-            if (e.innerText.indexOf("A post") != -1) {
-              // console.log(tag, "This is one of those fake.");
-              // skip to the next iteration
-              return;
-            }
-
-            console.log(tag, "Inserting ad for:", e);
-
-            // check if paragraph element is near another content hint
-            if (isNearContentHint || isNearImageSection) {
-              // skip to next iteration
-              return;
-            } else {
-              // insert before horizontal rule if paragraph element is near horizontal rule element
-              if (isNearHorizontalRule) {
-                // insert advertisement to DOM
-                $(paragraphParent).after(adHTML);
-              } else {
-                // insert advertisement to DOM
-                $(e).after(adHTML);
-              }
-            }
-
-            // increment value of ads inserted
-            numAdsInserted++;
-          }
+        // check if the next sibling is a horizontal rule
+        if ($(paragraphParent).next().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
+          isNearHorizontalRule = true;
         }
-      });
-      // check if pageLoaded variable has been initialized
-      if (pageLoaded == true) {
-        // call function that fills in content hints
-        $mediavine.web.fillContentHints();
-      } else {
-        // wait until page is loaded
-        var checkPageLoaded = setInterval(function () {
-          // execute if pageLoaded variable is true
-          if (pageLoaded == true) {
-            clearInterval(checkPageLoaded); // stop the loop
-            loadMediavineScripts();
+
+        // check if the next sibling is a content hint
+        if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
+          isNearContentHint = true;
+        }
+
+        // check if the paragraph element is part of image section
+        if ($(e).parent().hasClass("image-caption")) {
+          isNearImageSection = true;
+        }
+
+        // check if ad limit has not been reached
+        if (numAdsInserted < limit) {
+          // console.log(tag, "Inserting after:", i, $(e));
+          if (e.innerText.indexOf("A post") != -1) {
+            // console.log(tag, "This is one of those fake.");
+            // skip to the next iteration
+            return;
           }
-        }, 100);
+
+          console.log(tag, "Inserting ad for:", e);
+
+          // check if paragraph element is near another content hint
+          if (isNearContentHint || isNearImageSection) {
+            // skip to next iteration
+            return;
+          } else {
+            // insert before horizontal rule if paragraph element is near horizontal rule element
+            if (isNearHorizontalRule) {
+              // insert advertisement to DOM
+              $(paragraphParent).after(adHTML);
+            } else {
+              // insert advertisement to DOM
+              $(e).after(adHTML);
+            }
+          }
+
+          // increment value of ads inserted
+          numAdsInserted++;
+        }
       }
+    });
+    // check if pageLoaded variable has been initialized
+    if (pageLoaded == true) {
+      // call function that fills in content hints
+      $mediavine.web.fillContentHints();
+    } else {
+      // wait until page is loaded
+      var checkPageLoaded = setInterval(function () {
+        // execute if pageLoaded variable is true
+        if (pageLoaded == true) {
+          clearInterval(checkPageLoaded); // stop the loop
+          loadMediavineScripts();
+        }
+      }, 100);
     }
-  }, 100);
+
+  } else {
+    // assign desktop content hints
+    adHTML = "<div class='content_desktop_hint custom-appended'></div>";
+
+    // check if article is inserted so that advertisements are inserted after video
+    var checkIfMediavineVideoExists = setInterval(function () {
+      // check if mediavine video exists in DOM
+      if ($(".mediavine-video__target-div").length > 0) {
+        // stop the loop
+        clearInterval(checkIfMediavineVideoExists);
+        // console.log(tag, "Video exists, executing code now.");
+        // retrieve all paragraph elements
+        var paragraphElements = pElements;
+        // declare number of paragraph elements already inserted
+        var numAdsInserted = 0;
+        // retrieve number of paragraphs before video element
+        var numPrevParagraphs = $(".mediavine-video__target-div").prevAll("p").length;
+        // remove paragraphs from array before video element
+        paragraphElements.splice(0, numPrevParagraphs + 1);
+        // loop through array containing paragraphs
+        $(paragraphElements).each(function (i, e) {
+          // execute if paragraph index matches every three
+          if (i % 2 == 0) {
+            // retrieve paragraph sqs-block parent
+            var paragraphParent = $(e).parents(".sqs-block.html-block");
+
+            // declare variable that determines if paragraph parent element is near horizontal rule element
+            var isNearHorizontalRule = false;
+
+            // declare variable that determines if paragraph parent element is neighbors with a content hint
+            var isNearContentHint = false;
+
+            // declare variable that determines if paragraph parent element is part of image section
+            var isNearImageSection = false;
+
+            // check if the next sibling is a horizontal rule
+            if ($(paragraphParent).next().is(".sqs-block.horizontalrule-block.sqs-block-horizontalrule")) {
+              isNearHorizontalRule = true;
+            }
+
+            // check if the next sibling is a content hint
+            if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
+              isNearContentHint = true;
+            }
+
+            // check if the paragraph element is part of image section
+            if ($(e).parent().hasClass("image-caption")) {
+              isNearImageSection = true;
+            }
+
+            // check if ad limit has not been reached
+            if (numAdsInserted < limit) {
+              // console.log(tag, "Inserting after:", i, $(e));
+              if (e.innerText.indexOf("A post") != -1) {
+                // console.log(tag, "This is one of those fake.");
+                // skip to the next iteration
+                return;
+              }
+
+              console.log(tag, "Inserting ad for:", e);
+
+              // check if paragraph element is near another content hint
+              if (isNearContentHint || isNearImageSection) {
+                // skip to next iteration
+                return;
+              } else {
+                // insert before horizontal rule if paragraph element is near horizontal rule element
+                if (isNearHorizontalRule) {
+                  // insert advertisement to DOM
+                  $(paragraphParent).after(adHTML);
+                } else {
+                  // insert advertisement to DOM
+                  $(e).after(adHTML);
+                }
+              }
+
+              // increment value of ads inserted
+              numAdsInserted++;
+            }
+          }
+        });
+        // check if pageLoaded variable has been initialized
+        if (pageLoaded == true) {
+          // call function that fills in content hints
+          $mediavine.web.fillContentHints();
+        } else {
+          // wait until page is loaded
+          var checkPageLoaded = setInterval(function () {
+            // execute if pageLoaded variable is true
+            if (pageLoaded == true) {
+              clearInterval(checkPageLoaded); // stop the loop
+              loadMediavineScripts();
+            }
+          }, 100);
+        }
+      }
+    }, 100);
+
+  }
+
+
+
+
 
 }
 
