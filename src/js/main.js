@@ -110,7 +110,6 @@ var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
 var searchPageIndex = 0;
-var articleHasRemovedVideo = false;
 
 // custom code begins here -----------------------------------------------------------------------------------
 //init(); //Start the code when the page loads
@@ -304,15 +303,10 @@ function checkBlog() {
           }); // filter through category array and return true if "Feel Good(s)" category is returned
 
           var inDoNotShowList = categoryArray.some(function (item) {
-            return item === "Contests" || "Dedicated Feature";
+            return item === "Contests" || item === "Dedicated Feature";
           }); // filter through category array and return true if "Contests" category is returned
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
-
-          // check if article is in "do not display in-content ads or video" list
-          if (inDoNotShowList) {
-            articleHasRemovedVideo = true;
-          }
 
           // execute if insertNoFollowLinks returns true
           if (insertNoFollowLinks) {
@@ -3917,7 +3911,6 @@ function watch() {
     sidebarArticleLimit = 5; // initialize value that indicates the number of sidebar articles to retrieve from RSS feed for sidebar articles
     searchPageIndex = 0; // initialize value that indicates the index of the search page index
     articleIsFeelGoods = false;
-    articleHasRemovedVideo = false;
     checkBlog();
     // console.log("Will be calling function to load custom video javascript...");
     // try {
