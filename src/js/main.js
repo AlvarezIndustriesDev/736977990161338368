@@ -1,6 +1,6 @@
 /* NOTE: The following are customaizable variables that enhance features in article pages */
 var insertPubExchangeHTML = true; // setting this variable to true will insert the pubExchange HTML into the footer of article
-var insertMailChimpHTML = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
+// var insertMailChimpHTML = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
 var insertSummaryBlockHTML = true; // setting this variable to true will insert the custom summary block HTML into the bottom of article pages
 var insertCategoryBlockHTML = true; // setting this variable to true will insert the custom category link block HTML into the bottom of article pages
 var insertAuthorBlockHTML = true; // setting this variable to true will insert the custom author block HTML into the bottom of article pages
@@ -3471,51 +3471,51 @@ function insertCustomHTML(articleCategory) {
   // // // console.log("Approximate position index of middle of page:", positionIndex);
 
   // execute if insertMailChimpHTML variable is true
-  if (insertMailChimpHTML == true) {
+  // if (insertMailChimpHTML == true) {
 
-    var isAcceptable = articlesForEmbed.some(function (item) {
-      return item === articleCategory;
-    }); // filter articlesForEmbed array and return true if article passed in parameter exists in array
+  //   var isAcceptable = articlesForEmbed.some(function (item) {
+  //     return item === articleCategory;
+  //   }); // filter articlesForEmbed array and return true if article passed in parameter exists in array
 
-    // execute if category passed in parameter (articleCategory) exists in articlesForEmbed array
-    if (isAcceptable) {
-      // // console.log("LINE 353 MSG: Article is acceptable!");
+  //   // execute if category passed in parameter (articleCategory) exists in articlesForEmbed array
+  //   if (isAcceptable) {
+  //     // // console.log("LINE 353 MSG: Article is acceptable!");
 
-      // filter article data
-      articleResult = articleData.filter(function (data) {
-        return data.articleName === articleCategory;
-      })[0]; // set value to returned article data object
+  //     // filter article data
+  //     articleResult = articleData.filter(function (data) {
+  //       return data.articleName === articleCategory;
+  //     })[0]; // set value to returned article data object
 
-      // execute if category passed in parameter does not exist in articlesForEmbed array
-    } else {
-      // // console.log("LINE 353 MSG: Article is NOT acceptable!");
+  //     // execute if category passed in parameter does not exist in articlesForEmbed array
+  //   } else {
+  //     // // console.log("LINE 353 MSG: Article is NOT acceptable!");
 
-      // filter article data
-      articleResult = articleData.filter(function (data) {
-        return data.articleName === "Latest Articles";
-      })[0]; // set value to returned article data object
-    }
+  //     // filter article data
+  //     articleResult = articleData.filter(function (data) {
+  //       return data.articleName === "Latest Articles";
+  //     })[0]; // set value to returned article data object
+  //   }
 
-    // NOTE: Use try statement!
+  //   // NOTE: Use try statement!
 
-    // retrieve video information from database
-    $.get("https://www.naxelo.com/iamandco/api/mailchimp/read.php", { type: "all-mailchimp-information" }).done(function (response) {
-      console.log(response);
-      if (response['status'] == "success") {
+  //   // retrieve video information from database
+  //   $.get("https://www.naxelo.com/iamandco/api/mailchimp/read.php", { type: "all-mailchimp-information" }).done(function (response) {
+  //     console.log(response);
+  //     if (response['status'] == "success") {
 
-        // retrieve mailchimp header
-        var headerText = response['data'][0]['header_text'];
+  //       // retrieve mailchimp header
+  //       var headerText = response['data'][0]['header_text'];
 
-        /* FIX HORIZONTAL RULE. CURRENT VERSIONv1.1.63, by making embed in html-block */
+  //       /* FIX HORIZONTAL RULE. CURRENT VERSIONv1.1.63, by making embed in html-block */
 
-        mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + headerText + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
-      } else {
-        mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + articleResult.formTitle + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
-      }
-    });
+  //       mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + headerText + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
+  //     } else {
+  //       mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + articleResult.formTitle + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
+  //     }
+  //   });
 
-    // $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p").eq(positionIndex - 1).after(mailChimpHTML); // append MailChimp embed in middle (approximate) position in article
-  }
+  //   // $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p").eq(positionIndex - 1).after(mailChimpHTML); // append MailChimp embed in middle (approximate) position in article
+  // }
 
   var pubExchangeElement = document.getElementsByClassName("pubexchange_module")[0]; // initialize and set value to pubExchange element in DOM
   var htmlToInsert = '<div class="pubexchange_module" id="pubexchange_below_content" data-pubexchange-module-id="2747"></div>'; // initialize and set value to pubExchange HTML
@@ -3817,7 +3817,7 @@ function insertCustomHTML(articleCategory) {
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
     //
-    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML && mailChimpHTML) {
+    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML /* && mailChimpHTML */) {
       // // // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
       $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
@@ -3838,12 +3838,12 @@ function insertCustomHTML(articleCategory) {
         // retrieve parent containing sqs-block-html class
         var paragraphParent = $(element).parents(".sqs-block.html-block");
 
-        // check if the next sibling is a content hint
+        /* // check if the next sibling is a content hint
         if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
           $(paragraphParent).next().next().after(mailChimpHTML);
         } else {
           $(paragraphParent).after(mailChimpHTML);
-        }
+        } */
 
         // $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
       }
