@@ -3842,12 +3842,15 @@ function insertCustomHTML(articleCategory) {
     authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
   }
 
+  console.log("[INSERT CUSTOM HTML]", "PubExchange", pubExchangeHTML, "Custom Summary Block", summaryBlockHTML, "Category Block", categoryBlockHTML);
+
   // method to check if all custom HTML variables exist
   var checkElement = setInterval(function () {
     //
-    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML /* && mailChimpHTML */) {
+    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML) {
       // // // console.log("MESSAGE:", "Elements ready for insertion!");
       clearInterval(checkElement); // stop the loop
+      console.log("[INSERT CUSTOM HTML]", "Inserting content into summary container.");
       $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
       $(".custom-summary-container").prepend(summaryBlockHTML); // append to custom HTML element into footer of article
       $(".custom-summary-container").prepend(authorBlockHTML); // append custom HTML into footer of article
