@@ -3469,7 +3469,7 @@ function insertCustomHTML(articleCategory) {
 
     // check if an article category was selected from article categories
     if (categoryResult) {
-      console.log(tag, "A category result was found:", categoryResult.categoryName);
+      console.log(tag, "A category result was found:", categoryResult);
 
       // check if setting to insert category breadcrumb on header is on
       if (insertBreadcrumbHTML) {
