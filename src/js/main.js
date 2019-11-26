@@ -552,6 +552,7 @@ function checkBlog() {
           // execute if article category does not exist in articlesForEmbed array
           if (!checked) {
             insertCustomHTML(null); // method called to insert custom HTML
+            checked = false; // set value to false
           }
 
         }
@@ -3467,7 +3468,7 @@ function checkForExternalLinks(applyNoFollow) {
 
 // method that dynamically inserts custom HTML into the DOM of article pages
 function insertCustomHTML(articleCategory) {
-  // // // console.log("insertCustomHTML function called!");
+  console.log("[INSERT CUSTOM HTML]", "Function has been called.");
   // // // console.log("Article category:", articleCategory);
 
   var articleResult; // initialize article result variable
