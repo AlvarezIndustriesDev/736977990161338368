@@ -3469,7 +3469,7 @@ function insertCustomHTML(articleCategory) {
 
     // check if an article category was selected from article categories
     if (categoryResult) {
-      console.log(tag, "A category result was found.");
+      console.log(tag, "A category result was found:", categoryResult.categoryName);
 
       // check if setting to insert category breadcrumb on header is on
       if (insertBreadcrumbHTML) {
@@ -3490,6 +3490,7 @@ function insertCustomHTML(articleCategory) {
         },
         dataType: "xml",
         success: function (data) {
+          console.log(tag, "Successfully retrieved AJAX data.");
           // retrieve all XML items from data and assign to variable
           var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
 
