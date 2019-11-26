@@ -112,23 +112,7 @@ var sentenceArray = [];
 var searchPageIndex = 0;
 
 // custom code begins here -----------------------------------------------------------------------------------
-//init(); //Start the code when the page loads
-// redirectInit(); // method called to initialize redirect function
 checkBlog(); // method called to check if current page is blog page
-// handleTrendingCarousel(); // method called to modify "trending" carousel in home page
-
-// method called to initialize redirect function
-/*
-function redirectInit() {
-// method to check if gallery exists
-var checkElement = setInterval(function() {
-  if (document.getElementsByClassName("sqs-gallery-design-grid").length) {
-    clearInterval(checkElement); // stop the loop
-    addEventListeners(); // call method to add event listeners to product tiles
-  }
-}, 100);
-}
-*/
 
 // method that checks if current page is "blog" page
 function checkBlog() {
@@ -314,7 +298,7 @@ function checkBlog() {
 
           // execute if the article is a style letter article
           if (isArticleStyleExclusive) {
-          
+
             console.log("[STYLE LETTER]", "This article is a style exclusive letter article.");
 
             /* INSERT STYLE EXCLUSIVE TITLE */
@@ -1430,21 +1414,6 @@ function redirectToAffiliate() {
 
 
 }
-
-/* NOTES:
-  Regular articles
-  -------------------------------------------------------
-  1. ONE AD INSERTED AFTER FIRST PARAGRAPH OF VIDEO
-  2. THE REMAINING EVERY THREE PARAGRAPHS
-  3. MAXIMUM OF 4 ADS - POSSIBLE UPDATE TO 6
-
-  Feel Good(s) articles
-  -------------------------------------------------------
-  1. ONE IN THE FIRST BLOCK
-  2. THE REMAINING THREE EVERY OTHER BLOCK
-
-
-*/
 
 // method that inserts custom HTML for advertisements
 // function insertAdvertisements(isFeelGoods) {
@@ -3358,48 +3327,6 @@ function displaySubscriptionPopup(categoryToDisplay) {
 
 }
 
-// method that adds event listeners to products found in a design gallery grid
-/*
-function addEventListeners() {
-// // // console.log("AddEventListener function was executed...");
-var anchorTags = document.getElementsByClassName("sqs-gallery-design-grid")[0].getElementsByTagName("a"); // initialize and retrieve anchor tags inside div as array-like collection of elements
-var newURL; // initialize new URL variable
-
-// loop through anchor tags
-for (var i = 0; i < anchorTags.length; i++) {
-  if (isMobile() || (screen && screen.width < 768)) {
-    // add an event listerner to anchor tag
-    anchorTags[i].addEventListener("touchend", function(e) {
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-      //// // console.log(newURL);
-      // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
-      var button = document.createElement("a"); // create anchor tag
-      button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
-      button.href = newURL; // set anchor tag reference to new URL
-      document.body.appendChild(button); // append anchor tag to body
-      button.click(); // trigger anchor tag "click" event
-      button.parentNode.removeChild(button); // remove anchor tag from body
-    });
-  } else {
-    // add an event listerner to anchor tag
-    anchorTags[i].addEventListener("click", function(e) {
-      e.preventDefault(); // prevent anchor tag from automatically changing page
-      newURL = location.protocol + '//' + location.hostname + '/redirect?ref=' + this.href; // set newURL variable value to desired redirect URL page
-      //// // console.log(newURL);
-      // NOTE: Creating an anchor tag and triggering its "click" event prevents multiple tabs from being opened in mobile Google Chrome browser
-      var button = document.createElement("a"); // create anchor tag
-      button.target = "_blank"; // set anchor tag target to "_blank" to open link on new tab
-      button.href = newURL; // set anchor tag reference to new URL
-      document.body.appendChild(button); // append anchor tag to body
-      button.click(); // trigger anchor tag "click" event
-      button.parentNode.removeChild(button); // remove anchor tag from body
-    });
-  }
-}
-}
-*/
-
 // method that checks if anchor tags (links) found in document are external
 function checkForExternalLinks(applyNoFollow) {
   // // // console.log("Function external links works! Apply no follow: ", applyNoFollow);
@@ -3468,17 +3395,12 @@ function checkForExternalLinks(applyNoFollow) {
 
 // method that dynamically inserts custom HTML into the DOM of article pages
 function insertCustomHTML(articleCategory) {
-  console.log("[INSERT CUSTOM HTML]", "Function has been called.");
-  // // // console.log("Article category:", articleCategory);
+  let tag = "[INSERT CUSTOM HTML]";
+  console.log(tag, "Function successfully called.");
 
-  var articleResult; // initialize article result variable
+  var pubExchangeHTML, summaryBlockHTML, categoryBlockHTML, authorBlockHTML;
 
-  var pubExchangeHTML; // initialize PubExchange HTML variable
-  var summaryBlockHTML; // initialize summary block HTML variable
-  var categoryBlockHTML; // initialize category block HTML variable
-  var authorBlockHTML; // initialize author block HTML variable
-  var mailChimpHTML; // initialize mailchimp block HTML variable
-  // execute if user is not on a mobile device
+  // check if user is on mobile devive
   if (!isMobile()) {
     // append the custom summary container inside the custom content div
     $(".custom-content .custom-article-content div[data-layout-label='Post Body']").after("<div class='custom-summary-container'></div>"); // append a custom HTML element into footer of article
@@ -3487,173 +3409,80 @@ function insertCustomHTML(articleCategory) {
     $(".BlogItem-share").after("<div class='custom-summary-container'></div>"); // append a custom HTML element into footer of article
   }
 
-  // // console.log("INSERTED CUSTOM SUMMARY CONTAINER");
+  /* PubExchange Module */
 
-  var length = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p").length; // set value to length of article DOM elements
-
-  // divides the length by 2 and rounds number up ---> gives append position
-  // // // console.log(length);
-
-  var positionIndex = Math.ceil(length / 4); // initialize and declare position index for custom MailChimp embed HTML
-
-  // // // console.log("Approximate position index of middle of page:", positionIndex);
-
-  // execute if insertMailChimpHTML variable is true
-  // if (insertMailChimpHTML == true) {
-
-  //   var isAcceptable = articlesForEmbed.some(function (item) {
-  //     return item === articleCategory;
-  //   }); // filter articlesForEmbed array and return true if article passed in parameter exists in array
-
-  //   // execute if category passed in parameter (articleCategory) exists in articlesForEmbed array
-  //   if (isAcceptable) {
-  //     // // console.log("LINE 353 MSG: Article is acceptable!");
-
-  //     // filter article data
-  //     articleResult = articleData.filter(function (data) {
-  //       return data.articleName === articleCategory;
-  //     })[0]; // set value to returned article data object
-
-  //     // execute if category passed in parameter does not exist in articlesForEmbed array
-  //   } else {
-  //     // // console.log("LINE 353 MSG: Article is NOT acceptable!");
-
-  //     // filter article data
-  //     articleResult = articleData.filter(function (data) {
-  //       return data.articleName === "Latest Articles";
-  //     })[0]; // set value to returned article data object
-  //   }
-
-  //   // NOTE: Use try statement!
-
-  //   // retrieve video information from database
-  //   $.get("https://www.naxelo.com/iamandco/api/mailchimp/read.php", { type: "all-mailchimp-information" }).done(function (response) {
-  //     console.log(response);
-  //     if (response['status'] == "success") {
-
-  //       // retrieve mailchimp header
-  //       var headerText = response['data'][0]['header_text'];
-
-  //       /* FIX HORIZONTAL RULE. CURRENT VERSIONv1.1.63, by making embed in html-block */
-
-  //       mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + headerText + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
-  //     } else {
-  //       mailChimpHTML = "<div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div><div id='customMCEmbed' class='sqs-block html-block sqs-block-html'><link href='' rel='stylesheet' type='text/css'><style type='text/css'>#mc_embed_signup{background:#fff; clear:left; font:16px futura-pt,Helvetica,Arial,sans-serif; width:100%;}</style><div id='mc_embed_signup'><form action='https://iamandco.us16.list-manage.com/subscribe/post?" + articleResult.actionID + "' method='post' id='mc-embedded-subscribe-form' name='mc-embedded-subscribe-form' class='validate' novalidate><div id='mc_embed_signup_scroll'><label for='mce-EMAIL'><h2>" + articleResult.formTitle + "</h2></label><input type='email' value='' name='EMAIL' class='email' id='mce-EMAIL' placeholder='email address' required><div style='position: absolute; left: -5000px;' aria-hidden='true'><input type='text' name='" + articleResult.inputNameValue + "' tabindex='-1' value=''></div><div class='clear'><input type='submit' value='" + buttonText + "' name='subscribe' id='mc-embedded-subscribe' class='button'></div></div><p><a href='https://iamandco.com/terms-of-use' target='_blank'>Terms & Conditions</a> and <a href='https://iamandco.com/privacy-policy' target='_blank'>Privacy Policy</a></p><div id='mce-success-response' style='display:none;'>SUCCESS MESSAGE GOES HERE</div><div id='mce-error-response' style='display:none;'>ERROR MESSAGE GOES HERE</div></form></div><script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script></div><div class='sqs-block html-block sqs-html-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block'><div class='sqs-block-content'><hr></div></div>"; // initialize and set value to custom MailChimp embed HTML
-  //     }
-  //   });
-
-  //   // $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p").eq(positionIndex - 1).after(mailChimpHTML); // append MailChimp embed in middle (approximate) position in article
-  // }
-
-  var pubExchangeElement = document.getElementsByClassName("pubexchange_module")[0]; // initialize and set value to pubExchange element in DOM
-  var htmlToInsert = '<div class="pubexchange_module" id="pubexchange_below_content" data-pubexchange-module-id="2747"></div>'; // initialize and set value to pubExchange HTML
-
-  // if pubExchange element already exists
-  if (pubExchangeElement) {
-    // // // console.log("Exists! Removing now...");
-    $(".pubexchange_module").remove(); // remove from DOM
+  // check if PubExchange module exists in document
+  if (document.getElementsByClassName("pubexchange_module")[0]) {
+    // remove the element from DOM
+    $(".pubexchange_module").remove();
   }
 
-  // execute if insertPubExchangeHTML variable is true
-  if (insertPubExchangeHTML == true) {
-    // // // console.log("Does not exist, creating now!");
-    //$(".custom-summary-container").prepend(htmlToInsert); // append to custom HTML element into footer of article
-    pubExchangeHTML = htmlToInsert; // set value to PubExchange HTML
+  // check if setting to insert PubExchange Module is on
+  if (insertPubExchangeHTML) {
+    // assign PubExchange HTML to variable
+    pubExchangeHTML = '<div class="pubexchange_module" id="pubexchange_below_content" data-pubexchange-module-id="2747"></div>';
   }
 
-  // execute if insertSummaryBlockHTML variable is true
-  if (insertSummaryBlockHTML == true) {
+  /* --------------------------------------------------- */
+
+  /* Article Summary Block */
+
+  // check if setting to insert Summary Block is on
+  if (insertSummaryBlockHTML) {
+    // initialize variables that will contain HTML of Summary Block
     var summaryBlockHTMLStart = "<div class='custom-summary-block sqs-block-html'><div class='custom-summary-wrapper'><div class='custom-summary-external'><div class='custom-summary-title'>" + customEmbedTitle + "</div><ul class='custom-summary-module'>"; // initialize and set value to custom summary block HTML
     var summaryBlockHTMLMiddle = ""; // initialize and set value to custom summary block HTML
     var summaryBlockHTMLEnd = "</ul></div></div></div>"; // initialize and set value to custom summary block HTML
 
-    var rssFeedURL; // initialize RSS Feed URL variable
-    var categoryResult; // initialize category result variable
-    // var isFeelGoods = false; // initialize and declare value to false
+    // intialize variables
+    var rssFeedURL;
+    var categoryResult;
 
-    // NOTE: The following code retrieves the rss feed URL for the category
+    // check if article has categories
+    if (jsonData['item']['categories']) {
 
-    // execute if article only has one category
-    if (jsonData['categoryFilter']) {
+      // initialize boolean variable
+      var categoryChecked = false;
 
-      // // console.log("Article HAS Category Filter");
+      // loop through article categories
+      for (var i = 0; i < jsonData['item']['categories'].length; i++) {
 
-      var articleCategoryExists = summaryBlockData.some(function (item) {
-        return item['categoryName'] === jsonData['categoryFilter'];
-      }); // filter through summaryBlockData array and return true if article category exists
+        // check if any of article categories exist in pre-defined summary block data
+        var categoryExistsInArray = summaryBlockData.some(function (item) {
+          return item['categoryName'] === jsonData['item']['categories'][i];
+        });
 
-      // execute if article category exists in summaryBlockData array
-      if (articleCategoryExists) {
-        categoryResult = summaryBlockData.filter(function (data) {
-          return data['categoryName'] === articleCategory;
-        })[0]; // set value to returned article data object
-      }
-
-      // execute if article category is Feel Good(s)
-      /*
-      if (jsonData['categoryFilter'] == "Feel Good(s)") {
-        isFeelGoods = true; // set value to true
-      } */
-      // execute if page does not have category filter node
-    } else if (jsonData['item']['categories']) {
-
-      // // console.log("Article HAS Item Categories");
-
-      var checkedCategory = false; // initialize and set value to false
-
-      var categoriesArray = jsonData['item']['categories']; // initialize and declare variable value to JSON data array
-
-      /*
-      var testIsFeelGoods = categoriesArray.some(function(item) {
-        return item == "Feel Good(s)";
-      });
- 
-      // execute if article category is Feel Good(s)
-      if (testIsFeelGoods) {
-        isFeelGoods = true; // set value to true
-      } */
-
-      // loop through JSON data array
-      for (var i = 0; i < categoriesArray.length; i++) {
-
-        // // // console.log(categoriesArray[i]);
-
-        var existsInArticlesArray = summaryBlockData.some(function (item) {
-          return item['categoryName'] === categoriesArray[i];
-        }); // filter through summaryBlockData array object and return true if article category exists
-
-        // execute if article category exists in summaryBlockData array object and checked is false
-        if (existsInArticlesArray && !checkedCategory) {
-
+        // prevent any further category checks (only selects one category)
+        if (categoryExistsInArray && !categoryChecked) {
+          // assign category data to variable
           categoryResult = summaryBlockData.filter(function (data) {
-            return data['categoryName'] === categoriesArray[i];
-          })[0]; // set value to returned article data object
+            return data['categoryName'] === jsonData['item']['categories'][i];
+          });
 
-
-          checkedCategory = true; // set value to true
-        } // end if statement
-      } // end for-loop statement
-    } // end if statement
-
-    // // console.log("RSS FEED URL: ", categoryResult);
-
-    /* NOTE: Optimize this by adding a check for category result before adding any breadcrumbs, etc */
-    if (categoryResult) {
-      // // console.log("[CATEGORY RESULT] Exists!", categoryResult);
-
-      // execute if insertBreadcumbHTML variable is true
-      if (insertBreadcrumbHTML == true) {
-        var html = "<div class='custom-breadcrumb'><p>Story from <a href='" + categoryResult.categoryURL + "'>" + categoryResult.categoryName + "</a><span class='special-symbol'></span></p></div>"; // initialize and declare breadcrumb HTML
-
-        $("article").prepend(html); // insert custom breadcrumb HTML into top of article page
+          // set boolean variable to true
+          categoryChecked = true;
+        }
 
       }
 
-      rssFeedURL = categoryResult.categoryURL + "&format=rss"; // set value of article RSS Feed URL
+    }
 
-      // // // console.log(rssFeedURL);
+    // check if an article category was selected from article categories
+    if (categoryResult) {
+      console.log(tag, "A category result was found.");
 
-      // method to retrieve blog page RSS in XML format
+      // check if setting to insert category breadcrumb on header is on
+      if (insertBreadcrumbHTML) {
+        // initialize and assign breadcrumb HTML to variable
+        var breadcrumbHTML = "<div class='custom-breadcrumb'><p>Story from <a href='" + categoryResult.categoryURL + "'>" + categoryResult.categoryName + "</a><span class='special-symbol'></span></p></div>";
+        // append breadcrumb HTML to DOM
+        $("article").prepend(breadcrumbHTML);
+      }
+
+      // assign category RSS feed URL format to variable
+      rssFeedURL = categoryResult.categoryURL + "&format=rss";
+
+      // call AJAX method that retrieves related articles
       $.ajax({
         url: rssFeedURL,
         accepts: {
@@ -3661,97 +3490,94 @@ function insertCustomHTML(articleCategory) {
         },
         dataType: "xml",
         success: function (data) {
+          // retrieve all XML items from data and assign to variable
           var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
 
+          // loop through XML items
           for (var i = 0; i < summaryBlockArticleLimit; i++) {
-            var item; // initialize variable
+            // initialize item
+            var item;
 
-            // execute if current item title is the same as page title
+            // check if current article item is the same as the current article
             if (items[i].getElementsByTagName("title")[0].textContent == decodeText(jsonData['item']['title'])) {
               item = items[i + 1]; // set variable as xml item
               i++; // increment for-loop index
               summaryBlockArticleLimit++; // increment summary block article limit
-              // execute if current item title is not the same as page title
             } else {
               item = items[i]; // set variable as xml item
             }
 
-            // item.getElementsByTagName("title")[0].textContent ||
-            var itemTitle = item.getElementsByTagName("title")[0].textContent; // initialize and set variable to xml item title
+            // retrieve item title
+            var itemTitle = item.getElementsByTagName("title")[0].textContent;
 
-            // item.getElementsByTagName("link")[0].textContent ||
-            var itemLink = item.getElementsByTagName("link")[0].textContent; // initialize and set variable to xml item URL
-            var itemAuthor = ""; // initialize xml item author variable
+            // retrieve item URL
+            var itemLink = item.getElementsByTagName("link")[0].textContent;
 
-            // execute if element exists in item
+            // initialize variable that will contain author name
+            var itemAuthor = "";
+
+            // retrieve item author
             if (item.getElementsByTagName("dc:creator")[0]) {
               itemAuthor = item.getElementsByTagName("dc:creator")[0].textContent; // set variable to xml item author
-              // execute if element does not exists (Microsoft Edge works with this one)
             } else {
               itemAuthor = $(item).children("dc\\:creator").text(); // set variable to xml item author
             }
 
-            var itemDescription; // initialize xml item description variable
+            // initialize variable that will contain item description
+            var itemDescription;
 
-            // item.getElementsByTagName("description")[0].textContent ||
-            // execute if the article item description contains HTML element tags
+            // retrieve item description
             if (item.getElementsByTagName("description")[0].textContent.indexOf("<p>") != -1) {
               itemDescription = " "; // set variable to empty string
-              // execute if the article item description does not contain HTML element tags
             } else {
               itemDescription = item.getElementsByTagName("description")[0].textContent; // initialize and set variable to xml item description
             }
-            var itemImage = ""; // initialize xml item image variable
 
-            // execute if element exists in item
+            // initialize variable that will contain item image URL
+            var itemImage;
+
+            // retrieve item image URL
             if (item.getElementsByTagName("media:content")[0]) {
               itemImage = item.getElementsByTagName("media:content")[0].attributes[1].value; // set variable to xml item image
-              // // // console.log("Current Item Image: ", itemImage);
 
               // execute if the image URL returned is not an actual url (Internet Explorer works with this one)
               if (itemImage.indexOf("http://") == -1 || itemImage.indexOf("https://") == -1) {
                 itemImage = item.getElementsByTagName("media:content")[0].getAttribute("url");
               }
-              // execute if element does not exists (Microsoft Edge works with this one)
             } else {
               itemImage = $(item).children("media\\:content").attr("url"); // set variable to xml item image
             }
 
-            //// // console.log(itemImage);
+            // retrieve image thumbnail URL in HTTPS
+            var itemThumbnail = itemImage.replace(/^http:\/\//i, 'https://');
 
-            var itemStyle = ""; // initialize xml item CSS style variable
-
-            var itemThumbnail = itemImage.replace(/^http:\/\//i, 'https://'); // set variable to HTTP replaced URL
-
-            // // // console.log("New updated!: ", itemThumbnail);
-
-            // variables: itemTitle, itemLink, itemAuthor, itemDescription, itemThumbnail
-
+            // add HTML to summary block
             summaryBlockHTMLMiddle += "<li class='custom-summary-article'><div class='custom-summary-thumb-wrapper'><a class='custom-summary-thumb' href='" + itemLink + "' data-url='" + itemLink + "'><img style='' src='" + itemThumbnail + "' data-pin-nopin='1' nopin='1'></a></div><div class='custom-summary-editorial'><a class='custom-summary-headline' href='" + itemLink + "' data-url='" + itemLink + "'>" + itemTitle + "</a><p class='custom-summary-author-name'>" + itemAuthor + "</p></div></li>"; // set value to custom summary block item HTML
+
           }
 
-          var completeHTML = summaryBlockHTMLStart + summaryBlockHTMLMiddle + summaryBlockHTMLEnd; // concatenate HTML
+          // format complete HTML and assign to variable
+          summaryBlockHTML = summaryBlockHTMLStart + summaryBlockHTMLMiddle + summaryBlockHTMLEnd;
 
-          // execute if article category does not contain "Feel Good(s)"
-          // && (location.pathname.split("/")[2] == "75-of-the-funniest-cheesy-pick-up-lines")
+        }
+      });
 
-          // $(".custom-summary-container").prepend(completeHTML); // append to custom HTML element into footer of article
-          summaryBlockHTML = completeHTML; // set value to summary block HTML
-
-        } // end ajax success
-      }); // end ajax request
+    } else {
+      // assign an empty span element
+      summaryBlockHTML = "<span></span>";
     }
 
+  }
 
+  /* --------------------------------------------------- */
 
-  } // end insertSummaryBlockHTML
+  /* Article Category Block */
 
-  // execute if insertCategoryBlockHTML variable is true
-  if (insertCategoryBlockHTML == true) {
+  // check if setting to insert article category block is on
+  if (insertCategoryBlockHTML) {
     // execute if article has categories node
     if (jsonData['item']['categories']) {
-      // // // console.log("Article has multiple categories");
-
+      // initialize variables
       var categoriesArray = jsonData['item']['categories']; // initialize and declare variable value to JSON data array
       var specialCharacter = ""; // initialize special character variable
       var startHTML = "<div class='custom-category-block sqs-block-html'>"; // initialize and declare start of category block HTML
@@ -3760,15 +3586,11 @@ function insertCustomHTML(articleCategory) {
 
       // loop through JSON data array
       for (var i = 0; i < categoriesArray.length; i++) {
-        // // // console.log(categoriesArray[i]);
-
         var categoryURL = ""; // initialize category URL variable
 
         var existsInCategoryArray = summaryBlockData.some(function (item) {
           return item['categoryName'] === categoriesArray[i];
         }); // filter through summaryBlockData array object and return true if article category exists
-
-        // // // console.log(existsInCategoryArray);
 
         // execute if article category exists in category array (summaryBlockData)
         if (existsInCategoryArray) {
@@ -3777,11 +3599,8 @@ function insertCustomHTML(articleCategory) {
           })[0].categoryURL; // set value to returned article data object
           // execute if article category does not exist in category array
         } else {
-          // // // console.log("ERROR:", "Article category does not exist...");
           categoryURL = "https://iamandco.com/blog?category=" + categoriesArray[i];
         }
-
-        // // // console.log("URL:", categoryURL);
 
         if (i == 0) {
           specialCharacter = "";
@@ -3794,21 +3613,20 @@ function insertCustomHTML(articleCategory) {
       }
 
 
-      var completeHTML = startHTML + middleHTML + endHTML; // concatenate HTML
+      categoryBlockHTML = startHTML + middleHTML + endHTML; // concatenate HTML
 
-      // $(".custom-summary-container").prepend(completeHTML); // append to custom HTML element into footer of article
-
-      categoryBlockHTML = completeHTML; // set value to category block HTML
     }
   }
 
-  // execute if insertAuthorBlockHTML variable is true
-  if (insertAuthorBlockHTML == true) {
-    // // console.log("[AUTHOR ARTICLE BLOCK]:", jsonData);
+  /* --------------------------------------------------- */
 
+  /*  Article Author Block */
+
+  // check if setting to insert author block is on
+  if (insertAuthorBlockHTML) {
+    // initialize variables
     var authorName = jsonData["item"]["author"]["displayName"]; // initialize and declare author name
     var authorID = jsonData["item"]["author"]["id"]; // initialize and declare author ID
-
     var authorAvatarURL; // initialize author avatar URL
 
     // execute if author avatarURL exists
@@ -3827,14 +3645,11 @@ function insertCustomHTML(articleCategory) {
       var customClass = ""; // initialize custom class
       var width = img.naturalWidth || img.width;
       var height = img.naturalHeight || img.height;
-      // // // console.log("Image height:", height);
-      // // // console.log("Image width:", width);
 
       // execute if image width is greater than height
       if (width > height) {
         customClass = "author-img-landscape"; // set value to landscape image class
       }
-
 
       authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img class='" + customClass + "' src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
     }
@@ -3842,49 +3657,81 @@ function insertCustomHTML(articleCategory) {
     authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
   }
 
-  console.log("[INSERT CUSTOM HTML]", "PubExchange", pubExchangeHTML, "Custom Summary Block", summaryBlockHTML, "Category Block", categoryBlockHTML);
+  /* --------------------------------------------------- */
 
-  // method to check if all custom HTML variables exist
-  var checkElement = setInterval(function () {
-    //
-    if (pubExchangeHTML && summaryBlockHTML && categoryBlockHTML) {
-      // // // console.log("MESSAGE:", "Elements ready for insertion!");
-      clearInterval(checkElement); // stop the loop
-      console.log("[INSERT CUSTOM HTML]", "Inserting content into summary container.");
-      $(".custom-summary-container").prepend(pubExchangeHTML); // append to custom HTML element into footer of article
-      $(".custom-summary-container").prepend(summaryBlockHTML); // append to custom HTML element into footer of article
-      $(".custom-summary-container").prepend(authorBlockHTML); // append custom HTML into footer of article
-      $(".custom-summary-container").prepend(categoryBlockHTML); // append to custom HTML element into footer of article
-      if (articleIsFeelGoods == false) {
+  /* Insert Blocks */
 
-        // retrieve all p elements in the article
-        var pElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p");
+  // append blank divs into summary container
+  $(".custom-summary-container").prepend("<div class='custom-summary-pubexchange'></div>");
+  $(".custom-summary-container").prepend("<div class='custom-summary-summaryblock'></div>");
+  $(".custom-summary-container").prepend("<div class='custom-summary-author'></div>");
+  $(".custom-summary-container").prepend("<div class='custom-summary-categories'></div>");
 
-        // retrieve middle p element index
-        var middleParagraphIndex = Math.ceil(pElements.length / 2);
-
-        // retrieve paragraph element
-        var element = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(" + middleParagraphIndex + ")");
-
-        // retrieve parent containing sqs-block-html class
-        var paragraphParent = $(element).parents(".sqs-block.html-block");
-
-        /* // check if the next sibling is a content hint
-        if ($(paragraphParent).next().is(".content_desktop_hint.custom-appended") || $(paragraphParent).next().is(".content_mobile_hint.custom-appended")) {
-          $(paragraphParent).next().next().after(mailChimpHTML);
-        } else {
-          $(paragraphParent).after(mailChimpHTML);
-        } */
-
-        // $(".custom-summary-container").prepend(mailChimpHTML); // append to custom HTML element into footer of article
+  // check if setting to insert PubExchange Module is on
+  if (insertPubExchangeHTML) {
+    // recursive method that checks if HTML exists
+    var checkPubExchange = setInterval(function () {
+      // check if HTML exists
+      if (pubExchangeHTML) {
+        // stop the loop
+        clearInterval(checkPubExchange);
+        // append to summary container
+        $(".custom-summary-container .custom-summary-pubexchange").append(pubExchangeHTML);
       }
-      if (movePaginationHTML == true) {
-        moveElements(); // method called to change position of elements in blog page
+    }, 100);
+  }
+
+  // check if setting to insert Summary Block is on
+  if (insertSummaryBlockHTML) {
+    // recursive method that checks if HTML exists
+    var checkSummaryBlock = setInterval(function () {
+      // check if HTML exists
+      if (summaryBlockHTML) {
+        // stop the loop
+        clearInterval(checkSummaryBlock);
+        // append to summary container
+        $(".custom-summary-container .custom-summary-summaryblock").append(summaryBlockHTML);
       }
-      // call method that inserts pinterest button for thumbnail images
-      insertGalleryImageButtons();
-    }
-  }, 100);
+    }, 100);
+  }
+
+  // check if setting to insert Category Block is on
+  if (insertCategoryBlockHTML) {
+    // recursive method that checks if HTML exists
+    var checkCategoryBlock = setInterval(function () {
+      // check if HTML exists
+      if (categoryBlockHTML) {
+        // stop the loop
+        clearInterval(checkCategoryBlock);
+        // append to summary container
+        $(".custom-summary-container .custom-summary-categories").append(categoryBlockHTML);
+        // check if setting to move pagination is on
+        if (movePaginationHTML) {
+          // call method that moves the pagination
+          moveElements();
+        }
+      }
+    }, 100);
+  }
+
+  // check if setting to insert Author Block is on
+  if (insertAuthorBlockHTML) {
+    // recursive method that checks if HTML exists
+    var checkAuthorBlock = setInterval(function () {
+      // check if HTML exists
+      if (authorBlockHTML) {
+        // stop the loop
+        clearInterval(checkAuthorBlock);
+        // append to summary container
+        $(".custom-summary-container .custom-summary-author").append(authorBlockHTML);
+      }
+    }, 100);
+  }
+
+  // call method that inserts Pinterest button for thumbnail images
+  insertGalleryImageButtons();
+
+  /* --------------------------------------------------- */
 
 }
 
@@ -3895,30 +3742,16 @@ function moveElements() {
 
   // execute if paginationElement exists
   if (paginationElement[0]) {
-    // // // console.log("pagination element exists!");
-    // // // console.log(paginationElement);
 
     var paginationElementClone = paginationElement.clone();
 
     paginationElement.remove();
 
     $(".custom-summary-container .custom-category-block").after(paginationElementClone);
-    // execute if paginationElement does not exist
-  } else {
-    // // // console.log("ERROR:", "Pagination Element does not exist!");
   }
 
   if (socialElement[0]) {
-    // // // console.log("social element exists!");
-    // // // console.log(socialElement);
-
     var socialElementClone = socialElement.clone();
-
-    // socialElementClone.removeClass("hidden");
-
-    // // // console.log(socialElementClone);
-
-    // socialElement.remove();
 
     $(".custom-summary-container .BlogItem-pagination").after(socialElementClone);
 
