@@ -299,14 +299,31 @@ function checkBlog() {
           var checked = false; // initialize and declare variable to false
 
           var insertNoFollowLinks = categoryArray.some(function (item) {
-            return item === "Feel Good(s)";
+            return item === "Feel Good(s)" || item === "The Style Letter";
           }); // filter through category array and return true if "Feel Good(s)" category is returned
 
           var inDoNotShowList = categoryArray.some(function (item) {
             return item === "Contests" || item === "Dedicated Feature";
           }); // filter through category array and return true if "Contests" category is returned
 
+          var isArticleStyleExclusive = categoryArray.some(function (item) {
+            return item === "The Style Letter";
+          });
+
           // // // console.log("Add no follow: ", insertNoFollowLinks);
+
+          // execute if the article is a style letter article
+          if (isArticleStyleExclusive) {
+          
+            console.log("[STYLE LETTER]", "This article is a style exclusive letter article.");
+
+            /* INSERT STYLE EXCLUSIVE TITLE */
+            var customHTML = "<p class='style-letter-title'>The Style Letter Exclusive</p><p class='style-letter-by'>by <span class='style-letter-name'>I AM & CO</span></p>";
+
+            // insert custom style letter title above title
+            $("article .BlogItem-title").prepend(customHTML);
+
+          }
 
           // execute if insertNoFollowLinks returns true
           if (insertNoFollowLinks) {
@@ -771,30 +788,35 @@ function editSearchPage(queryParameter) {
             // loop through each article item
             for (var i = 0; i < data["items"].length; i++) {
 
-              // check if the item is a stories item
-              if (data["items"][i]["collectionDisplayName"] == "Stories") {
-                // declare variables containing article information
-                var articleTitle = decodeText(data["items"][i]["title"]);
-                articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
-                var articleAuthorID = data["items"][i]["author"]["id"];
-                var articleAuthor = data["items"][i]["author"]["displayName"];
-                var articleImage = data["items"][i]["imageUrl"];
-                var articleURL = data["items"][i]["itemUrl"];
+              // check if article item is not a story exclusive
+              if (!findKeywordInArray("The Style Letter", data["items"][i]["categories"])) {
 
-                console.log(articleTitle);
+                // check if the item is a stories item
+                if (data["items"][i]["collectionDisplayName"] == "Stories") {
+                  // declare variables containing article information
+                  var articleTitle = decodeText(data["items"][i]["title"]);
+                  articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
+                  var articleAuthorID = data["items"][i]["author"]["id"];
+                  var articleAuthor = data["items"][i]["author"]["displayName"];
+                  var articleImage = data["items"][i]["imageUrl"];
+                  var articleURL = data["items"][i]["itemUrl"];
 
-                // fill in data to HTML template
-                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
-              } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
-                // declare variables containing article information
-                var title = decodeText(data["items"][i]["title"]);
-                title = title.replace("&<em>amp</em>;", "&");
-                var image = data["items"][i]["imageUrl"];
-                var url = data["items"][i]["itemUrl"];
-                var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+                  console.log(articleTitle);
 
-                // fill in data to HTML template
-                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+                  // fill in data to HTML template
+                  middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
+                } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
+                  // declare variables containing article information
+                  var title = decodeText(data["items"][i]["title"]);
+                  title = title.replace("&<em>amp</em>;", "&");
+                  var image = data["items"][i]["imageUrl"];
+                  var url = data["items"][i]["itemUrl"];
+                  var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+
+                  // fill in data to HTML template
+                  middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+                }
+
               }
 
             }
@@ -875,30 +897,35 @@ function editSearchPage(queryParameter) {
             // loop through each article item
             for (var i = 0; i < data["items"].length; i++) {
 
-              // check if the item is a stories item
-              if (data["items"][i]["collectionDisplayName"] == "Stories") {
-                // declare variables containing article information
-                var articleTitle = decodeText(data["items"][i]["title"]);
-                articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
-                var articleAuthorID = data["items"][i]["author"]["id"];
-                var articleAuthor = data["items"][i]["author"]["displayName"];
-                var articleImage = data["items"][i]["imageUrl"];
-                var articleURL = data["items"][i]["itemUrl"];
+              // check if article item is not a story exclusive
+              if (!findKeywordInArray("The Style Letter", data["items"][i]["categories"])) {
 
-                console.log(articleTitle);
+                // check if the item is a stories item
+                if (data["items"][i]["collectionDisplayName"] == "Stories") {
+                  // declare variables containing article information
+                  var articleTitle = decodeText(data["items"][i]["title"]);
+                  articleTitle = articleTitle.replace("&<em>amp</em>;", "&");
+                  var articleAuthorID = data["items"][i]["author"]["id"];
+                  var articleAuthor = data["items"][i]["author"]["displayName"];
+                  var articleImage = data["items"][i]["imageUrl"];
+                  var articleURL = data["items"][i]["itemUrl"];
 
-                // fill in data to HTML template
-                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
-              } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
-                // declare variables containing article information
-                var title = decodeText(data["items"][i]["title"]);
-                title = title.replace("&<em>amp</em>;", "&");
-                var image = data["items"][i]["imageUrl"];
-                var url = data["items"][i]["itemUrl"];
-                var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+                  console.log(articleTitle);
 
-                // fill in data to HTML template
-                middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+                  // fill in data to HTML template
+                  middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + articleURL + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + articleImage + "' data-image='" + articleImage + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + articleImage + "?format=500w'></a></div><a href='" + articleURL + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + articleTitle + "</a><div class='Blog-meta BlogList-item-meta'><a href='/blog?author=" + articleAuthorID + "' class='Blog-meta-item Blog-meta-item--author'>" + articleAuthor + "</a></div></article>";
+                } else if (data["items"][i]["collectionDisplayName"] == "Shop") {
+                  // declare variables containing article information
+                  var title = decodeText(data["items"][i]["title"]);
+                  title = title.replace("&<em>amp</em>;", "&");
+                  var image = data["items"][i]["imageUrl"];
+                  var url = data["items"][i]["itemUrl"];
+                  var collectionDisplayName = data["items"][i]["collectionDisplayName"];
+
+                  // fill in data to HTML template
+                  middleHTML += "<article class='BlogList-item hentry post-type-text'><div class='BlogList-item-image'><a href='" + url + "' class='BlogList-item-image-link' style='overflow: hidden;'><img data-src='" + image + "' data-image='" + image + "' class='custom-image-search' style='font-size: 0px; left: -0.25px; top: 0px; width: 352.5px; height: 235px; position: relative;' src='" + image + "?format=500w'></a></div><a href='" + url + "' class='BlogList-item-title custom-article-title-search' data-content-field='title'>" + title + "</a><div class='Blog-meta BlogList-item-meta'><a href='/products' class='Blog-meta-item Blog-meta-item--author'>" + collectionDisplayName + "</a></div></article>";
+                }
+
               }
 
             }
