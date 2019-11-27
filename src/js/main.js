@@ -290,9 +290,11 @@ function checkBlog() {
             return item === "Contests" || item === "Dedicated Feature";
           }); // filter through category array and return true if "Contests" category is returned
 
-          var isArticleStyleExclusive = categoryArray.some(function (item) {
-            return item === "The Style Letter";
-          });
+          var isArticleStyleExclusive = false;
+
+          // var isArticleStyleExclusive = categoryArray.some(function (item) {
+          //   return item === "The Style Letter";
+          // });
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
 
