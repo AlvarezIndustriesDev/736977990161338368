@@ -1,6 +1,6 @@
 /* NOTE: The following are customaizable variables that enhance features in article pages */
 var insertPubExchangeHTML = true; // setting this variable to true will insert the pubExchange HTML into the footer of article
-// var insertMailChimpHTML = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
+var insertMailerLite = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
 var insertSummaryBlockHTML = true; // setting this variable to true will insert the custom summary block HTML into the bottom of article pages
 var insertCategoryBlockHTML = true; // setting this variable to true will insert the custom category link block HTML into the bottom of article pages
 var insertAuthorBlockHTML = true; // setting this variable to true will insert the custom author block HTML into the bottom of article pages
@@ -9,7 +9,6 @@ var insertBreadcrumbHTML = true; // setting this variable to true will insert a 
 var insertCustomDisclaimerText = true; // setting this variable to true will replace Feel Good(s) article disclaimers
 var newDisclaimerText = "At I AM & CO, we have a blast curating products that we think you’ll love. Every editorial product is independently selected by our editorial team. When you make a purchase, I AM Media may earn a commission."; // this text will display as Feel Good(s) article disclaimer
 var redirectDelay = 1; // initialize and set number of seconds delay before redirecting
-var mailChimpPopupDelay = 5; // initialize and set number of seconds delay before displaying mailchimp popup
 var summaryBlockArticleLimit = 4; // value of this variable indicates the number of articles to retrieve from RSS feed for custom summary block
 var desktopAdRatio = 25; // in percent (%)
 var mobileAdRatio = 28; // in percent(%)
@@ -298,6 +297,20 @@ function checkBlog() {
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
 
+          var isStylesArticle = categoryArray.some(function (item) {
+            return item === "Style";
+          });
+
+          // execute if article has "style" category
+          if (isStylesArticle) {
+            // initialize MailerLite specific HTML
+            var mailerLiteStyleHTML = "<p style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;><a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>Subscribe to \"The Style Letter\"</a> and get FREE fashion industry news, exclusive members-only articles, exclusive discounts from our style partners, style partner sale announcements, swag, freebies, and more.</p><p style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;> The Style Letter is always 100% free and delivered to your inbox Tuesdays at 9 p.m. EST. All it takes is <a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>2 clicks to join</a> a global community of smart style lovers.</p>";
+
+            // append after first image thumbnail
+            $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.image-block:eq(0)").parent().parent().after(mailerLiteStyleHTML);
+
+          }
+
           // execute if the article is a style letter article
           if (isArticleStyleExclusive) {
 
@@ -533,6 +546,7 @@ function checkBlog() {
               insertCustomHTML(categoryArray[i]); // method called to insert custom HTML
               checked = true; // set value to true
             }
+
           }
 
           // execute if article category does not exist in articlesForEmbed array
@@ -3410,6 +3424,29 @@ function insertCustomHTML(articleCategory) {
     // append the custom summary container inside the article element and after the share buttons
     $(".BlogItem-share").after("<div class='custom-summary-container'></div>"); // append a custom HTML element into footer of article
   }
+
+  /* MailerLite Module */
+
+  // check if setting to insert MailerLite Module is on
+  if (insertMailerLite) {
+
+    // initialize variable with MailerLite HTML
+    var mailerLiteHTML = "<div class='ml-form-embed' data-account='1763926:w7z9o7z8j7' data-form='1624668:u5f7o6'></div>";
+
+    // retrieve the length of all divs with .sqs-block class
+    var allElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").find("div.sqs-block.html-block");
+
+    // calculate the middle element index
+    var middleElementIndex = Math.floor(allElements.length / 2);
+
+    // append MailerLite HTML after middle element
+    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").after(mailerLiteHTML);
+
+    // call function that reloads MailerLite scripts
+
+  }
+
+  /* --------------------------------------------------- */
 
   /* PubExchange Module */
 
