@@ -1118,3 +1118,9 @@ article span.style-letter-name {
     font-size: 1em;
     font-weight: 700;
 }
+
+@media only screen and (min-width:737px) {
+    .mailer-lite-style {
+        width: 70% !important;
+    }
+}

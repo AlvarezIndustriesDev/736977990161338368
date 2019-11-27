@@ -3439,8 +3439,10 @@ function insertCustomHTML(articleCategory) {
     // calculate the middle element index
     var middleElementIndex = Math.floor(allElements.length / 2);
 
-    // append MailerLite HTML after middle element
-    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").after(mailerLiteHTML);
+    // check if element at index is near a button block
+    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().hasClass(".button-block")) {
+      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().after(mailerLiteHTML);
+    }
 
     // call function that reloads MailerLite scripts
     loadScript("https://static.mailerlite.com/js/universal.js");
