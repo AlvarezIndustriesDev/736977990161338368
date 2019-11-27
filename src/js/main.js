@@ -3442,7 +3442,7 @@ function insertCustomHTML(articleCategory) {
     // check if element at index is near a button block
     if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().hasClass("button-block")) {
       console.log(tag, "MailerLite is trying to insert near a button block.");
-      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().after(mailerLiteHTML);
+      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().next().after(mailerLiteHTML);
     } else if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().hasClass("button-block")) {
       console.log(tag, "MailerLite is trying to insert next to a button block.");
       $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().after(mailerLiteHTML);
