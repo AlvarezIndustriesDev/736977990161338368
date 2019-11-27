@@ -304,7 +304,7 @@ function checkBlog() {
           // execute if article has "style" category
           if (isStylesArticle) {
             // initialize MailerLite specific HTML
-            var mailerLiteStyleHTML = "<div class='sqs-block html-block sqs-block-html mailer-lite-style'><p style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;><a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>Subscribe to \"The Style Letter\"</a> and get FREE fashion industry news, exclusive members-only articles, exclusive discounts from our style partners, style partner sale announcements, swag, freebies, and more.</p><p style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;> The Style Letter is always 100% free and delivered to your inbox Tuesdays at 9 p.m. EST. All it takes is <a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>2 clicks to join</a> a global community of smart style lovers.</p></div>";
+            var mailerLiteStyleHTML = "<div class='sqs-block html-block sqs-block-html mailer-lite-style'><span style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;><a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>Subscribe to \"The Style Letter\"</a> and get FREE fashion industry news, exclusive members-only articles, exclusive discounts from our style partners, style partner sale announcements, swag, freebies, and more.</span><span style = font-style:italic; font-family:'Arial',Helvetica,sans-serif;> The Style Letter is always 100% free and delivered to your inbox Tuesdays at 9 p.m. EST. All it takes is <a href='javascript:;' onclick='ml_account('webforms', '1626504', 'u0v0s4', 'show')' style='font-weight:800;color:#000000;border-bottom:solid 4px #ff5a41;'>2 clicks to join</a> a global community of smart style lovers.</span></div>";
 
             // append after first image thumbnail
             $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.image-block:eq(0)").parent().parent().after(mailerLiteStyleHTML);
@@ -413,7 +413,7 @@ function checkBlog() {
                       var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
-                      if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule") || $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().hasClass("mailer-lite-style")) {
+                      if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
                         // remove horizontal rule
                         $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().remove();
                         // insert video element after second paragraph
