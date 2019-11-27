@@ -3457,7 +3457,7 @@ function insertCustomHTML(articleCategory) {
           // assign category data to variable
           categoryResult = summaryBlockData.filter(function (data) {
             return data['categoryName'] === jsonData['item']['categories'][i];
-          });
+          })[0];
 
           // set boolean variable to true
           categoryChecked = true;
