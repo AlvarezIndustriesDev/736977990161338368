@@ -3482,6 +3482,8 @@ function insertCustomHTML(articleCategory) {
       // assign category RSS feed URL format to variable
       rssFeedURL = categoryResult.categoryURL + "&format=rss";
 
+      console.log(tag, "Category URL:", rssFeedURL);
+
       // call AJAX method that retrieves related articles
       $.ajax({
         url: rssFeedURL,
