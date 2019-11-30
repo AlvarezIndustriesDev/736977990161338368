@@ -3427,360 +3427,383 @@ function insertCustomHTML(articleCategory) {
 
   /* MailerLite Module */
 
-  // check if setting to insert MailerLite Module is on
-  if (insertMailerLite) {
+  // initialize boolean variable to determine if article is style article
+  var isStyleArticle;
 
-    // initialize variable with MailerLite HTML
-    var mailerLiteHTML = "<div class='ml-form-embed' data-account='1763926:w7z9o7z8j7' data-form='1624668:u5f7o6'></div>";
+  // check if article has categories
+  if (jsonData['item']['categories']) {
 
-    // retrieve the length of all divs with .sqs-block class
-    var allElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").find("div.sqs-block.html-block");
+    // loop through article categories
+    for (var i = 0; i < jsonData['item']['categories'].length; i++) {
 
-    // calculate the middle element index
-    var middleElementIndex = Math.floor(allElements.length / 2);
-
-    // check if element at index is near a button block
-    if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().hasClass("button-block")) {
-      console.log(tag, "MailerLite is trying to insert near a button block.");
-      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().next().after(mailerLiteHTML);
-    } else if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().hasClass("button-block")) {
-      console.log(tag, "MailerLite is trying to insert next to a button block.");
-      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().after(mailerLiteHTML);
-    } else {
-      $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").after(mailerLiteHTML);
-    }
-
-    // call function that reloads MailerLite scripts
-    loadScript("https://static.mailerlite.com/js/universal.js");
-
-  }
-
-  /* --------------------------------------------------- */
-
-  /* PubExchange Module */
-
-  // check if PubExchange module exists in document
-  if (document.getElementsByClassName("pubexchange_module")[0]) {
-    // remove the element from DOM
-    $(".pubexchange_module").remove();
-  }
-
-  // check if setting to insert PubExchange Module is on
-  if (insertPubExchangeHTML) {
-    // assign PubExchange HTML to variable
-    pubExchangeHTML = '<div class="pubexchange_module" id="pubexchange_below_content" data-pubexchange-module-id="2747"></div>';
-  }
-
-  /* --------------------------------------------------- */
-
-  /* Article Summary Block */
-
-  // check if setting to insert Summary Block is on
-  if (insertSummaryBlockHTML) {
-    // initialize variables that will contain HTML of Summary Block
-    var summaryBlockHTMLStart = "<div class='custom-summary-block sqs-block-html'><div class='custom-summary-wrapper'><div class='custom-summary-external'><div class='custom-summary-title'>" + customEmbedTitle + "</div><ul class='custom-summary-module'>"; // initialize and set value to custom summary block HTML
-    var summaryBlockHTMLMiddle = ""; // initialize and set value to custom summary block HTML
-    var summaryBlockHTMLEnd = "</ul></div></div></div>"; // initialize and set value to custom summary block HTML
-
-    // intialize variables
-    var rssFeedURL;
-    var categoryResult;
-
-    // check if article has categories
-    if (jsonData['item']['categories']) {
-
-      // initialize boolean variable
-      var categoryChecked = false;
-
-      // loop through article categories
-      for (var i = 0; i < jsonData['item']['categories'].length; i++) {
-
-        // check if any of article categories exist in pre-defined summary block data
-        var categoryExistsInArray = summaryBlockData.some(function (item) {
-          return item['categoryName'] === jsonData['item']['categories'][i];
-        });
-
-        // prevent any further category checks (only selects one category)
-        if (categoryExistsInArray && !categoryChecked) {
-          // assign category data to variable
-          categoryResult = summaryBlockData.filter(function (data) {
-            return data['categoryName'] === jsonData['item']['categories'][i];
-          })[0];
-
-          // set boolean variable to true
-          categoryChecked = true;
-        }
-
+      // check if article is a style's article
+      if (jsonData['item']['categories'][i] == "Style") {
+        isStyleArticle = true;
       }
 
     }
 
-    // check if an article category was selected from article categories
-    if (categoryResult) {
-      console.log(tag, "A category result was found:", categoryResult);
+  }
 
-      // check if setting to insert category breadcrumb on header is on
-      if (insertBreadcrumbHTML) {
-        // initialize and assign breadcrumb HTML to variable
-        var breadcrumbHTML = "<div class='custom-breadcrumb'><p>Story from <a href='" + categoryResult.categoryURL + "'>" + categoryResult.categoryName + "</a><span class='special-symbol'></span></p></div>";
-        // append breadcrumb HTML to DOM
-        $("article").prepend(breadcrumbHTML);
-      }
+}
 
-      // assign category RSS feed URL format to variable
-      rssFeedURL = categoryResult.categoryURL + "&format=rss";
+// check if setting to insert MailerLite Module is on
+if (insertMailerLite && isStyleArticle) {
 
-      console.log(tag, "Category URL:", rssFeedURL);
+  // set variable to false
+  isStyleArticle = false;
 
-      // call AJAX method that retrieves related articles
-      $.ajax({
-        url: rssFeedURL,
-        accepts: {
-          xml: "application/rss+xml"
-        },
-        dataType: "xml",
-        success: function (data) {
-          console.log(tag, "Successfully retrieved AJAX data.");
-          // retrieve all XML items from data and assign to variable
-          var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
+  // initialize variable with MailerLite HTML
+  var mailerLiteHTML = "<div class='ml-form-embed' data-account='1763926:w7z9o7z8j7' data-form='1624668:u5f7o6'></div>";
 
-          // loop through XML items
-          for (var i = 0; i < summaryBlockArticleLimit; i++) {
-            // initialize item
-            var item;
+  // retrieve the length of all divs with .sqs-block class
+  var allElements = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12").find("div.sqs-block.html-block");
 
-            // check if current article item is the same as the current article
-            if (items[i].getElementsByTagName("title")[0].textContent == decodeText(jsonData['item']['title'])) {
-              item = items[i + 1]; // set variable as xml item
-              i++; // increment for-loop index
-              summaryBlockArticleLimit++; // increment summary block article limit
-            } else {
-              item = items[i]; // set variable as xml item
-            }
+  // calculate the middle element index
+  var middleElementIndex = Math.floor(allElements.length / 2);
 
-            // retrieve item title
-            var itemTitle = item.getElementsByTagName("title")[0].textContent;
+  // check if element at index is near a button block
+  if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().hasClass("button-block")) {
+    console.log(tag, "MailerLite is trying to insert near a button block.");
+    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().next().next().after(mailerLiteHTML);
+  } else if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().hasClass("button-block")) {
+    console.log(tag, "MailerLite is trying to insert next to a button block.");
+    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").next().after(mailerLiteHTML);
+  } else {
+    $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.html-block:eq(" + middleElementIndex + ")").after(mailerLiteHTML);
+  }
 
-            // retrieve item URL
-            var itemLink = item.getElementsByTagName("link")[0].textContent;
+  // call function that reloads MailerLite scripts
+  loadScript("https://static.mailerlite.com/js/universal.js");
 
-            // initialize variable that will contain author name
-            var itemAuthor = "";
+}
 
-            // retrieve item author
-            if (item.getElementsByTagName("dc:creator")[0]) {
-              itemAuthor = item.getElementsByTagName("dc:creator")[0].textContent; // set variable to xml item author
-            } else {
-              itemAuthor = $(item).children("dc\\:creator").text(); // set variable to xml item author
-            }
+/* --------------------------------------------------- */
 
-            // initialize variable that will contain item description
-            var itemDescription;
+/* PubExchange Module */
 
-            // retrieve item description
-            if (item.getElementsByTagName("description")[0].textContent.indexOf("<p>") != -1) {
-              itemDescription = " "; // set variable to empty string
-            } else {
-              itemDescription = item.getElementsByTagName("description")[0].textContent; // initialize and set variable to xml item description
-            }
+// check if PubExchange module exists in document
+if (document.getElementsByClassName("pubexchange_module")[0]) {
+  // remove the element from DOM
+  $(".pubexchange_module").remove();
+}
 
-            // initialize variable that will contain item image URL
-            var itemImage;
+// check if setting to insert PubExchange Module is on
+if (insertPubExchangeHTML) {
+  // assign PubExchange HTML to variable
+  pubExchangeHTML = '<div class="pubexchange_module" id="pubexchange_below_content" data-pubexchange-module-id="2747"></div>';
+}
 
-            // retrieve item image URL
-            if (item.getElementsByTagName("media:content")[0]) {
-              itemImage = item.getElementsByTagName("media:content")[0].attributes[1].value; // set variable to xml item image
+/* --------------------------------------------------- */
 
-              // execute if the image URL returned is not an actual url (Internet Explorer works with this one)
-              if (itemImage.indexOf("http://") == -1 || itemImage.indexOf("https://") == -1) {
-                itemImage = item.getElementsByTagName("media:content")[0].getAttribute("url");
-              }
-            } else {
-              itemImage = $(item).children("media\\:content").attr("url"); // set variable to xml item image
-            }
+/* Article Summary Block */
 
-            // retrieve image thumbnail URL in HTTPS
-            var itemThumbnail = itemImage.replace(/^http:\/\//i, 'https://');
+// check if setting to insert Summary Block is on
+if (insertSummaryBlockHTML) {
+  // initialize variables that will contain HTML of Summary Block
+  var summaryBlockHTMLStart = "<div class='custom-summary-block sqs-block-html'><div class='custom-summary-wrapper'><div class='custom-summary-external'><div class='custom-summary-title'>" + customEmbedTitle + "</div><ul class='custom-summary-module'>"; // initialize and set value to custom summary block HTML
+  var summaryBlockHTMLMiddle = ""; // initialize and set value to custom summary block HTML
+  var summaryBlockHTMLEnd = "</ul></div></div></div>"; // initialize and set value to custom summary block HTML
 
-            // add HTML to summary block
-            summaryBlockHTMLMiddle += "<li class='custom-summary-article'><div class='custom-summary-thumb-wrapper'><a class='custom-summary-thumb' href='" + itemLink + "' data-url='" + itemLink + "'><img style='' src='" + itemThumbnail + "' data-pin-nopin='1' nopin='1'></a></div><div class='custom-summary-editorial'><a class='custom-summary-headline' href='" + itemLink + "' data-url='" + itemLink + "'>" + itemTitle + "</a><p class='custom-summary-author-name'>" + itemAuthor + "</p></div></li>"; // set value to custom summary block item HTML
+  // intialize variables
+  var rssFeedURL;
+  var categoryResult;
 
-          }
+  // check if article has categories
+  if (jsonData['item']['categories']) {
 
-          // format complete HTML and assign to variable
-          summaryBlockHTML = summaryBlockHTMLStart + summaryBlockHTMLMiddle + summaryBlockHTMLEnd;
+    // initialize boolean variable
+    var categoryChecked = false;
 
-        }
+    // loop through article categories
+    for (var i = 0; i < jsonData['item']['categories'].length; i++) {
+
+      // check if any of article categories exist in pre-defined summary block data
+      var categoryExistsInArray = summaryBlockData.some(function (item) {
+        return item['categoryName'] === jsonData['item']['categories'][i];
       });
 
-    } else {
-      // assign an empty span element
-      summaryBlockHTML = "<span></span>";
-    }
+      // prevent any further category checks (only selects one category)
+      if (categoryExistsInArray && !categoryChecked) {
+        // assign category data to variable
+        categoryResult = summaryBlockData.filter(function (data) {
+          return data['categoryName'] === jsonData['item']['categories'][i];
+        })[0];
 
-  }
-
-  /* --------------------------------------------------- */
-
-  /* Article Category Block */
-
-  // check if setting to insert article category block is on
-  if (insertCategoryBlockHTML) {
-    // execute if article has categories node
-    if (jsonData['item']['categories']) {
-      // initialize variables
-      var categoriesArray = jsonData['item']['categories']; // initialize and declare variable value to JSON data array
-      var specialCharacter = ""; // initialize special character variable
-      var startHTML = "<div class='custom-category-block sqs-block-html'>"; // initialize and declare start of category block HTML
-      var middleHTML = ""; // initialize middle of category block HTML
-      var endHTML = "</div>"; // initialize and declare end of category block HTML
-
-      // loop through JSON data array
-      for (var i = 0; i < categoriesArray.length; i++) {
-        var categoryURL = ""; // initialize category URL variable
-
-        var existsInCategoryArray = summaryBlockData.some(function (item) {
-          return item['categoryName'] === categoriesArray[i];
-        }); // filter through summaryBlockData array object and return true if article category exists
-
-        // execute if article category exists in category array (summaryBlockData)
-        if (existsInCategoryArray) {
-          categoryURL = summaryBlockData.filter(function (data) {
-            return data['categoryName'] === categoriesArray[i];
-          })[0].categoryURL; // set value to returned article data object
-          // execute if article category does not exist in category array
-        } else {
-          categoryURL = "https://iamandco.com/blog?category=" + categoriesArray[i];
-        }
-
-        if (i == 0) {
-          specialCharacter = "";
-        } else {
-          specialCharacter = " • ";
-        }
-
-        middleHTML += "<span class='category-block-item'><span class='bullet-point'>" + specialCharacter + "</span><a href='" + categoryURL + "' target='_blank'>" + categoriesArray[i] + "</a></span>";
-
+        // set boolean variable to true
+        categoryChecked = true;
       }
 
-
-      categoryBlockHTML = startHTML + middleHTML + endHTML; // concatenate HTML
-
     }
+
   }
 
-  /* --------------------------------------------------- */
+  // check if an article category was selected from article categories
+  if (categoryResult) {
+    console.log(tag, "A category result was found:", categoryResult);
 
-  /*  Article Author Block */
+    // check if setting to insert category breadcrumb on header is on
+    if (insertBreadcrumbHTML) {
+      // initialize and assign breadcrumb HTML to variable
+      var breadcrumbHTML = "<div class='custom-breadcrumb'><p>Story from <a href='" + categoryResult.categoryURL + "'>" + categoryResult.categoryName + "</a><span class='special-symbol'></span></p></div>";
+      // append breadcrumb HTML to DOM
+      $("article").prepend(breadcrumbHTML);
+    }
 
-  // check if setting to insert author block is on
-  if (insertAuthorBlockHTML) {
+    // assign category RSS feed URL format to variable
+    rssFeedURL = categoryResult.categoryURL + "&format=rss";
+
+    console.log(tag, "Category URL:", rssFeedURL);
+
+    // call AJAX method that retrieves related articles
+    $.ajax({
+      url: rssFeedURL,
+      accepts: {
+        xml: "application/rss+xml"
+      },
+      dataType: "xml",
+      success: function (data) {
+        console.log(tag, "Successfully retrieved AJAX data.");
+        // retrieve all XML items from data and assign to variable
+        var items = data.getElementsByTagName("channel")[0].getElementsByTagName("item");
+
+        // loop through XML items
+        for (var i = 0; i < summaryBlockArticleLimit; i++) {
+          // initialize item
+          var item;
+
+          // check if current article item is the same as the current article
+          if (items[i].getElementsByTagName("title")[0].textContent == decodeText(jsonData['item']['title'])) {
+            item = items[i + 1]; // set variable as xml item
+            i++; // increment for-loop index
+            summaryBlockArticleLimit++; // increment summary block article limit
+          } else {
+            item = items[i]; // set variable as xml item
+          }
+
+          // retrieve item title
+          var itemTitle = item.getElementsByTagName("title")[0].textContent;
+
+          // retrieve item URL
+          var itemLink = item.getElementsByTagName("link")[0].textContent;
+
+          // initialize variable that will contain author name
+          var itemAuthor = "";
+
+          // retrieve item author
+          if (item.getElementsByTagName("dc:creator")[0]) {
+            itemAuthor = item.getElementsByTagName("dc:creator")[0].textContent; // set variable to xml item author
+          } else {
+            itemAuthor = $(item).children("dc\\:creator").text(); // set variable to xml item author
+          }
+
+          // initialize variable that will contain item description
+          var itemDescription;
+
+          // retrieve item description
+          if (item.getElementsByTagName("description")[0].textContent.indexOf("<p>") != -1) {
+            itemDescription = " "; // set variable to empty string
+          } else {
+            itemDescription = item.getElementsByTagName("description")[0].textContent; // initialize and set variable to xml item description
+          }
+
+          // initialize variable that will contain item image URL
+          var itemImage;
+
+          // retrieve item image URL
+          if (item.getElementsByTagName("media:content")[0]) {
+            itemImage = item.getElementsByTagName("media:content")[0].attributes[1].value; // set variable to xml item image
+
+            // execute if the image URL returned is not an actual url (Internet Explorer works with this one)
+            if (itemImage.indexOf("http://") == -1 || itemImage.indexOf("https://") == -1) {
+              itemImage = item.getElementsByTagName("media:content")[0].getAttribute("url");
+            }
+          } else {
+            itemImage = $(item).children("media\\:content").attr("url"); // set variable to xml item image
+          }
+
+          // retrieve image thumbnail URL in HTTPS
+          var itemThumbnail = itemImage.replace(/^http:\/\//i, 'https://');
+
+          // add HTML to summary block
+          summaryBlockHTMLMiddle += "<li class='custom-summary-article'><div class='custom-summary-thumb-wrapper'><a class='custom-summary-thumb' href='" + itemLink + "' data-url='" + itemLink + "'><img style='' src='" + itemThumbnail + "' data-pin-nopin='1' nopin='1'></a></div><div class='custom-summary-editorial'><a class='custom-summary-headline' href='" + itemLink + "' data-url='" + itemLink + "'>" + itemTitle + "</a><p class='custom-summary-author-name'>" + itemAuthor + "</p></div></li>"; // set value to custom summary block item HTML
+
+        }
+
+        // format complete HTML and assign to variable
+        summaryBlockHTML = summaryBlockHTMLStart + summaryBlockHTMLMiddle + summaryBlockHTMLEnd;
+
+      }
+    });
+
+  } else {
+    // assign an empty span element
+    summaryBlockHTML = "<span></span>";
+  }
+
+}
+
+/* --------------------------------------------------- */
+
+/* Article Category Block */
+
+// check if setting to insert article category block is on
+if (insertCategoryBlockHTML) {
+  // execute if article has categories node
+  if (jsonData['item']['categories']) {
     // initialize variables
-    var authorName = jsonData["item"]["author"]["displayName"]; // initialize and declare author name
-    var authorID = jsonData["item"]["author"]["id"]; // initialize and declare author ID
-    var authorAvatarURL; // initialize author avatar URL
+    var categoriesArray = jsonData['item']['categories']; // initialize and declare variable value to JSON data array
+    var specialCharacter = ""; // initialize special character variable
+    var startHTML = "<div class='custom-category-block sqs-block-html'>"; // initialize and declare start of category block HTML
+    var middleHTML = ""; // initialize middle of category block HTML
+    var endHTML = "</div>"; // initialize and declare end of category block HTML
 
-    // execute if author avatarURL exists
-    if (jsonData["item"]["author"]["avatarUrl"]) {
-      authorAvatarURL = jsonData["item"]["author"]["avatarUrl"];
-      // execute if author avatarURL does not exist
-    } else {
-      authorAvatarURL = stockAvatarURL;
+    // loop through JSON data array
+    for (var i = 0; i < categoriesArray.length; i++) {
+      var categoryURL = ""; // initialize category URL variable
+
+      var existsInCategoryArray = summaryBlockData.some(function (item) {
+        return item['categoryName'] === categoriesArray[i];
+      }); // filter through summaryBlockData array object and return true if article category exists
+
+      // execute if article category exists in category array (summaryBlockData)
+      if (existsInCategoryArray) {
+        categoryURL = summaryBlockData.filter(function (data) {
+          return data['categoryName'] === categoriesArray[i];
+        })[0].categoryURL; // set value to returned article data object
+        // execute if article category does not exist in category array
+      } else {
+        categoryURL = "https://iamandco.com/blog?category=" + categoriesArray[i];
+      }
+
+      if (i == 0) {
+        specialCharacter = "";
+      } else {
+        specialCharacter = " • ";
+      }
+
+      middleHTML += "<span class='category-block-item'><span class='bullet-point'>" + specialCharacter + "</span><a href='" + categoryURL + "' target='_blank'>" + categoriesArray[i] + "</a></span>";
+
     }
 
-    var img = document.createElement("img"); // create image element
-    img.src = authorAvatarURL; // set image source to author avatarURL
 
-    // method that executes when image is loaded
-    img.onload = function () {
-      var customClass = ""; // initialize custom class
-      var width = img.naturalWidth || img.width;
-      var height = img.naturalHeight || img.height;
+    categoryBlockHTML = startHTML + middleHTML + endHTML; // concatenate HTML
 
-      // execute if image width is greater than height
-      if (width > height) {
-        customClass = "author-img-landscape"; // set value to landscape image class
-      }
+  }
+}
 
-      authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img class='" + customClass + "' src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
+/* --------------------------------------------------- */
+
+/*  Article Author Block */
+
+// check if setting to insert author block is on
+if (insertAuthorBlockHTML) {
+  // initialize variables
+  var authorName = jsonData["item"]["author"]["displayName"]; // initialize and declare author name
+  var authorID = jsonData["item"]["author"]["id"]; // initialize and declare author ID
+  var authorAvatarURL; // initialize author avatar URL
+
+  // execute if author avatarURL exists
+  if (jsonData["item"]["author"]["avatarUrl"]) {
+    authorAvatarURL = jsonData["item"]["author"]["avatarUrl"];
+    // execute if author avatarURL does not exist
+  } else {
+    authorAvatarURL = stockAvatarURL;
+  }
+
+  var img = document.createElement("img"); // create image element
+  img.src = authorAvatarURL; // set image source to author avatarURL
+
+  // method that executes when image is loaded
+  img.onload = function () {
+    var customClass = ""; // initialize custom class
+    var width = img.naturalWidth || img.width;
+    var height = img.naturalHeight || img.height;
+
+    // execute if image width is greater than height
+    if (width > height) {
+      customClass = "author-img-landscape"; // set value to landscape image class
     }
 
-    authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
+    authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img class='" + customClass + "' src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
   }
 
-  /* --------------------------------------------------- */
+  authorBlockHTML = "<div class='custom-author-article-container'><div class='custom-author-article-image'><img src='" + authorAvatarURL + "' title='" + authorName + "' alt='" + authorName + "' /></div><div class='custom-author-article-info'><p>Written by</p><a href='/blog/?author=" + authorID + "'>" + authorName + "</a></div></div>";
+}
 
-  /* Insert Blocks */
+/* --------------------------------------------------- */
 
-  // append blank divs into summary container
-  $(".custom-summary-container").prepend("<div class='custom-summary-pubexchange'></div>");
-  $(".custom-summary-container").prepend("<div class='custom-summary-summaryblock'></div>");
-  $(".custom-summary-container").prepend("<div class='custom-summary-author'></div>");
-  $(".custom-summary-container").prepend("<div class='custom-summary-categories'></div>");
+/* Insert Blocks */
 
-  // check if setting to insert PubExchange Module is on
-  if (insertPubExchangeHTML) {
-    // recursive method that checks if HTML exists
-    var checkPubExchange = setInterval(function () {
-      // check if HTML exists
-      if (pubExchangeHTML) {
-        // stop the loop
-        clearInterval(checkPubExchange);
-        // append to summary container
-        $(".custom-summary-container .custom-summary-pubexchange").append(pubExchangeHTML);
+// append blank divs into summary container
+$(".custom-summary-container").prepend("<div class='custom-summary-pubexchange'></div>");
+$(".custom-summary-container").prepend("<div class='custom-summary-summaryblock'></div>");
+$(".custom-summary-container").prepend("<div class='custom-summary-author'></div>");
+$(".custom-summary-container").prepend("<div class='custom-summary-categories'></div>");
+
+// check if setting to insert PubExchange Module is on
+if (insertPubExchangeHTML) {
+  // recursive method that checks if HTML exists
+  var checkPubExchange = setInterval(function () {
+    // check if HTML exists
+    if (pubExchangeHTML) {
+      // stop the loop
+      clearInterval(checkPubExchange);
+      // append to summary container
+      $(".custom-summary-container .custom-summary-pubexchange").append(pubExchangeHTML);
+    }
+  }, 100);
+}
+
+// check if setting to insert Summary Block is on
+if (insertSummaryBlockHTML) {
+  // recursive method that checks if HTML exists
+  var checkSummaryBlock = setInterval(function () {
+    // check if HTML exists
+    if (summaryBlockHTML) {
+      // stop the loop
+      clearInterval(checkSummaryBlock);
+      // append to summary container
+      $(".custom-summary-container .custom-summary-summaryblock").append(summaryBlockHTML);
+    }
+  }, 100);
+}
+
+// check if setting to insert Category Block is on
+if (insertCategoryBlockHTML) {
+  // recursive method that checks if HTML exists
+  var checkCategoryBlock = setInterval(function () {
+    // check if HTML exists
+    if (categoryBlockHTML) {
+      // stop the loop
+      clearInterval(checkCategoryBlock);
+      // append to summary container
+      $(".custom-summary-container .custom-summary-categories").append(categoryBlockHTML);
+      // check if setting to move pagination is on
+      if (movePaginationHTML) {
+        // call method that moves the pagination
+        moveElements();
       }
-    }, 100);
-  }
+    }
+  }, 100);
+}
 
-  // check if setting to insert Summary Block is on
-  if (insertSummaryBlockHTML) {
-    // recursive method that checks if HTML exists
-    var checkSummaryBlock = setInterval(function () {
-      // check if HTML exists
-      if (summaryBlockHTML) {
-        // stop the loop
-        clearInterval(checkSummaryBlock);
-        // append to summary container
-        $(".custom-summary-container .custom-summary-summaryblock").append(summaryBlockHTML);
-      }
-    }, 100);
-  }
+// check if setting to insert Author Block is on
+if (insertAuthorBlockHTML) {
+  // recursive method that checks if HTML exists
+  var checkAuthorBlock = setInterval(function () {
+    // check if HTML exists
+    if (authorBlockHTML) {
+      // stop the loop
+      clearInterval(checkAuthorBlock);
+      // append to summary container
+      $(".custom-summary-container .custom-summary-author").append(authorBlockHTML);
+    }
+  }, 100);
+}
 
-  // check if setting to insert Category Block is on
-  if (insertCategoryBlockHTML) {
-    // recursive method that checks if HTML exists
-    var checkCategoryBlock = setInterval(function () {
-      // check if HTML exists
-      if (categoryBlockHTML) {
-        // stop the loop
-        clearInterval(checkCategoryBlock);
-        // append to summary container
-        $(".custom-summary-container .custom-summary-categories").append(categoryBlockHTML);
-        // check if setting to move pagination is on
-        if (movePaginationHTML) {
-          // call method that moves the pagination
-          moveElements();
-        }
-      }
-    }, 100);
-  }
-
-  // check if setting to insert Author Block is on
-  if (insertAuthorBlockHTML) {
-    // recursive method that checks if HTML exists
-    var checkAuthorBlock = setInterval(function () {
-      // check if HTML exists
-      if (authorBlockHTML) {
-        // stop the loop
-        clearInterval(checkAuthorBlock);
-        // append to summary container
-        $(".custom-summary-container .custom-summary-author").append(authorBlockHTML);
-      }
-    }, 100);
-  }
-
-  // call method that inserts Pinterest button for thumbnail images
-  insertGalleryImageButtons();
+// call method that inserts Pinterest button for thumbnail images
+insertGalleryImageButtons();
 
   /* --------------------------------------------------- */
 
