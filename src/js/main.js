@@ -1,6 +1,6 @@
 /* NOTE: The following are customaizable variables that enhance features in article pages */
 var insertPubExchangeHTML = true; // setting this variable to true will insert the pubExchange HTML into the footer of article
-var insertMailerLite = true; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
+var insertMailerLite = false; // setting this variable to true will insert the custom MailChimp embed into middle (approximately) of article pages
 var insertSummaryBlockHTML = true; // setting this variable to true will insert the custom summary block HTML into the bottom of article pages
 var insertCategoryBlockHTML = true; // setting this variable to true will insert the custom category link block HTML into the bottom of article pages
 var insertAuthorBlockHTML = true; // setting this variable to true will insert the custom author block HTML into the bottom of article pages
@@ -297,7 +297,7 @@ function checkBlog() {
 
           // // // console.log("Add no follow: ", insertNoFollowLinks);
 
-          var isStylesArticle = categoryArray.some(function (item) {
+          /* var isStylesArticle = categoryArray.some(function (item) {
             return item === "Style";
           });
 
@@ -309,7 +309,7 @@ function checkBlog() {
             // append after first image thumbnail
             $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.image-block:eq(0)").parent().parent().after(mailerLiteStyleHTML);
 
-          }
+          } */
 
           // execute if the article is a style letter article
           if (isArticleStyleExclusive) {
