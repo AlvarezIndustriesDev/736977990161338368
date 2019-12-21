@@ -3140,6 +3140,12 @@ function insertGalleryImageButtons() {
     // loop through images
     for (var i = 0; i < thumbImages.length; i++) {
 
+      /* Testing code for ImageLoader */
+
+      ImageLoader.load(thumbImages[i], { load: true }, function() {
+        console.log(pinTag, "Images loaded.");
+      });
+
       // retrieve height of image text
       var textHeight = $(thumbImages[i]).parent().parent().find(".image-slide-title").outerHeight();
 
