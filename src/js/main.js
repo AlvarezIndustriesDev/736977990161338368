@@ -1759,6 +1759,9 @@ function insertFeelGoodAds() {
     // assign desktop content hints
     adHTML = "<div class='content_desktop_hint custom-appended'></div>";
 
+    // initialize fall back counter variable
+    var timesRan = 0;
+
     // check if article is inserted so that advertisements are inserted after video
     var checkIfMediavineVideoExists = setInterval(function () {
 
