@@ -70,7 +70,7 @@ var summaryBlockData = [{
   categoryURL: "https://iamandco.com/blog?category=News"
 }]; // initialize and declare array of article objects for custom summary block embed
 /* var selection = [".sqs-block.html-block.sqs-block-html", ":header", "p"]; // initialize and declare array of pre-defined HTML selectors for positioning of custom summary block **/
-var stockAvatarURL = "https://static1.squarespace.com/static/5b527b0e45776e1abae27d13/5b528263758d4613dec6268a/5c53e1840d9297839d5e4992/1549001094734/generic-user-icon.jpg"; // initialize and declare stock avatar image URL
+var stockAvatarURL = "https://images.squarespace-cdn.com/content/54ff0211e4b0331c7906899c/1581827889194-T5VPUG7JM871930PPU1F/generic-user-icon.jpg?content-type=image%2Fpng"; // initialize and declare stock avatar image URL
 
 /* Scripts */
 /* ------------------------------------------------------------------------------- */
