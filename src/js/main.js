@@ -1709,7 +1709,7 @@ function insertFeelGoodAds() {
   var numAdsInserted = 0;
 
   // declare ad limit [REMOVE FOR OLD COUNTER]
-  adPerPageLimit = 5;
+  adPerPageLimit = 10;
 
   // execute if user is on a mobile device
   if (isMobile()) {
@@ -2203,7 +2203,7 @@ function insertNonFeelGoodAds() {
   var adHTML = "<div class='content_hint custom-appended'></div>";
 
   // declare and initialize number of ads to insert
-  var limit = 5;
+  var limit = 10;
 
   // check if there are instagram embeds in the article
   if ($(".instagram-media").length > 0) {
@@ -3142,9 +3142,8 @@ function insertGalleryImageButtons() {
 
       /* Testing code for ImageLoader */
 
-      ImageLoader.load(thumbImages[i], { load: true }, function() {
-        console.log(pinTag, "Images loaded.");
-      });
+      // added so that the images instantly load and no bugs with misplacement of buttons occurs
+      ImageLoader.load(thumbImages[i], { load: true });
 
       // retrieve height of image text
       var textHeight = $(thumbImages[i]).parent().parent().find(".image-slide-title").outerHeight();
