@@ -412,7 +412,8 @@ function checkBlog() {
 
                       // initialize variables
                       var videoID = response['data'][0]['video_id'];
-                      var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      // var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      var videoElement = "<div class='mv-video-target mv-video-id-" + videoID + "' data-video-id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
                       var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
 
@@ -493,9 +494,10 @@ function checkBlog() {
 
                       // initialize variables
                       var videoID = response['data'][0]['video_id'];
-                      var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      // var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
+                      var videoElement = "<div class='mv-video-target mv-video-id-" + videoID + "' data-video-id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-                      var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
+                      var scriptURL = "https://scripts.mediavine.com/tags/i-am-and-co.js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
                       if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
@@ -1002,14 +1004,14 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
   console.log("[VIDEO] SRC:", src);
 
   // set autoplay property to true
-  $('#' + videoID).attr('data-autoplay', 'true');
+  $('.mv-video-id-' + videoID).attr('data-autoplay', 'true');
 
   // set autoplay property to true for video element
-  $('#' + videoID).find('.video-js').find('video').attr('autoplay', 'true');
+  $('.mv-video-id-' + videoID).find('.video-js').find('video').attr('autoplay', 'true');
 
   /* // add horizontal lines
-  $('#' + videoID).before(hrElement);
-  $('#' + videoID).after(hrElement); */
+  $('.mv-video-id-' + videoID).before(hrElement);
+  $('.mv-video-id-' + videoID).after(hrElement); */
 
   // load javascript
   $.getScript(src, function (data, textStatus, jqxhr) {
@@ -1023,23 +1025,23 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
       // method to check if all custom HTML variables exist
       var checkElement = setInterval(function () {
         // check if ad container exists inside video
-        if ($('#' + videoID).find(".ima-ad-container").length > 0) {
+        if ($('.mv-video-id-' + videoID).find(".ima-ad-container").length > 0) {
           clearInterval(checkElement); // stop the loop
           console.log("[VIDEO] Element found.");
           // add horizontal lines
-          $('#' + videoID).before(hrElement);
-          $('#' + videoID).after(hrElement);
+          $('.mv-video-id-' + videoID).before(hrElement);
+          $('.mv-video-id-' + videoID).after(hrElement);
 
           // set autoplay to true and reload the video
-          $('#' + videoID).find('video')[0].autoplay = true;
+          $('.mv-video-id-' + videoID).find('video')[0].autoplay = true;
           // set the title of the mediavine bar
-          $('#' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
-          $('#' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
-          $('#' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
+          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
+          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
+          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
           // hide the default image
-          $('#' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
-          var targetElement = $('#' + videoID).find(".ima-ad-container");
-          var miniVideoElement = $('#' + videoID).find(".mediavine-video__sticky-container");
+          $('.mv-video-id-' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
+          var targetElement = $('.mv-video-id-' + videoID).find(".ima-ad-container");
+          var miniVideoElement = $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-container");
           observeVideoAd(targetElement, videoID, response);
           observeMiniVideo(miniVideoElement, videoID, response);
         }
@@ -1074,16 +1076,16 @@ function observeVideoAd(targetElement, videoID, data) {
       mutationsList.forEach((mutation) => {
         // execute if the ad becomes invisible
         if (mutation.target.style.display == 'none') {
-          console.log("[VIDEO] ID:", $('#' + videoID));
-          console.log("[VIDEO] Ad stopped playing...", $('#' + videoID).find('video')[0].paused);
+          console.log("[VIDEO] ID:", $('.mv-video-id-' + videoID));
+          console.log("[VIDEO] Ad stopped playing...", $('.mv-video-id-' + videoID).find('video')[0].paused);
           // call method that displays the title animations
           animateAdVideo(videoID, videoInformation);
           // execute if the mini video exists
-          if ($('#' + videoID).find('.mediavine-video__is-sticky').length > 0) {
+          if ($('.mv-video-id-' + videoID).find('.mediavine-video__is-sticky').length > 0) {
             // hide the "READ MORE" text
-            $('#' + videoID).find('.read-more-text').attr('hidden', 'true');
+            $('.mv-video-id-' + videoID).find('.read-more-text').attr('hidden', 'true');
             // hide the video headline container
-            $('#' + videoID).find('.video-headline-container').attr('hidden', 'true');
+            $('.mv-video-id-' + videoID).find('.video-headline-container').attr('hidden', 'true');
           }
           // stop observing
           observer.disconnect();
@@ -1114,8 +1116,8 @@ function animateAdVideo(videoID, information) {
   console.log("[VIDEO] Information:", information);
 
   // pause the video and set time to 0:00
-  $('#' + videoID).find('video')[0].pause();
-  $('#' + videoID).find('video')[0].currentTime = 0;
+  $('.mv-video-id-' + videoID).find('video')[0].pause();
+  $('.mv-video-id-' + videoID).find('video')[0].currentTime = 0;
 
   // declare the headline HTML
   var headlineHTML = "<div class='video-headline-container'></div>";
@@ -1130,13 +1132,13 @@ function animateAdVideo(videoID, information) {
   var counter = 0;
 
   // add headline HTML inside video
-  $('#' + videoID).find('.mediavine-video__sticky-video').prepend(headlineHTML);
+  $('.mv-video-id-' + videoID).find('.mediavine-video__sticky-video').prepend(headlineHTML);
 
   // add an event listener that executes when the video ends
   document.getElementById(videoID).getElementsByTagName('video')[0].onended = function () {
     console.log("[VIDEO]", "The video has finally ended.");
     // remove headlines from container after video ends
-    $('#' + videoID).find('.video-headline-container').empty();
+    $('.mv-video-id-' + videoID).find('.video-headline-container').empty();
   }
 
   // retrieve formatted strings based on article title
@@ -1149,12 +1151,12 @@ function animateAdVideo(videoID, information) {
     // declare HTML for headline text
     var textHTML = "<div class='video-headline-text' data-element-id='" + i + "'>" + sentenceArray[i] + "</div>";
     // append to video headline container
-    $('#' + videoID).find('.video-headline-container').append(textHTML);
+    $('.mv-video-id-' + videoID).find('.video-headline-container').append(textHTML);
 
   }
 
   // pause the video and set time to 0:00
-  var autoplayPromise = $('#' + videoID).find('video')[0].play();
+  var autoplayPromise = $('.mv-video-id-' + videoID).find('video')[0].play();
 
   // check if promise is undefined
   if (autoplayPromise !== undefined) {
@@ -1175,9 +1177,9 @@ function animateAdVideo(videoID, information) {
   // change article titles incrementally
   var changeTitles = setInterval(function () {
     // check if video is paused
-    if (!$('#' + videoID).find('video')[0].paused) {
+    if (!$('.mv-video-id-' + videoID).find('video')[0].paused) {
       // empty the headline text elements
-      $('#' + videoID).find('.video-headline-container').empty();
+      $('.mv-video-id-' + videoID).find('.video-headline-container').empty();
       // retrieve formatted strings based on article title
       retrieveStrings(information['video_links'][counter]['article_title'].split(" "), wordLimit);
       console.log("[VIDEO] Sentence:", sentenceArray);
@@ -1186,7 +1188,7 @@ function animateAdVideo(videoID, information) {
         // declare HTML for headline text
         var textHTML = "<div class='video-headline-text'>" + sentenceArray[i] + "</div>";
         // append to video headline container
-        $('#' + videoID).find('.video-headline-container').append(textHTML);
+        $('.mv-video-id-' + videoID).find('.video-headline-container').append(textHTML);
       }
 
       // reset the sentence array
@@ -1229,20 +1231,20 @@ function observeMiniVideo(targetElement, videoID, data) {
         // execute if the mini video exists
         if (mutation.target.className.indexOf('mediavine-video__is-sticky') > -1) {
           // hide the "READ MORE" text
-          $('#' + videoID).find('.read-more-text').attr('hidden', 'true');
+          $('.mv-video-id-' + videoID).find('.read-more-text').attr('hidden', 'true');
           // hide the video headline container
-          $('#' + videoID).find('.video-headline-container').attr('hidden', 'true');
+          $('.mv-video-id-' + videoID).find('.video-headline-container').attr('hidden', 'true');
         } else {
           // execute if the document has the "READ MORE" text
-          if ($('#' + videoID).find('.read-more-text').length > 0) {
+          if ($('.mv-video-id-' + videoID).find('.read-more-text').length > 0) {
             // execute if the document has the video headline container
-            if ($('#' + videoID).find('.video-headline-container').length > 0 && $('#' + videoID).find('.video-headline-container').is(':hidden')) {
-              $('#' + videoID).find('.video-headline-container').removeAttr('hidden');
+            if ($('.mv-video-id-' + videoID).find('.video-headline-container').length > 0 && $('.mv-video-id-' + videoID).find('.video-headline-container').is(':hidden')) {
+              $('.mv-video-id-' + videoID).find('.video-headline-container').removeAttr('hidden');
             }
             // execute if they have the hidden attribute
-            if ($('#' + videoID).find('.read-more-text').is(':hidden')) {
+            if ($('.mv-video-id-' + videoID).find('.read-more-text').is(':hidden')) {
               // display the hidden containers
-              $('#' + videoID).find('.read-more-text').removeAttr('hidden');
+              $('.mv-video-id-' + videoID).find('.read-more-text').removeAttr('hidden');
             }
           }
         }
