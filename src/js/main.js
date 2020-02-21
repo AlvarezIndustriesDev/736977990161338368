@@ -1776,7 +1776,7 @@ function insertFeelGoodAds() {
       timesRan++;
 
       // check if limit of times ran is met
-      if (timesRan == 100) {
+      if (timesRan == 200) {
         // stop the loop
         clearInterval(checkIfMediavineVideoExists);
         // reset the counter
@@ -2378,7 +2378,7 @@ function insertNonFeelGoodAds() {
       timesRan++;
 
       // check if limit of times ran is met
-      if (timesRan == 100) {
+      if (timesRan == 200) {
         // stop the loop
         clearInterval(checkIfMediavineVideoExists);
         // reset the counter
