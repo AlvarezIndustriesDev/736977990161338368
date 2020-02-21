@@ -372,6 +372,9 @@ function checkBlog() {
 
               // check if user is on mobile (if they are, do not show the video at all)
               if (!isMobile()) {
+
+                /* 2/20/2020 - FIX THIS PLEASE, MAKE IT BETTER */
+
                 // loop through scripts and find mediavine video
                 $('script[data-noptimize]').each(function () {
                   var src = this.src; // initialize and retrieve script source link
@@ -388,7 +391,7 @@ function checkBlog() {
                     blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo(src, videoID, false);
+                    loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
 
                     return false;
 
@@ -410,7 +413,8 @@ function checkBlog() {
                       // initialize variables
                       var videoID = response['data'][0]['video_id'];
                       var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                      var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+                      // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+                      var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
                       if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
@@ -468,7 +472,7 @@ function checkBlog() {
                     blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo(src, videoID, false);
+                    loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
 
                     return false;
 
@@ -490,7 +494,8 @@ function checkBlog() {
                       // initialize variables
                       var videoID = response['data'][0]['video_id'];
                       var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
-                      var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+                      // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
+                      var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
                       if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
@@ -2555,11 +2560,6 @@ function insertNonFeelGoodAds() {
     }, 100);
 
   }
-
-
-
-
-
 }
 
 // method that returns ad
