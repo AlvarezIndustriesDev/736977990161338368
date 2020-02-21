@@ -2377,7 +2377,7 @@ function insertNonFeelGoodAds() {
       // increment the number of times this interval has executed
       timesRan++;
 
-      // check if limit of times ran is met
+      /* // check if limit of times ran is met
       if (timesRan == 300) {
         // stop the loop
         clearInterval(checkIfMediavineVideoExists);
@@ -2467,7 +2467,7 @@ function insertNonFeelGoodAds() {
             }
           }, 100);
         }
-      }
+      } */
 
       // check if mediavine video exists in DOM
       if ($(".mediavine-video__target-div").length > 0) {
