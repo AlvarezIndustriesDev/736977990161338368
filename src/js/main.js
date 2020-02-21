@@ -1135,7 +1135,7 @@ function animateAdVideo(videoID, information) {
   $('.mv-video-id-' + videoID).find('.mediavine-video__sticky-video').prepend(headlineHTML);
 
   // add an event listener that executes when the video ends
-  document.getElementById(videoID).getElementsByTagName('video')[0].onended = function () {
+  document.getElementsByClassName('mv-video-id-' + videoID)[0].getElementsByTagName('video')[0].onended = function () {
     console.log("[VIDEO]", "The video has finally ended.");
     // remove headlines from container after video ends
     $('.mv-video-id-' + videoID).find('.video-headline-container').empty();
@@ -2377,7 +2377,7 @@ function insertNonFeelGoodAds() {
       // increment the number of times this interval has executed
       timesRan++;
 
-      /* // check if limit of times ran is met
+      // check if limit of times ran is met
       if (timesRan == 300) {
         // stop the loop
         clearInterval(checkIfMediavineVideoExists);
@@ -2467,7 +2467,7 @@ function insertNonFeelGoodAds() {
             }
           }, 100);
         }
-      } */
+      }
 
       // check if mediavine video exists in DOM
       if ($(".mediavine-video__target-div").length > 0) {
