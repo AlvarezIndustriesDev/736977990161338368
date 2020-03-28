@@ -522,7 +522,7 @@ function checkBlog() {
                         }
 
                         // insert video element after third paragraph
-                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[1].after(videoElement);
+                        availableParagraphs[1].after(videoElement);
                       }
 
                       // call method that loads mediavine's videos
