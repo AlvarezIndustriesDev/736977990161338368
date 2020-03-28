@@ -522,11 +522,11 @@ function checkBlog() {
                         }
 
                         // insert video element after third paragraph
-                        availableParagraphs[1].after(videoElement);
+                        $(availableParagraphs[1]).after(videoElement);
                       }
 
                       // call method that loads mediavine's videos
-                      loadMediavineVideo(scriptURL, videoID, true, response);
+                      // loadMediavineVideo(scriptURL, videoID, true, response);
 
                     }
                   });
