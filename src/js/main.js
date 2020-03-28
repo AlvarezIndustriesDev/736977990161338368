@@ -391,7 +391,7 @@ function checkBlog() {
                     blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
+                    // loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
 
                     return false;
 
@@ -415,7 +415,7 @@ function checkBlog() {
                       // var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       var videoElement = "<div class='mv-video-target mv-video-id-" + videoID + "' data-video-id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-                      var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
+                      // var scriptURL = "//scripts.mediavine.com/tags/i-am-and-co.js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
                       if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
@@ -424,12 +424,24 @@ function checkBlog() {
                         // insert video element after second paragraph
                         $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
                       } else {
+                        // initialize variable that will hold all available paragraphs
+                        var availableParagraphs = new Array();
+
+                        // loop through first ten paragraphs in DOM
+                        for (var i = 0; i < 10; i++) {
+                          // check if paragraph is inside an image tag
+                          if (!$($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]).parent().hasClass("image-caption")) {
+                            // insert paragraph into list
+                            availableParagraphs.push($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]);
+                          }
+                        }
+
                         // insert video element after third paragraph
-                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                        $(availableParagraphs[1]).after(videoElement);
                       }
 
                       // call method that loads mediavine's videos
-                      loadMediavineVideo(scriptURL, videoID, true, response);
+                      loadMediavineVideo(/*scriptURL,*/videoID, true, response);
 
                     }
                   });
@@ -473,7 +485,7 @@ function checkBlog() {
                     blogHasVideo = true;
 
                     // call method that loads mediavine's videos
-                    loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
+                    // loadMediavineVideo("//scripts.mediavine.com/tags/i-am-and-co.js", videoID, false);
 
                     return false;
 
@@ -506,28 +518,25 @@ function checkBlog() {
                         // insert video element after second paragraph
                         $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
                       } else {
-
                         // initialize variable that will hold all available paragraphs
                         var availableParagraphs = new Array();
 
                         // loop through first ten paragraphs in DOM
                         for (var i = 0; i < 10; i++) {
-      
                           // check if paragraph is inside an image tag
                           if (!$($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]).parent().hasClass("image-caption")) {
                             // insert paragraph into list
                             availableParagraphs.push($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]);
-                          } 
-
+                          }
                         }
 
                         // insert video element after third paragraph
                         $(availableParagraphs[1]).after(videoElement);
+
                       }
 
                       // call method that loads mediavine's videos
-                      // loadMediavineVideo(scriptURL, videoID, true, response);
-
+                      loadMediavineVideo(/*scriptURL,*/videoID, true, response);
                     }
                   });
 
@@ -1012,11 +1021,11 @@ function editSearchPage(queryParameter) {
 }
 
 // method that loads mediavine's videos
-function loadMediavineVideo(src, videoID, addObserver, response) {
+function loadMediavineVideo(/*src,*/videoID, addObserver, response) {
 
   var hrElement = "<div class='sqs-block horizontalrule-block sqs-block-horizontalrule new-custom-article-sqs-block custom-hr-element'><div class='sqs-block-content'><hr></div></div>";
 
-  console.log("[VIDEO] SRC:", src);
+  // console.log("[VIDEO] SRC:", src);
 
   // set autoplay property to true
   $('.mv-video-id-' + videoID).attr('data-autoplay', 'true');
@@ -1024,12 +1033,42 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
   // set autoplay property to true for video element
   $('.mv-video-id-' + videoID).find('.video-js').find('video').attr('autoplay', 'true');
 
+  // execute if addObserver element is true
+  if (addObserver && response) {
+
+    // method to check if all custom HTML variables exist
+    var checkElement = setInterval(function () {
+      // check if ad container exists inside video
+      if ($('.mv-video-id-' + videoID).find(".ima-ad-container").length > 0) {
+        clearInterval(checkElement); // stop the loop
+        console.log("[VIDEO] Element found.");
+        // add horizontal lines
+        $('.mv-video-id-' + videoID).before(hrElement);
+        $('.mv-video-id-' + videoID).after(hrElement);
+
+        // set autoplay to true and reload the video
+        $('.mv-video-id-' + videoID).find('video')[0].autoplay = true;
+        // set the title of the mediavine bar
+        $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
+        $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
+        $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
+        // hide the default image
+        $('.mv-video-id-' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
+        var targetElement = $('.mv-video-id-' + videoID).find(".ima-ad-container");
+        var miniVideoElement = $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-container");
+        observeVideoAd(targetElement, videoID, response);
+        observeMiniVideo(miniVideoElement, videoID, response);
+      }
+    }, 100);
+
+  }
+
   /* // add horizontal lines
   $('.mv-video-id-' + videoID).before(hrElement);
   $('.mv-video-id-' + videoID).after(hrElement); */
 
   // load javascript
-  $.getScript(src, function (data, textStatus, jqxhr) {
+/*   $.getScript(src, function (data, textStatus, jqxhr) {
     console.log("[VIDEO]", textStatus); // success message
     console.log("[VIDEO]", jqxhr.status); // 200 message
     console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
@@ -1064,7 +1103,7 @@ function loadMediavineVideo(src, videoID, addObserver, response) {
 
     }
 
-  });
+  }); */
 
 }
 
