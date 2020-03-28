@@ -324,7 +324,7 @@ function checkBlog() {
 
           }
 
-          // execute if insertNoFollowLinks returns true
+          // execute if insertNoFollowLinks returns true (article is a "Feel Good(s)")
           if (insertNoFollowLinks) {
             checkForExternalLinks(true); // method called to check if anchor tags (links) found in document are external and apply no-follow property
 
@@ -497,7 +497,7 @@ function checkBlog() {
                       // var videoElement = "<div id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       var videoElement = "<div class='mv-video-target mv-video-id-" + videoID + "' data-video-id='" + videoID + "' data-volume='70' data-ratio='16:9'></div>";
                       // var scriptURL = "//video.mediavine.com/videos/" + videoID + ".js";
-                      var scriptURL = "https://scripts.mediavine.com/tags/i-am-and-co.js";
+                      // var scriptURL = "https://scripts.mediavine.com/tags/i-am-and-co.js";
 
                       // check if article has horizontal line after second paragraph indicating that it has a list?
                       if ($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").parent().parent().next().is(".sqs-block-horizontalrule")) {
@@ -506,8 +506,23 @@ function checkBlog() {
                         // insert video element after second paragraph
                         $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(1)").after(videoElement);
                       } else {
+
+                        // initialize variable that will hold all available paragraphs
+                        var availableParagraphs = new Array();
+
+                        // loop through first ten paragraphs in DOM
+                        for (var i = 0; i < 10; i++) {
+      
+                          // check if paragraph is inside an image tag
+                          if (!$($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]).parent().hasClass("image-caption")) {
+                            // insert paragraph into list
+                            availableParagraphs.push($("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[i]);
+                          } 
+
+                        }
+
                         // insert video element after third paragraph
-                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p:eq(2)").after(videoElement);
+                        $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 p")[1].after(videoElement);
                       }
 
                       // call method that loads mediavine's videos
@@ -1820,6 +1835,9 @@ function insertFeelGoodAds() {
       if ($(".mediavine-video__target-div").length > 0) {
         // stop the loop
         clearInterval(checkIfMediavineVideoExists);
+
+        console.log(tag, "Video found.");
+
         // retrieve all horizontal rule elements (line blocks)
         var lineBlocks = $("article div[data-layout-label='Post Body'] .col.sqs-col-12.span-12 div.sqs-block.horizontalrule-block.sqs-block-horizontalrule");
         // declare number of line blocks already inserted
