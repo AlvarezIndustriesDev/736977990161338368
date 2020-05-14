@@ -696,20 +696,23 @@ function checkBlog() {
     });
 
   } else if (pathName == "shop") {
-    // check if wiremo div has loaded
-    if ($('wiremo-widget-lite').length > 0) {
-      $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
-    } else {
-      // check if the element exists in the page
-      var checkReviewStars = setInterval(function () {
-        // check if input element exists
-        if ($("wiremo-widget-lite").length > 0) {
-          // stop the loop from running
-          clearInterval(checkReviewStars);
-          // place beneath title
-          $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
-        }
-      });
+    // check if user is viewing on mobile
+    if (isMobile()) {
+      // check if wiremo div has loaded
+      if ($('wiremo-widget-lite').length > 0) {
+        $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
+      } else {
+        // check if the element exists in the page
+        var checkReviewStars = setInterval(function () {
+          // check if input element exists
+          if ($("wiremo-widget-lite").length > 0) {
+            // stop the loop from running
+            clearInterval(checkReviewStars);
+            // place beneath title
+            $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
+          }
+        });
+      }
     }
   }
 
@@ -1084,42 +1087,42 @@ function loadMediavineVideo(/*src,*/videoID, addObserver, response) {
   $('.mv-video-id-' + videoID).after(hrElement); */
 
   // load javascript
-/*   $.getScript(src, function (data, textStatus, jqxhr) {
-    console.log("[VIDEO]", textStatus); // success message
-    console.log("[VIDEO]", jqxhr.status); // 200 message
-    console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
-
-    // execute if addObserver element is true
-    if (addObserver && response) {
-
-      // method to check if all custom HTML variables exist
-      var checkElement = setInterval(function () {
-        // check if ad container exists inside video
-        if ($('.mv-video-id-' + videoID).find(".ima-ad-container").length > 0) {
-          clearInterval(checkElement); // stop the loop
-          console.log("[VIDEO] Element found.");
-          // add horizontal lines
-          $('.mv-video-id-' + videoID).before(hrElement);
-          $('.mv-video-id-' + videoID).after(hrElement);
-
-          // set autoplay to true and reload the video
-          $('.mv-video-id-' + videoID).find('video')[0].autoplay = true;
-          // set the title of the mediavine bar
-          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
-          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
-          $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
-          // hide the default image
-          $('.mv-video-id-' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
-          var targetElement = $('.mv-video-id-' + videoID).find(".ima-ad-container");
-          var miniVideoElement = $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-container");
-          observeVideoAd(targetElement, videoID, response);
-          observeMiniVideo(miniVideoElement, videoID, response);
-        }
-      }, 100);
-
-    }
-
-  }); */
+  /*   $.getScript(src, function (data, textStatus, jqxhr) {
+      console.log("[VIDEO]", textStatus); // success message
+      console.log("[VIDEO]", jqxhr.status); // 200 message
+      console.log("[VIDEO]", "Javascript load was performed successfully."); // custom success message
+  
+      // execute if addObserver element is true
+      if (addObserver && response) {
+  
+        // method to check if all custom HTML variables exist
+        var checkElement = setInterval(function () {
+          // check if ad container exists inside video
+          if ($('.mv-video-id-' + videoID).find(".ima-ad-container").length > 0) {
+            clearInterval(checkElement); // stop the loop
+            console.log("[VIDEO] Element found.");
+            // add horizontal lines
+            $('.mv-video-id-' + videoID).before(hrElement);
+            $('.mv-video-id-' + videoID).after(hrElement);
+  
+            // set autoplay to true and reload the video
+            $('.mv-video-id-' + videoID).find('video')[0].autoplay = true;
+            // set the title of the mediavine bar
+            $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title").prepend("<span class='mediavine-sticky-header'>Top Stories</span>");
+            $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").html("Read More <span class='mediavine-sticky-title-arrow'>>></span>");
+            $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-title a").prependTo(".mediavine-video__sticky-bar").addClass("read-more-text");
+            // hide the default image
+            $('.mv-video-id-' + videoID).find("div:first-child").find("div:first-child").css("background-image", "none");
+            var targetElement = $('.mv-video-id-' + videoID).find(".ima-ad-container");
+            var miniVideoElement = $('.mv-video-id-' + videoID).find(".mediavine-video__sticky-container");
+            observeVideoAd(targetElement, videoID, response);
+            observeMiniVideo(miniVideoElement, videoID, response);
+          }
+        }, 100);
+  
+      }
+  
+    }); */
 
 }
 
