@@ -698,7 +698,7 @@ function checkBlog() {
   } else if (pathName == "shop") {
     // check if wiremo div has loaded
     if ($('wiremo-widget-lite').length > 0) {
-      $('wiremo-widget-lite').appendTo('article .ProductItem-details.ProductItem-details--mobile');
+      $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
     } else {
       // check if the element exists in the page
       var checkReviewStars = setInterval(function () {
@@ -707,7 +707,7 @@ function checkBlog() {
           // stop the loop from running
           clearInterval(checkReviewStars);
           // place beneath title
-          $('wiremo-widget-lite').appendTo('article .ProductItem-details.ProductItem-details--mobile');
+          $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
         }
       });
     }
