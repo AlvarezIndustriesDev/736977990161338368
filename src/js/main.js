@@ -695,7 +695,7 @@ function checkBlog() {
 
     });
 
-  } else if (pathName == "shop") {
+  } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
     // check if user is viewing on mobile
     if (isMobile()) {
       // check if wiremo div has loaded
