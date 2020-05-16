@@ -714,7 +714,8 @@ function checkBlog() {
         });
       }
     }
-  } else if (pathName == "") { // home page
+  } else if (pathName == "") {
+    console.log("Home page?");
     // check if product quick view div has loaded
     if ($('.sqs-product-quick-view-content').length > 0) {
       // place on product block
