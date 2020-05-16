@@ -741,6 +741,8 @@ function checkBlog() {
       $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
       // remove the quick view selection
       $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+      // hide product block
+      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
       // remove the lightbox
       $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
       // remove lightbox class
@@ -760,6 +762,8 @@ function checkBlog() {
           $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
           // remove the quick view selection
           $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+          // hide product block
+          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
           // remove the lightbox
           $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
           // remove lightbox class
@@ -767,6 +771,9 @@ function checkBlog() {
         }
       });
     }
+
+    $('html').removeClass('sqs-modal-lightbox-open');
+
   }
 }
 
