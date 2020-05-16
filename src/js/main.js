@@ -749,6 +749,8 @@ function checkBlog() {
       // check if the element exists in the page
       var checkQuickView = setInterval(function () {
         console.log("Checking quick-view...");
+        // trigger click event
+        $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
         // check if input element exists
         if ($(".sqs-product-quick-view-content").length > 0) {
           // stop the loop from running
