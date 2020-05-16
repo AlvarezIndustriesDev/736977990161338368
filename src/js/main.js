@@ -714,8 +714,28 @@ function checkBlog() {
         });
       }
     }
+  } else if (pathName == "new-homepage") {
+    // check if product quick view div has loaded
+    if ($('.sqs-product-quick-view-content').length > 0) {
+      // place on product block
+      $('.sqs-product-quick-view-content').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
+      // remove the quick view selection
+      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+    } else {
+      // check if the element exists in the page
+      var checkQuickView = setInterval(function () {
+        // check if input element exists
+        if ($(".sqs-product-quick-view-content").length > 0) {
+          // stop the loop from running
+          clearInterval(checkQuickView);
+          // place on product block
+          $('.sqs-product-quick-view-content').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
+          // remove the quick view selection
+          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+        }
+      });
+    }
   }
-
 }
 
 // method that returns search results to the search page
