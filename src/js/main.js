@@ -716,12 +716,21 @@ function checkBlog() {
     }
   } else if (pathName == "") {
     console.log("Home page?");
+
+    // hide product block
+    $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
+
+    // trigger click event
+    $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
+
     // check if product quick view div has loaded
     if ($('.sqs-product-quick-view-content').length > 0) {
       // place on product block
-      $('.sqs-product-quick-view-content').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
+      $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
       // remove the quick view selection
       $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+      // remove the lightbox
+      $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
     } else {
       // check if the element exists in the page
       var checkQuickView = setInterval(function () {
@@ -730,9 +739,11 @@ function checkBlog() {
           // stop the loop from running
           clearInterval(checkQuickView);
           // place on product block
-          $('.sqs-product-quick-view-content').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
+          $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
           // remove the quick view selection
           $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
+          // remove the lightbox
+          $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
         }
       });
     }
