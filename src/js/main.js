@@ -718,7 +718,7 @@ function checkBlog() {
     console.log("Home page?");
 
     // hide product block
-    // $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
+    $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
 
     if ($('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').length > 0) {
       // trigger click event
