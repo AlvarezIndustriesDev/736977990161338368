@@ -724,7 +724,8 @@ function checkBlog() {
       // trigger click event
       $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
     } else {
-      var checkButtonExists = setInterval(function() {
+      var checkButtonExists = setInterval(function () {
+        console.log("Checking button...");
         if ($('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').length > 0) {
           clearInterval(checkButtonExists);
           // trigger click event
@@ -742,9 +743,12 @@ function checkBlog() {
       $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
       // remove the lightbox
       $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
+      // remove lightbox class
+      $('html').removeClass('sqs-modal-lightbox-open');
     } else {
       // check if the element exists in the page
       var checkQuickView = setInterval(function () {
+        console.log("Checking quick-view...");
         // check if input element exists
         if ($(".sqs-product-quick-view-content").length > 0) {
           // stop the loop from running
@@ -756,6 +760,8 @@ function checkBlog() {
           $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
           // remove the lightbox
           $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
+          // remove lightbox class
+          $('html').removeClass('sqs-modal-lightbox-open');
         }
       });
     }
