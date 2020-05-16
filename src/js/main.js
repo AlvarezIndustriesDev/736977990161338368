@@ -718,13 +718,13 @@ function checkBlog() {
     console.log("Home page?");
 
     // hide product block
-    $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
-
-    // trigger click event
-    $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
+    // $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
 
     // check if product quick view div has loaded
     if ($('.sqs-product-quick-view-content').length > 0) {
+      // trigger click event
+      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
+
       // place on product block
       $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
       // remove the quick view selection
@@ -738,6 +738,8 @@ function checkBlog() {
         if ($(".sqs-product-quick-view-content").length > 0) {
           // stop the loop from running
           clearInterval(checkQuickView);
+          // trigger click event
+          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
           // place on product block
           $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
           // remove the quick view selection
