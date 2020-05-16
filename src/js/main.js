@@ -737,16 +737,14 @@ function checkBlog() {
     // check if product quick view div has loaded
     if ($('.sqs-product-quick-view-content').length > 0) {
       console.log("Quick view exists, in first check.");
+      // hide product block
+      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
       // place on product block
       $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
       // remove the quick view selection
       $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
-      // hide product block
-      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
       // remove the lightbox
       $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
-      // remove lightbox class
-      $('html').removeClass('sqs-modal-lightbox-open');
     } else {
       // check if the element exists in the page
       var checkQuickView = setInterval(function () {
@@ -758,21 +756,25 @@ function checkBlog() {
           // stop the loop from running
           clearInterval(checkQuickView);
           console.log("Quick view exists, in second check.");
+          // hide product block
+          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
           // place on product block
           $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
           // remove the quick view selection
           $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
-          // hide product block
-          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
           // remove the lightbox
           $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
-          // remove lightbox class
-          $('html').removeClass('sqs-modal-lightbox-open');
         }
       });
     }
 
-    $('html').removeClass('sqs-modal-lightbox-open');
+    var checkClassInHTML = setInterval(function() {
+      if ($('html').hasClass('sqs-modal-lightbox-open')) {
+        clearInterval(checkClassInHTML);
+        console.log('Class in HTML found.');
+        $('html').removeClass('sqs-modal-lightbox-open');
+      }
+    }, 1000)
 
   }
 }
