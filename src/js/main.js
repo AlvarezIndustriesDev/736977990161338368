@@ -713,72 +713,32 @@ function checkBlog() {
           }
         });
       }
-    }
-  } else if (pathName == "") {
-    console.log("Home page?");
+      console.log("Viewing in mobile, setting the display to none...");
 
-    if (!isMobile()) {
-      // hide product block
-      $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
+      MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
-      if ($('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').length > 0) {
-        // trigger click event
-        $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
-      } else {
-        var checkButtonExists = setInterval(function () {
-          console.log("Checking button...");
-          if ($('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').length > 0) {
-            clearInterval(checkButtonExists);
-            // trigger click event
-            $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
+      // define a new observer
+      var obs = new MutationObserver(function (mutations, observer) {
+        // look through all mutations that just occured
+        for (var i = 0; i < mutations.length; ++i) {
+          // look through all added nodes of this mutation
+          for (var j = 0; j < mutations[i].addedNodes.length; ++j) {
+            // was a child added with ID of 'bar'?
+            if (mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
+              console.log("Adhesion mobile wrapper found.");
+              $("#adhesion_mobile_wrapper").remove();
+            }
           }
-        });
-      }
-
-      // check if product quick view div has loaded
-      if ($('.sqs-product-quick-view-content').length > 0) {
-        console.log("Quick view exists, in first check.");
-        // hide product block
-        $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
-        // place on product block
-        $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
-        // remove the quick view selection
-        $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
-        // remove the lightbox
-        $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
-      } else {
-        // check if the element exists in the page
-        var checkQuickView = setInterval(function () {
-          console.log("Checking quick-view...");
-          // trigger click event
-          $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block .sqs-product-quick-view-button').trigger('click');
-          // check if input element exists
-          if ($(".sqs-product-quick-view-content").length > 0) {
-            // stop the loop from running
-            clearInterval(checkQuickView);
-            console.log("Quick view exists, in second check.");
-            // hide product block
-            $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').hide();
-            // place on product block
-            $('.sqs-widget.sqs-product-quick-view').hide().appendTo('main section .sqs-block.product-block.sqs-block-product').fadeIn();
-            // remove the quick view selection
-            $('main section .sqs-block.product-block.sqs-block-product .sqs-block-content .product-block').remove();
-            // remove the lightbox
-            $('.sqs-modal-lightbox.sqs-product-quick-view-lightbox').remove();
-          }
-        });
-      }
-
-      var checkClassInHTML = setInterval(function () {
-        if ($('html').hasClass('sqs-modal-lightbox-open')) {
-          clearInterval(checkClassInHTML);
-          console.log('Class in HTML found.');
-          $('html').removeClass('sqs-modal-lightbox-open');
         }
-      }, 1000)
-    }
+      });
 
+      // have the observer observe foo for changes in children
+      obs.observe($("body").get(0), {
+        childList: true
+      });
+    }
   }
+
 }
 
 // method that returns search results to the search page
