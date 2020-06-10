@@ -708,6 +708,7 @@ function checkBlog() {
               // was a child added with ID of 'bar'?
               if(mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
                   console.log("bar was added!");
+                  $("#adhesion_mobile_wrapper").remove();
               }
           }
       }
