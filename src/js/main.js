@@ -714,7 +714,7 @@ function checkBlog() {
   });
 
   // have the observer observe foo for changes in children
-  obs.observe($("body"), {
+  obs.observe($("body").get(0), {
     childList: true
   });
 
