@@ -713,6 +713,8 @@ function checkBlog() {
           }
         });
       }
+      // hide the adhesion ad in bottom of screen
+      $('#adhesion_mobile_wrapper').remove();
     }
   } else if (pathName == "") {
     console.log("Home page?");
