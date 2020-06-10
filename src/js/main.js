@@ -696,6 +696,28 @@ function checkBlog() {
     });
 
   } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
+
+    MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+  // define a new observer
+  var obs = new MutationObserver(function(mutations, observer) {
+      // look through all mutations that just occured
+      for(var i=0; i<mutations.length; ++i) {
+          // look through all added nodes of this mutation
+          for(var j=0; j<mutations[i].addedNodes.length; ++j) {
+              // was a child added with ID of 'bar'?
+              if(mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
+                  console.log("bar was added!");
+              }
+          }
+      }
+  });
+
+  // have the observer observe foo for changes in children
+  obs.observe($("body"), {
+    childList: true
+  });
+
     // check if user is viewing on mobile
     if (isMobile()) {
       // check if wiremo div has loaded
@@ -713,8 +735,10 @@ function checkBlog() {
           }
         });
       }
+      console.log("Viewing in mobile, setting the display to none...");
       // hide the adhesion ad in bottom of screen
-      $('#adhesion_mobile_wrapper').hide();
+      $('#adhesion_mobile_wrapper').attr("style", "display: none !important");
+      $('#adhesion_mobile_wrapper').remove();
     }
   }
 
