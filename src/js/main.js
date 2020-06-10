@@ -714,7 +714,7 @@ function checkBlog() {
         });
       }
       // hide the adhesion ad in bottom of screen
-      $('#adhesion_mobile_wrapper').remove();
+      $('#adhesion_mobile_wrapper').hide();
     }
   }
 
