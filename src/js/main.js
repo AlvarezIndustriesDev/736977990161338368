@@ -109,12 +109,18 @@ var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
 var searchPageIndex = 0;
+var obs = null;
 
 // custom code begins here -----------------------------------------------------------------------------------
 checkBlog(); // method called to check if current page is blog page
 
 // method that checks if current page is "blog" page
 function checkBlog() {
+
+  // check if mutation observer exists
+  if (obs != null) {
+    obs.disconnect();
+  }
 
   // execute if the page contains a blog list filter
   if (document.getElementsByClassName("BlogList-filter").length) {
@@ -713,19 +719,19 @@ function checkBlog() {
           }
         });
       }
-      console.log("Viewing in mobile, setting the display to none...");
+      // console.log("Viewing in mobile, setting the display to none...");
 
       MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
       // define a new observer
-      var obs = new MutationObserver(function (mutations, observer) {
+      obs = new MutationObserver(function (mutations, observer) {
         // look through all mutations that just occured
         for (var i = 0; i < mutations.length; ++i) {
           // look through all added nodes of this mutation
           for (var j = 0; j < mutations[i].addedNodes.length; ++j) {
             // was a child added with ID of 'bar'?
             if (mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
-              console.log("Adhesion mobile wrapper found.");
+              // console.log("Adhesion mobile wrapper found.");
               $("#adhesion_mobile_wrapper").remove();
             }
           }
