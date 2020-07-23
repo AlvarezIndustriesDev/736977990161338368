@@ -743,6 +743,29 @@ function checkBlog() {
         childList: true
       });
     }
+  } else if (pathName == "checkout") {
+    var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+        console.log(mutation)
+        if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+          // element added to DOM
+          var hasClass = [].some.call(mutation.addedNodes, function (el) {
+            return el.name.contains('street-address address-line1')
+          });
+          if (hasClass) {
+            console.log("Elements that have the class:", hasClass);
+          }
+        }
+      });
+    });
+
+    var config = {
+      attributes: true,
+      childList: true,
+      characterData: true
+    };
+
+    observer.observe(document.body, config);
   }
 
 }
