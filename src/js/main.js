@@ -748,6 +748,7 @@ function checkBlog() {
       mutations.forEach(function (mutation) {
         console.log(mutation)
         if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+          console.log(mutation.addedNodes);
           // element added to DOM
           var hasClass = [].some.call(mutation.addedNodes, function (el) {
             return el.name.contains('street-address address-line1')
