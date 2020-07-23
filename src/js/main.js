@@ -744,9 +744,10 @@ function checkBlog() {
       });
     }
   } else if (pathName == "checkout") {
+    console.log("We are in the checkout page.");
     var observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
-        console.log(mutation)
+        console.log(mutation);
         if (mutation.addedNodes && mutation.addedNodes.length > 0) {
           console.log(mutation.addedNodes);
           // element added to DOM
