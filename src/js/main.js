@@ -753,7 +753,7 @@ function checkBlog() {
             return el.name.contains('street-address address-line1')
           });
           if (hasClass) {
-            console.log("Elements that have the class:", hasClass);
+            console.log("Element that have the class:", hasClass);
           }
         }
       });
