@@ -703,7 +703,7 @@ function checkBlog() {
 
   } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
     // check if user is viewing on mobile
-    if (isMobile()) {
+    // if (isMobile()) {
       // check if wiremo div has loaded
       if ($('wiremo-widget-lite').length > 0) {
         $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
@@ -720,6 +720,13 @@ function checkBlog() {
         });
       }
       console.log("Viewing in mobile, setting the display to none...");
+
+      // check if adhesion wrapper exists
+      if ($("#adhesion_mobile_wrapper").length > 0) {
+        console.log("Adhesion mobile wrapper found in body, attempting to remove it.");
+        // remove
+        $("#adhesion_mobile_wrapper").remove();
+      }
 
       MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
@@ -746,7 +753,7 @@ function checkBlog() {
       // disconnect the mutation
       obs.disconnect();
 
-    }
+    //}
   }
 
 }
