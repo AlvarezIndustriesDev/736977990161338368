@@ -118,9 +118,9 @@ checkBlog(); // method called to check if current page is blog page
 function checkBlog() {
 
   // check if mutation observer exists
-  if (obs != null) {
+  /* if (obs != null) {
     obs.disconnect();
-  }
+  } */
 
   // execute if the page contains a blog list filter
   if (document.getElementsByClassName("BlogList-filter").length) {
@@ -719,7 +719,7 @@ function checkBlog() {
           }
         });
       }
-      // console.log("Viewing in mobile, setting the display to none...");
+      console.log("Viewing in mobile, setting the display to none...");
 
       MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
@@ -731,7 +731,7 @@ function checkBlog() {
           for (var j = 0; j < mutations[i].addedNodes.length; ++j) {
             // was a child added with ID of 'bar'?
             if (mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
-              // console.log("Adhesion mobile wrapper found.");
+              console.log("Adhesion mobile wrapper found.");
               $("#adhesion_mobile_wrapper").remove();
             }
           }
@@ -742,32 +742,11 @@ function checkBlog() {
       obs.observe($("body").get(0), {
         childList: true
       });
+
+      // disconnect the mutation
+      obs.disconnect();
+
     }
-  } else if (pathName == "checkout") {
-    console.log("We are in the checkout page.");
-    var observer = new MutationObserver(function (mutations) {
-      mutations.forEach(function (mutation) {
-        console.log(mutation);
-        if (mutation.addedNodes && mutation.addedNodes.length > 0) {
-          console.log(mutation.addedNodes);
-          // element added to DOM
-          var hasClass = [].some.call(mutation.addedNodes, function (el) {
-            return el.name.contains('street-address address-line1')
-          });
-          if (hasClass) {
-            console.log("Element that have the class:", hasClass);
-          }
-        }
-      });
-    });
-
-    var config = {
-      attributes: true,
-      childList: true,
-      characterData: true
-    };
-
-    observer.observe(document.body, config);
   }
 
 }

@@ -1124,3 +1124,22 @@ article span.style-letter-name {
         width: 70% !important;
     }
 }
+
+body:not(.sqs-seven-one) .sqs-announcement-bar {
+  background-color: #ffb6e6;
+  animation: colorfade 10s infinite;
+  -webkit-animation: colorfade 10s infinite;
+}
+
+.banner[data-name="Free U.S. Shipping"] p {
+    color: #000;
+}
+
+/* animation code */
+@keyframes colorfade {
+  0%   {background-color: #ffb6e6}
+  25%  {background-color: #88f47b}
+  50%  {background-color: #87ccff}
+  75%  {background-color: #d3b6fe}
+  100% {background-color: #ffb6e6}
+}
