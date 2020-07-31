@@ -703,7 +703,7 @@ function checkBlog() {
 
   } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
     // check if user is viewing on mobile
-    // if (isMobile()) {
+    if (isMobile()) {
       // check if wiremo div has loaded
       if ($('wiremo-widget-lite').length > 0) {
         $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
@@ -753,7 +753,7 @@ function checkBlog() {
       // disconnect the mutation
       obs.disconnect();
 
-    //}
+    }
   }
 
 }
