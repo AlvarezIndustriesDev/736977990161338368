@@ -109,7 +109,7 @@ var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
 var searchPageIndex = 0;
-var obs = null;
+/* var obs = null; */
 
 // custom code begins here -----------------------------------------------------------------------------------
 checkBlog(); // method called to check if current page is blog page
@@ -704,6 +704,10 @@ function checkBlog() {
   } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
     // check if user is viewing on mobile
     if (isMobile()) {
+
+      // initialize the MutationObserver variable
+      var obs = null;
+
       // check if wiremo div has loaded
       if ($('wiremo-widget-lite').length > 0) {
         $('wiremo-widget-lite').hide().appendTo('article .ProductItem-details.ProductItem-details--mobile').fadeIn();
@@ -728,6 +732,13 @@ function checkBlog() {
         $("#adhesion_mobile_wrapper").remove();
       }
 
+      // check if tablet adhesion wrapper exists
+      if ($("#adhesion_tablet_wrapper").length > 0) {
+        console.log("Adhesion tablet wrapper found in body, attempting to remove it.");
+        // remove
+        $("#adhesion_tablet_wrapper").remove();
+      }
+
       MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
       // define a new observer
@@ -736,10 +747,15 @@ function checkBlog() {
         for (var i = 0; i < mutations.length; ++i) {
           // look through all added nodes of this mutation
           for (var j = 0; j < mutations[i].addedNodes.length; ++j) {
-            // was a child added with ID of 'bar'?
+            // check if mobile wrapper is added
             if (mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
               console.log("Adhesion mobile wrapper found.");
               $("#adhesion_mobile_wrapper").remove();
+            } 
+            // check if tablet wrapper is added
+            if (mutations[i].addedNodes[j].id == "adhesion_tablet_wrapper") {
+              console.log("Adhesion tablet wrapper found.");
+              $("#adhesion_tablet_wrapper").remove();
             }
           }
         }
