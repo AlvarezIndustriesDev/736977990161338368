@@ -725,7 +725,7 @@ function checkBlog() {
       }
       console.log("Viewing in mobile, setting the display to none...");
 
-      console.log("Mobile Wrappers: ", $("#adhesion_mobile_wrapper").length, "Tablet Wrapper:", $("#adhesion_tablet_wrapper").length);
+      console.log("Mobile Wrappers: ", $("#adhesion_mobile_wrapper").length, "Tablet Wrapper:", $("#adhesion_tablet_wrapper").length, "New Wrapper:", $("#GG_PXS").length);
 
       // check if adhesion wrapper exists
       if ($("#adhesion_mobile_wrapper").length > 0) {
@@ -739,6 +739,13 @@ function checkBlog() {
         console.log("Adhesion tablet wrapper found in body, attempting to remove it.");
         // remove
         $("#adhesion_tablet_wrapper").remove();
+      }
+
+      // check if new ad format div exists
+      if ($("#GG_PXS").length > 0) {
+        console.log("New adhesion ad div found in body, attempting to remove it.");
+        // remove 
+        $("#GG_PXS").parent().remove();
       }
 
       MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
