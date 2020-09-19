@@ -109,7 +109,7 @@ var pageLoaded = false;
 var articleIsFeelGoods = false;
 var sentenceArray = [];
 var searchPageIndex = 0;
-/* var obs = null; */
+var obs = null;
 
 // custom code begins here -----------------------------------------------------------------------------------
 checkBlog(); // method called to check if current page is blog page
@@ -118,6 +118,7 @@ checkBlog(); // method called to check if current page is blog page
 function checkBlog() {
 
   // check if mutation observer exists
+  console.log("Mutation Observer:", obs);
   /* if (obs != null) {
     obs.disconnect();
   } */
@@ -704,9 +705,6 @@ function checkBlog() {
   } else if (pathName == "shop" || pathName == "bulk" || pathName == "wholesale") {
     // check if user is viewing on mobile
     if (isMobile()) {
-
-      // initialize the MutationObserver variable
-      var obs = null;
 
       // check if wiremo div has loaded
       if ($('wiremo-widget-lite').length > 0) {
