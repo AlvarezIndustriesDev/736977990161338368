@@ -725,6 +725,8 @@ function checkBlog() {
       }
       console.log("Viewing in mobile, setting the display to none...");
 
+      console.log("Mobile Wrappers: ", $("#adhesion_mobile_wrapper").length, "Tablet Wrapper:", $("#adhesion_tablet_wrapper").length);
+
       // check if adhesion wrapper exists
       if ($("#adhesion_mobile_wrapper").length > 0) {
         console.log("Adhesion mobile wrapper found in body, attempting to remove it.");
@@ -747,6 +749,7 @@ function checkBlog() {
         for (var i = 0; i < mutations.length; ++i) {
           // look through all added nodes of this mutation
           for (var j = 0; j < mutations[i].addedNodes.length; ++j) {
+            console.log(mutations[i].addedNodes[j].id);
             // check if mobile wrapper is added
             if (mutations[i].addedNodes[j].id == "adhesion_mobile_wrapper") {
               console.log("Adhesion mobile wrapper found.");
@@ -757,6 +760,7 @@ function checkBlog() {
               console.log("Adhesion tablet wrapper found.");
               $("#adhesion_tablet_wrapper").remove();
             }
+
           }
         }
       });
@@ -767,7 +771,7 @@ function checkBlog() {
       });
 
       // disconnect the mutation
-      obs.disconnect();
+      // obs.disconnect();
 
     }
   }
