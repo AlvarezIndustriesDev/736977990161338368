@@ -119,9 +119,11 @@ function checkBlog() {
 
   // check if mutation observer exists
   console.log("Mutation Observer:", obs);
-  /* if (obs != null) {
+  if (obs != null) {
     obs.disconnect();
-  } */
+    console.log("Mutation Observer Disconnected:", obs);
+    loadMediavineScripts();
+  }
 
   // execute if the page contains a blog list filter
   if (document.getElementsByClassName("BlogList-filter").length) {
