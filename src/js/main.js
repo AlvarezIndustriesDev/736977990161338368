@@ -122,7 +122,7 @@ function checkBlog() {
   if (obs != null) {
     obs.disconnect();
     console.log("Mutation Observer Disconnected:", obs);
-    loadMediavineScripts();
+    loadMediavineScripts(true);
   }
 
   // execute if the page contains a blog list filter
@@ -1426,14 +1426,14 @@ function retrieveStrings(array, limitPerString) {
 }
 
 // method that loads mediavine's script
-function loadMediavineScripts() {
+function loadMediavineScripts(fromBlogPage) {
   var scriptSrc = "//scripts.mediavine.com/tags/i-am-and-co.js"; // initialize and retrieve script source link
 
   var pathName = location.pathname.split("/")[1]; // initialize and retrieve current URL pathname
   var secondaryPathName = location.pathname.split("/")[2]; // initialize and retrieve current URL pathname after "/blog/"
 
   // execute if page is an article page under "blog" pathname
-  if (pathName == "blog" && secondaryPathName) {
+  if ((pathName == "blog" && secondaryPathName) || fromBlogPage) {
     // load javascript
     $.getScript(scriptSrc, function (data, textStatus, jqxhr) {
       // // console.log("[SCRIPT]", textStatus); // success message
