@@ -802,12 +802,7 @@ function checkBlog() {
       // execute AJAX request to Squarespace commerce API
       Y.Data.post({
         url: "/api/commerce/shopping-cart/entries",
-        data: {
-          additionalFields: "null",
-          itemId: "5ba0009588251b8450a4edc8",
-          quantity: "10",
-          sku: null
-        },
+        data: stringifiedRequest,
         success: function (data) {
 
           console.log("Was this a success? Did it increase the product quantity??");
