@@ -122,7 +122,7 @@ function checkBlog() {
   if (obs != null) {
     obs.disconnect();
     console.log("Mutation Observer Disconnected:", obs);
-    loadMediavineScripts(true);
+    //loadMediavineScripts(true);
   }
 
   // execute if the page contains a blog list filter
@@ -781,6 +781,29 @@ function checkBlog() {
       // obs.disconnect();
 
     }
+  } else if (pathName == "cart") {
+
+    console.log("We are in the cart page, can we edit it?");
+
+    var apiUrl = "https://iamandco.com/api/commerce/shopping-cart/entries";
+
+    var apiRequestData = {
+      additionalFields: "null",
+      itemId: "5ba0009588251b8450a4edc8",
+      quantity: "10",
+      sku: null
+    };
+
+    $.ajax({
+      url: apiUrl,
+      type: "POST",
+      dataType: "json",
+      data: apiRequestData,
+      contentType: "application/json"
+    }).done(function(data) {
+      console.log("Successful API request?");
+    });
+
   }
 
 }
