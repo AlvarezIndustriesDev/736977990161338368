@@ -813,9 +813,10 @@ function checkBlog() {
       // execute AJAX request to Squarespace commerce API
       Y.Data.post({
         url: "/api/commerce/shopping-cart/entries",
-        dataType: "json",
         data: stringifiedRequest,
-        contentType: "application/json",
+        headers: {
+          'Content-Type': 'application/json'
+        },
         success: function (data) {
 
           console.log("Was this a success? Did it increase the product quantity??");
