@@ -794,11 +794,13 @@ function checkBlog() {
       sku: null
     };
 
+    var stringifiedRequest = JSON.stringify(apiRequestData);
+
     $.ajax({
       url: apiUrl,
       type: "POST",
       dataType: "json",
-      data: apiRequestData,
+      data: stringifiedRequest,
       contentType: "application/json"
     }).done(function(data) {
       console.log("Successful API request?");
