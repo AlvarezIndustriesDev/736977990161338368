@@ -796,13 +796,26 @@ function checkBlog() {
 
     var stringifiedRequest = JSON.stringify(apiRequestData);
 
+    $.ajax({
+      url: apiUrl,
+      type: "POST",
+      dataType: "json",
+      data: stringifiedRequest,
+      contentType: "application/json"
+    }).done(function(data) {
+
+      console.log("Successful API request?");
+    });
+
     // try statement to ensure Squarespace function exists
     try {
 
       // execute AJAX request to Squarespace commerce API
       Y.Data.post({
         url: "/api/commerce/shopping-cart/entries",
+        dataType: "json",
         data: stringifiedRequest,
+        contentType: "application/json",
         success: function (data) {
 
           console.log("Was this a success? Did it increase the product quantity??");
