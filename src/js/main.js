@@ -785,7 +785,7 @@ function checkBlog() {
 
     console.log("We are in the cart page, can we edit it?");
 
-    var apiUrl = "https://iamandco.com/api/commerce/shopping-cart/entries";
+    var apiUrl = "https://iamandco.com/api/commerce/shopping-cart/entries?crumb=";
 
     var apiRequestData = {
       additionalFields: "null",
@@ -796,15 +796,32 @@ function checkBlog() {
 
     var stringifiedRequest = JSON.stringify(apiRequestData);
 
-    $.ajax({
-      url: apiUrl,
-      type: "POST",
-      dataType: "json",
-      data: stringifiedRequest,
-      contentType: "application/json"
-    }).done(function(data) {
-      console.log("Successful API request?");
-    });
+    // try statement to ensure Squarespace function exists
+    try {
+
+      // execute AJAX request to Squarespace commerce API
+      Y.Data.post({
+        url: "/api/commerce/shopping-cart/entries",
+        data: {
+          additionalFields: "null",
+          itemId: "5ba0009588251b8450a4edc8",
+          quantity: "10",
+          sku: null
+        },
+        success: function (data) {
+
+          console.log("Was this a success? Did it increase the product quantity??");
+
+        }
+      }, this);
+
+      // catch error messages
+    } catch (error) {
+
+      // log the error
+      console.log("[ADD ITEM TO CART]", error);
+
+    }
 
   }
 
