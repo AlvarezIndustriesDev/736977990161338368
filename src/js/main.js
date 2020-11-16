@@ -794,10 +794,7 @@ function checkBlog() {
 
         console.log("We are in the cart page, can we edit it?");
 
-        // add gift wrap text to DOM
-        var giftText = "Gift wrap this item (additional $5.00)";
-
-        var html = '<div><input type="checkbox" class="gift-wrap"><label>' + giftText + '</label></div>';
+        var html = "<div><input type='checkbox' class='gift-wrap'><label>Gift wrap this item (additional $5.00)</label></div>";
 
         // append after every item
         for (var i = 0; i < $('div[class*="CartTableRow-cartItemList"]').length; i++) {
