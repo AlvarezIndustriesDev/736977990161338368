@@ -783,61 +783,75 @@ function checkBlog() {
     }
   } else if (pathName == "cart") {
 
-    console.log("We are in the cart page, can we edit it?");
+    // check if the element exists in the page
+    var checkCartElement = setInterval(function () {
 
-    // add gift wrap text to DOM
-    var giftText = "Gift wrap this item (additional $5.00)";
+      // check if input element exists
+      if ($('div[class*="CartTableRow-cartItemList"]').length > 0) {
 
-    var html = '<div><input type="checkbox" class="gift-wrap"><label>' + giftText + '</label></div>';
+        // stop the loop from running
+        clearInterval(checkCartElement);
 
-    // append after every item
-    $('div[class*="CartTableRow-cartItemList"]').append(html);
+        console.log("We are in the cart page, can we edit it?");
 
-    // add event listener when user clicks checkout button
-    $('.checkout-button').on('click', function(e) {
+        // add gift wrap text to DOM
+        var giftText = "Gift wrap this item (additional $5.00)";
 
-      // prevent default
-      e.preventDefault();
+        var html = '<div><input type="checkbox" class="gift-wrap"><label>' + giftText + '</label></div>';
 
-      console.log("Awaiting next command...");
+        // append after every item
+        $('div[class*="CartTableRow-cartItemList"]').append(html);
 
-      var apiRequestData = {
-        additionalFields: "null",
-        itemId: "5ba0009588251b8450a4edc8",
-        quantity: "10",
-        sku: null
-      };
+        // add event listener when user clicks checkout button
+        $('.checkout-button').on('click', function(e) {
 
-      var stringifiedRequest = JSON.stringify(apiRequestData);
+          // prevent default
+          e.preventDefault();
 
-      // try statement to ensure Squarespace function exists
-      try {
+          console.log("Awaiting next command...");
 
-        // execute AJAX request to Squarespace commerce API
-        Y.Data.post({
-          url: "/api/commerce/shopping-cart/entries",
-          data: stringifiedRequest,
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          success: function (data) {
+          var apiRequestData = {
+            additionalFields: "null",
+            itemId: "5ba0009588251b8450a4edc8",
+            quantity: "10",
+            sku: null
+          };
 
-            console.log("Successfully sent request to add product, now redirecting to checkout...");
+          var stringifiedRequest = JSON.stringify(apiRequestData);
 
-            window.location.replace("checkout");
+          // try statement to ensure Squarespace function exists
+          try {
+
+            // execute AJAX request to Squarespace commerce API
+            Y.Data.post({
+              url: "/api/commerce/shopping-cart/entries",
+              data: stringifiedRequest,
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              success: function (data) {
+
+                console.log("Successfully sent request to add product, now redirecting to checkout...");
+
+                window.location.replace("checkout");
+
+              }
+            }, this);
+
+            // catch error messages
+          } catch (error) {
+
+            // log the error
+            console.log("[ADD ITEM TO CART]", error);
 
           }
-        }, this);
 
-        // catch error messages
-      } catch (error) {
-
-        // log the error
-        console.log("[ADD ITEM TO CART]", error);
+        });
 
       }
 
     });
+
 
   }
 
