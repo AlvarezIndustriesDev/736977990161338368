@@ -796,9 +796,11 @@ function checkBlog() {
 
         var html = "<div><input type='checkbox' class='gift-wrap'><label>Gift wrap this item (additional $5.00)</label></div>";
 
+        var elements = $('div[class*="CartTableRow-cartItemList"]');
+
         // append after every item
-        for (var i = 0; i < $('div[class*="CartTableRow-cartItemList"]').length; i++) {
-          $('div[class*="CartTableRow-cartItemList"]')[i].after(html);
+        for (var i = 0; i < elements.length; i++) {
+          $(elements[i]).after(html);
         }
 
         // add event listener when user clicks checkout button
