@@ -861,6 +861,9 @@ function checkBlog() {
 
     });
 
+    // set timeout to prevent multiple threads
+    setTimeout(function() {clearInterval(checkCartElement);}, 10000);
+
 
   }
 
