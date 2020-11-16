@@ -800,7 +800,9 @@ function checkBlog() {
         var html = '<div><input type="checkbox" class="gift-wrap"><label>' + giftText + '</label></div>';
 
         // append after every item
-        $('div[class*="CartTableRow-cartItemList"]').append(html);
+        for (var i = 0; i < $('div[class*="CartTableRow-cartItemList"]').length; i++) {
+          $('div[class*="CartTableRow-cartItemList"]')[i].after(html);
+        }
 
         // add event listener when user clicks checkout button
         $('.checkout-button').on('click', function(e) {
@@ -810,10 +812,18 @@ function checkBlog() {
 
           console.log("Awaiting next command...");
 
+          var itemsChecked = 0;
+
+          $('input[type="checkbox"]').each(function() {
+            if ($(this).prop('checked') == true) {
+              itemsChecked++;
+            }
+          });
+
           var apiRequestData = {
             additionalFields: "null",
             itemId: "5ba0009588251b8450a4edc8",
-            quantity: "10",
+            quantity: itemsChecked,
             sku: null
           };
 
