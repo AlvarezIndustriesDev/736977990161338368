@@ -785,52 +785,59 @@ function checkBlog() {
 
     console.log("We are in the cart page, can we edit it?");
 
-    var apiUrl = "https://iamandco.com/api/commerce/shopping-cart/entries?crumb=";
+    // add gift wrap text to DOM
+    var giftText = "Gift wrap this item (additional $5.00)";
 
-    var apiRequestData = {
-      additionalFields: "null",
-      itemId: "5ba0009588251b8450a4edc8",
-      quantity: "10",
-      sku: null
-    };
+    var html = '<div><input type="checkbox" class="gift-wrap"><label>' + giftText + '</label></div>';
 
-    var stringifiedRequest = JSON.stringify(apiRequestData);
+    // append after every item
+    $('div[class*="CartTableRow-cartItemList"]').append(html);
 
-    $.ajax({
-      url: apiUrl,
-      type: "POST",
-      dataType: "json",
-      data: stringifiedRequest,
-      contentType: "application/json"
-    }).done(function(data) {
+    // add event listener when user clicks checkout button
+    $('.checkout-button').on('click', function(e) {
 
-      console.log("Successful API request?");
+      // prevent default
+      e.preventDefault();
+
+      console.log("Awaiting next command...");
+
+      var apiRequestData = {
+        additionalFields: "null",
+        itemId: "5ba0009588251b8450a4edc8",
+        quantity: "10",
+        sku: null
+      };
+
+      var stringifiedRequest = JSON.stringify(apiRequestData);
+
+      // try statement to ensure Squarespace function exists
+      try {
+
+        // execute AJAX request to Squarespace commerce API
+        Y.Data.post({
+          url: "/api/commerce/shopping-cart/entries",
+          data: stringifiedRequest,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          success: function (data) {
+
+            console.log("Successfully sent request to add product, now redirecting to checkout...");
+
+            window.location.replace("checkout");
+
+          }
+        }, this);
+
+        // catch error messages
+      } catch (error) {
+
+        // log the error
+        console.log("[ADD ITEM TO CART]", error);
+
+      }
+
     });
-
-    // try statement to ensure Squarespace function exists
-    try {
-
-      // execute AJAX request to Squarespace commerce API
-      Y.Data.post({
-        url: "/api/commerce/shopping-cart/entries",
-        data: stringifiedRequest,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        success: function (data) {
-
-          console.log("Was this a success? Did it increase the product quantity??");
-
-        }
-      }, this);
-
-      // catch error messages
-    } catch (error) {
-
-      // log the error
-      console.log("[ADD ITEM TO CART]", error);
-
-    }
 
   }
 
