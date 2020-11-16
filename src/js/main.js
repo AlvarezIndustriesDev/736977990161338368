@@ -794,7 +794,7 @@ function checkBlog() {
 
         console.log("We are in the cart page, can we edit it?");
 
-        var html = "<div><input type='checkbox' class='gift-wrap' style='margin-right: 1em; color: rgba(100, 100, 100, 0.9);'><label>Gift wrap this item (additional $5.00)</label></div>";
+        var html = "<div><input type='checkbox' class='gift-wrap' style='margin-right: 1em;'><label style='color: rgba(100, 100, 100, 0.9);'>Gift wrap this item (additional $5.00)</label></div>";
 
         var elements = $('div[class*="CartTableRow-cartItemList"]');
 
